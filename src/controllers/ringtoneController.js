@@ -12,7 +12,7 @@ export const ringtoneController = {
    */
   getRingtones(req, res, next) {
     try {
-      let items = ringtoneDb.getAll();
+      let items = [...ringtoneDb.getAll()].reverse();
 
       // 1. Searching (name or author)
       const { search, sort, page, limit } = req.query;

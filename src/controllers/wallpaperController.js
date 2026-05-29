@@ -13,7 +13,7 @@ export const wallpaperController = {
    */
   getWallpapers(req, res, next) {
     try {
-      let items = db.getAll();
+      let items = [...db.getAll()].reverse();
 
       // 1. Filtering by Category
       const { category, search, sort, page, limit } = req.query;
