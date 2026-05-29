@@ -69,13 +69,27 @@ export async function triggerGitSync(commitMessage) {
     // Ensure we have user config set up so commit doesn't fail
     await ensureGitConfig();
 
+    // Determine target remote, repository, and branch
+    const token = process.env.GITHUB_TOKEN;
+    const repo = process.env.GITHUB_REPO || 'satyakiran29/Anify_Server';
+    const branch = process.env.GITHUB_BRANCH || 'main';
+    const remoteUrl = token ? `https://${token}@github.com/${repo}.git` : 'origin';
+
+    // Fetch remote branch to integrate any upstream changes (e.g. code modifications, remote edits)
+    console.log(`[GitSync] Fetching latest changes from remote branch: "${branch}"...`);
+    await execPromise(`git fetch "${remoteUrl}" ${branch}`);
+
+    // Soft-reset local HEAD to the fetched remote state (keeps local changes in working directory)
+    console.log(`[GitSync] Resetting local HEAD to FETCH_HEAD to align with remote...`);
+    await execPromise('git reset FETCH_HEAD');
+
     // Stage database JSON files and uploads directory
     await execPromise('git add wallpapers.json livewalls.json ringtones.json public/uploads');
 
     // Check if there are staged changes to commit
     const { stdout: statusOut } = await execPromise('git diff --name-only --cached');
     if (!statusOut.trim()) {
-      console.log('[GitSync] No changes to commit.');
+      console.log('[GitSync] No changes to commit after alignment.');
       isSyncing = false;
       checkPending();
       return;
@@ -85,21 +99,9 @@ export async function triggerGitSync(commitMessage) {
     await execPromise(`git commit -m "${msg.replace(/"/g, '\\"')}"`);
     console.log(`[GitSync] Committed locally with message: "${msg}"`);
 
-    // Determine push command
-    const token = process.env.GITHUB_TOKEN;
-    const repo = process.env.GITHUB_REPO || 'satyakiran29/Anify_Server';
-
-    if (token) {
-      console.log(`[GitSync] Pushing to remote repository using GITHUB_TOKEN authentication...`);
-      const pushUrl = `https://${token}@github.com/${repo}.git`;
-      const { stdout: branchOut } = await execPromise('git rev-parse --abbrev-ref HEAD');
-      const branch = branchOut.trim();
-      await execPromise(`git push "${pushUrl}" HEAD:refs/heads/${branch}`);
-    } else {
-      console.log(`[GitSync] Pushing to remote repository using default credentials...`);
-      await execPromise('git push');
-    }
-    
+    // Push changes back to the remote branch
+    console.log(`[GitSync] Pushing changes back to remote branch: "${branch}"...`);
+    await execPromise(`git push "${remoteUrl}" HEAD:refs/heads/${branch}`);
     console.log(`[GitSync] Successfully pushed changes to GitHub!`);
   } catch (error) {
     console.error(`[GitSync] Git sync failed:`, error.message);
