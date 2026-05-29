@@ -2108,5 +2108,55 @@
     "dimensions": "1080p",
     "copyright": "Free",
     "category": "Artistic Scenery"
+  },
+  {
+    "id": "f4c8009c2677a6b72e3ea00fa7f1b3ce",
+    "name": "IMG_20260130180510664",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780076752346-226248388.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780076752346-226248388.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
+  },
+  {
+    "id": "d9f9cf69e14ff0b2868773de8a0bed8d",
+    "name": "IMG_20260130180425919",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780076752357-46064739.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780076752357-46064739.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
+  },
+  {
+    "id": "fec3e472cc3486ec21fe242d53929655",
+    "name": "IMG_20260130180939326",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780076752370-145335566.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780076752370-145335566.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
+  },
+  {
+    "id": "310451a02a8b285c26a3973b3e8428b6",
+    "name": "IMG_20260130180835261",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780076752386-765301100.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780076752386-765301100.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
+  },
+  {
+    "id": "b8414fa2edd937923cb5e8ee0ee55c9e",
+    "name": "IMG_20260130180628470",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780076752401-280068592.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780076752401-280068592.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
   }
 ]
