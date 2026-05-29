@@ -11,6 +11,12 @@ services:
         value: /api/v1
       - key: ADMIN_PASSWORD
         value: admin123 # You can override this in the Render dashboard env vars
+      - key: AUTO_GIT_SYNC
+        value: "true"
+      - key: GITHUB_TOKEN
+        sync: false  # Set this secret value in the Render dashboard
+      - key: GITHUB_REPO
+        value: satyakiran29/Anify_Server
 
   - type: cron
     name: anify-keep-alive
