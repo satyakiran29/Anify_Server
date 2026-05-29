@@ -2128,15 +2128,5 @@
     "dimensions": "1080p",
     "copyright": "Free",
     "category": "Anime"
-  },
-  {
-    "id": "29f7e22406d2bb87f6c2c9225d001c27",
-    "name": "test",
-    "author": "Anify",
-    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780074476601-294544263.jpg",
-    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780074476601-294544263.jpg",
-    "dimensions": "1080p",
-    "copyright": "Free",
-    "category": "Anime"
   }
 ]
