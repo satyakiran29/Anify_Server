@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anify Wallpaper Engine - API Server Dashboard</title>
+  <meta name="description" content="Official REST API Server dashboard and wallpaper explorer for the Anify Android personalization app. Manage, upload, and test wallpapers easily.">
+  <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%238a4bf3%22/><text y=%22.9em%22 font-size=%2280%22 fill=%22%2300f2fe%22 font-weight=%22bold%22 x=%2215%22>A</text></svg>">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/style.css">
+  <!-- FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Dynamic Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="brand">
+      <div class="logo-glow">A</div>
+      <h1>Anify Server Console</h1>
+    </div>
+    <p>Premium Wallpaper REST API & Admin Management Portal</p>
+    <div class="server-status">
+      <span class="status-dot"></span>
+      <span>API Status: Online</span>
+    </div>
+  </header>
+
+  <!-- Live Stats row -->
+  <div class="stats-container">
+    <div class="stat-card">
+      <h3>Total Wallpapers</h3>
+      <p id="statTotal">--</p>
+    </div>
+    <div class="stat-card">
+      <h3>Categories</h3>
+      <p id="statCategories">--</p>
+    </div>
+    <div class="stat-card">
+      <h3>Unique Authors</h3>
+      <p id="statAuthors">--</p>
+    </div>
+    <div class="stat-card">
+      <h3>Uptime</h3>
+      <p id="statUptime">--</p>
+    </div>
+  </div>
+
+  <!-- Tabs Navigation -->
+  <div class="tab-nav">
+    <button class="tab-btn active" data-tab="explorer">
+      <i class="fa-solid fa-images"></i> Wallpaper Explorer
+    </button>
+    <button class="tab-btn" data-tab="console">
+      <i class="fa-solid fa-terminal"></i> API Playground
+    </button>
+    <button class="tab-btn" data-tab="admin">
+      <i class="fa-solid fa-user-shield"></i> Admin Panel
+    </button>
+  </div>
+
+  <!-- Main Content area -->
+  <main>
+
+    <!-- EXPLORER TAB -->
+    <section id="explorer" class="tab-content active">
+      <div class="filter-bar">
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="searchInput" placeholder="Search by wallpaper name or author...">
+        </div>
+        <div class="filter-selects">
+          <select id="categoryFilter" class="select-custom">
+            <option value="">All Categories</option>
+            <!-- Categories populated dynamically -->
+          </select>
+          <select id="sortFilter" class="select-custom">
+            <option value="">Default Order</option>
+            <option value="name">Alphabetical (Name)</option>
+            <option value="category">Alphabetical (Category)</option>
+          </select>
+          <select id="limitFilter" class="select-custom">
+            <option value="12">12 per page</option>
+            <option value="24">24 per page</option>
+            <option value="48">48 per page</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Wallpaper grid -->
+      <div class="wallpaper-grid" id="wallpaperGrid">
+        <!-- Cards injected dynamically -->
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination-container" id="paginationContainer">
+        <!-- Injected dynamically -->
+      </div>
+    </section>
+
+    <!-- API CONSOLE TAB -->
+    <section id="console" class="tab-content">
+      <div class="api-grid">
+        <!-- Sidebar endpoints list -->
+        <div class="api-sidebar">
+          <h2 style="font-size: 1.3rem; margin-bottom: 20px; font-weight: 700;">REST API Routes</h2>
+          <div class="api-endpoint-list">
+            
+            <div class="api-endpoint-card" data-endpoint="/api/v1/wallpapers" data-desc="Get paginated list of wallpapers. Supports search, category, and sorting filters.">
+              <span class="api-method-badge method-get">GET</span>
+              <span class="api-path">/api/v1/wallpapers</span>
+              <div class="api-desc">Fetch wallpapers list (paginated, supports query parameters).</div>
+            </div>
+
+            <div class="api-endpoint-card" data-endpoint="/api/v1/wallpapers/random" data-desc="Returns a randomly selected wallpaper, optionally filtered by category.">
+              <span class="api-method-badge method-get">GET</span>
+              <span class="api-path">/api/v1/wallpapers/random</span>
+              <div class="api-desc">Get a random wallpaper.</div>
+            </div>
+
+            <div class="api-endpoint-card" data-endpoint="/api/v1/wallpapers/categories" data-desc="Fetch all categories and the counts of wallpapers in each.">
+              <span class="api-method-badge method-get">GET</span>
+              <span class="api-path">/api/v1/wallpapers/categories</span>
+              <div class="api-desc">Fetch unique category breakdown.</div>
+            </div>
+
+            <div class="api-endpoint-card" data-endpoint="/api/v1/wallpapers/stats" data-desc="Fetch operational server details, uptime, and database count metrics.">
+              <span class="api-method-badge method-get">GET</span>
+              <span class="api-path">/api/v1/wallpapers/stats</span>
+              <div class="api-desc">Query total counts and server uptime.</div>
+            </div>
+            
+            <div class="api-endpoint-card" data-endpoint="/api/v1/wallpapers/single" data-desc="Get details of a single wallpaper by its unique ID. Append an active ID to the endpoint.">
+              <span class="api-method-badge method-get">GET</span>
+              <span class="api-path">/api/v1/wallpapers/:id</span>
+              <div class="api-desc">Retrieve single wallpaper details.</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Terminal Console Panel -->
+        <div class="api-console-panel">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <span class="t-dot t-red"></span>
+              <span class="t-dot t-yellow"></span>
+              <span class="t-dot t-green"></span>
+            </div>
+            <div class="terminal-title">API Response Terminal</div>
+            <div><i class="fa-solid fa-copy" style="cursor: pointer;" title="Copy JSON" id="copyJsonBtn"></i></div>
+          </div>
+          <div class="terminal-body" id="terminalOutput">
+            <div class="terminal-prompt">> Select an endpoint card to test and fetch live JSON response payload...</div>
+            <pre id="jsonPre"></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADMIN PANEL TAB -->
+    <section id="admin" class="tab-content">
+      
+      <!-- Admin Login Card (visible when logged out) -->
+      <div id="adminLoginCard" class="form-card" style="display: block; max-width: 450px; margin: 40px auto; padding: 35px; border-color: var(--border-focus); box-shadow: 0 0 30px rgba(138, 75, 243, 0.25);">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <div class="logo-glow" style="margin: 0 auto 15px auto;">A</div>
+          <h2 style="font-size: 1.6rem; font-weight: 800; background: linear-gradient(to right, #fff, var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Admin Portal</h2>
+          <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px;">Enter credential password to unlock editing actions</p>
+        </div>
+        <form id="adminLoginForm">
+          <div class="form-group">
+            <label for="adminPassword">Access Password</label>
+            <div style="position: relative;">
+              <input type="password" id="adminPassword" placeholder="••••••••" required style="padding-right: 40px;">
+              <i class="fa-solid fa-eye" id="togglePasswordVisibility" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--text-secondary);"></i>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; margin-top: 10px;">
+            <i class="fa-solid fa-lock-open"></i> Unlock Dashboard
+          </button>
+        </form>
+      </div>
+
+      <!-- Admin Portal Header (visible when logged in) -->
+      <div id="adminPortalHeader" style="display: none; justify-content: space-between; align-items: center; margin-bottom: 25px; background: var(--bg-card); backdrop-filter: blur(12px); border: 1px solid var(--border-glass); padding: 15px 25px; border-radius: 16px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <i class="fa-solid fa-user-shield" style="color: var(--accent-cyan); font-size: 1.2rem;"></i>
+          <span style="font-weight: 600;">Logged in as Administrator</span>
+        </div>
+        <button class="btn btn-outline" id="adminLogoutBtn"><i class="fa-solid fa-sign-out-alt"></i> Logout</button>
+      </div>
+
+      <!-- Admin Controls Grid (visible when logged in) -->
+      <div id="adminPanelContent" class="admin-grid" style="display: none;">
+        
+        <!-- Wallpaper Upload / Edit Form -->
+        <div class="form-card">
+          <div class="form-title" id="formTitle">
+            <span>Add Wallpaper</span>
+            <button class="btn btn-outline" style="padding: 4px 8px; font-size: 0.75rem; display: none;" id="cancelEditBtn">
+              Cancel Edit
+            </button>
+          </div>
+          <form id="wallpaperForm" enctype="multipart/form-data">
+            <input type="hidden" id="wpId">
+            
+            <div class="form-group">
+              <label for="wpName">Wallpaper Name *</label>
+              <input type="text" id="wpName" placeholder="e.g. Kakashi Naruto 1" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="wpAuthor">Author / Creator</label>
+              <input type="text" id="wpAuthor" placeholder="e.g. Aniset" value="Anify">
+            </div>
+
+            <div class="form-group">
+              <label for="wpCategory">Category *</label>
+              <select id="wpCategory" required>
+                <option value="Anime">Anime</option>
+                <option value="Abstract">Abstract</option>
+                <option value="Top Choice">Top Choice</option>
+                <option value="Dreamland">Dreamland</option>
+                <option value="Fluidity">Fluidity</option>
+                <option value="Mixed">Mixed</option>
+                <option value="Christmas">Christmas</option>
+                <option value="Mountain Mania">Mountain Mania</option>
+                <option value="Artistic Scenery">Artistic Scenery</option>
+                <option value="Flower & Leaves">Flower & Leaves</option>
+                <option value="Setup Special">Setup Special</option>
+                <option value="GTA">GTA</option>
+                <option value="General">General</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="wpDimensions">Dimensions</label>
+              <input type="text" id="wpDimensions" placeholder="e.g. 1080p, 4K" value="1080p">
+            </div>
+
+            <div class="form-group">
+              <label for="wpCopyright">Copyright / License</label>
+              <input type="text" id="wpCopyright" placeholder="e.g. Free, CC BY" value="Free">
+            </div>
+
+            <!-- Upload Type Toggle -->
+            <div class="form-group" id="imageSourceGroup">
+              <label>Image Source</label>
+              <div style="display: flex; gap: 10px; margin-top: 5px;">
+                <label style="display: inline-flex; align-items: center; gap: 5px; text-transform: none; font-size: 0.9rem; cursor: pointer;">
+                  <input type="radio" name="imageSource" value="upload" checked style="width: auto;"> Local Upload
+                </label>
+                <label style="display: inline-flex; align-items: center; gap: 5px; text-transform: none; font-size: 0.9rem; cursor: pointer;">
+                  <input type="radio" name="imageSource" value="url" style="width: auto;"> Remote URL
+                </label>
+              </div>
+            </div>
+
+            <!-- Upload input container -->
+            <div class="form-group" id="fileUploadContainer">
+              <label>Upload File (JPEG/PNG/WEBP) *</label>
+              <div class="file-upload-area" id="dropArea">
+                <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                <div class="upload-text">Drag & Drop or Click to Upload</div>
+                <div class="upload-subtext">Supports PNG, JPG, WEBP (Max 10MB)</div>
+                <input type="file" id="wpFile" accept="image/*">
+              </div>
+              <div id="fileSelectedName" style="font-size: 0.85rem; color: var(--accent-cyan); margin-top: 8px; font-weight: 500; display: none;"></div>
+            </div>
+
+            <!-- Remote URL container -->
+            <div class="form-group" id="remoteUrlContainer" style="display: none;">
+              <label for="wpUrl">Remote Image URL *</label>
+              <input type="url" id="wpUrl" placeholder="https://example.com/image.jpg">
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary" id="submitFormBtn">Save Wallpaper</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Wallpaper Management Table List -->
+        <div class="admin-list-card">
+          <h2 style="font-size: 1.3rem; margin-bottom: 25px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+            <span>Manage Wallpapers</span>
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <div style="position: relative;">
+                <input type="text" id="adminSearchInput" placeholder="Search table..." style="font-size: 0.85rem; padding: 8px 12px 8px 30px; background: rgba(10,5,25,0.6); border: 1px solid var(--border-glass); border-radius: 8px; color: var(--text-primary); outline: none; width: 180px; font-family: var(--font-main);">
+                <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.8rem; color: var(--text-secondary);"></i>
+              </div>
+              <span style="font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); white-space: nowrap;" id="adminListCount">Loading...</span>
+            </div>
+          </h2>
+          <div class="table-responsive admin-table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Preview</th>
+                  <th>Wallpaper Title</th>
+                  <th>Category</th>
+                  <th>Author</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminTableBody">
+                <!-- Rows injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Lightbox Modal -->
+  <div id="wpLightbox" class="lightbox-modal">
+    <span class="lightbox-close" id="lightboxClose">&times;</span>
+    <div class="lightbox-content-card">
+      <div class="lightbox-image-box">
+        <img id="lightboxImg" src="" alt="Wallpaper Preview">
+      </div>
+      <div class="lightbox-details-box">
+        <div>
+          <span class="wp-category-badge" id="lightboxCategory" style="margin-bottom: 12px; display: inline-block;">Category</span>
+          <h2 id="lightboxTitle" style="font-size: 1.8rem; font-weight: 800; margin-bottom: 5px; background: linear-gradient(to right, #fff, var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Wallpaper Title</h2>
+          <p id="lightboxAuthor" style="color: var(--text-secondary); margin-bottom: 20px;">by Author</p>
+          
+          <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 15px 0; margin-bottom: 25px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem;">
+              <span style="color: var(--text-secondary);"><i class="fa-solid fa-expand" style="width: 20px;"></i> Resolution:</span>
+              <span id="lightboxResolution" style="font-weight: 600;">1080p</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+              <span style="color: var(--text-secondary);"><i class="fa-solid fa-copyright" style="width: 20px;"></i> License:</span>
+              <span id="lightboxLicense" style="font-weight: 600;">Free</span>
+            </div>
+          </div>
+        </div>
+        
+        <a id="lightboxDownloadBtn" href="" target="_blank" class="btn btn-primary" style="display: block; width: 100%; padding: 14px; text-align: center;">
+          <i class="fa-solid fa-download"></i> View Full Resolution
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/app.js"></script>
+</body>
+</html>

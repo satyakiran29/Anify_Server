@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# Environment Variables
+.env
+.env*.local
+
+# Editor directories
+.vscode/
+.idea/
+
+# OS Files
+Thumbs.db
+Desktop.ini
