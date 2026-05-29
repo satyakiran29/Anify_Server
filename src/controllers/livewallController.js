@@ -1,7 +1,7 @@
 import { liveDb } from '../utils/liveDb.js';
 import fs from 'fs';
 import path from 'path';
-import { triggerGitSync } from '../utils/gitSync.js';
+import { triggerGitSync, getRawGithubUrl } from '../utils/gitSync.js';
 
 // Helper to normalized strings for matching
 const normalize = (str) => (str || '').toLowerCase().trim();
@@ -210,10 +210,12 @@ export const livewallController = {
       // Check if files were uploaded via multer fields
       if (req.files) {
         if (req.files['video'] && req.files['video'][0]) {
-          url = `/uploads/${req.files['video'][0].filename}`;
+          const rel = `/uploads/${req.files['video'][0].filename}`;
+          url = getRawGithubUrl(rel) || rel;
         }
         if (req.files['thumbnail'] && req.files['thumbnail'][0]) {
-          thumbnail = `/uploads/${req.files['thumbnail'][0].filename}`;
+          const rel = `/uploads/${req.files['thumbnail'][0].filename}`;
+          thumbnail = getRawGithubUrl(rel) || rel;
         }
       }
 
@@ -277,7 +279,8 @@ export const livewallController = {
       if (req.files) {
         // Video file update
         if (req.files['video'] && req.files['video'][0]) {
-          updateData.url = `/uploads/${req.files['video'][0].filename}`;
+          const rel = `/uploads/${req.files['video'][0].filename}`;
+          updateData.url = getRawGithubUrl(rel) || rel;
           
           // Clean up old local video file if it was a local asset
           if (existing.url && existing.url.startsWith('/uploads/')) {
@@ -295,7 +298,8 @@ export const livewallController = {
 
         // Thumbnail file update
         if (req.files['thumbnail'] && req.files['thumbnail'][0]) {
-          updateData.thumbnail = `/uploads/${req.files['thumbnail'][0].filename}`;
+          const rel = `/uploads/${req.files['thumbnail'][0].filename}`;
+          updateData.thumbnail = getRawGithubUrl(rel) || rel;
 
           // Clean up old local thumbnail file if it was a local asset and not identical to the video URL
           if (existing.thumbnail && existing.thumbnail.startsWith('/uploads/') && existing.thumbnail !== existing.url) {

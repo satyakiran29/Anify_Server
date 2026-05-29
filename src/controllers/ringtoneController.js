@@ -1,7 +1,7 @@
 import { ringtoneDb } from '../utils/ringtoneDb.js';
 import fs from 'fs';
 import path from 'path';
-import { triggerGitSync } from '../utils/gitSync.js';
+import { triggerGitSync, getRawGithubUrl } from '../utils/gitSync.js';
 
 // Helper to normalized strings for matching
 const normalize = (str) => (str || '').toLowerCase().trim();
@@ -164,7 +164,8 @@ export const ringtoneController = {
 
       // Check if file was uploaded via multer
       if (req.file) {
-        url = `/uploads/${req.file.filename}`;
+        const relativePath = `/uploads/${req.file.filename}`;
+        url = getRawGithubUrl(relativePath) || relativePath;
       }
 
       // Validations
@@ -222,7 +223,8 @@ export const ringtoneController = {
 
       // Check if new file is uploaded
       if (req.file) {
-        updateData.url = `/uploads/${req.file.filename}`;
+        const relativePath = `/uploads/${req.file.filename}`;
+        updateData.url = getRawGithubUrl(relativePath) || relativePath;
         
         // Clean up old local file if it was a local asset
         if (existing.url && existing.url.startsWith('/uploads/')) {

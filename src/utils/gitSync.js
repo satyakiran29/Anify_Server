@@ -7,6 +7,22 @@ let isSyncing = false;
 let pendingSync = null;
 
 /**
+ * Build a stable raw.githubusercontent.com URL for a file in public/uploads.
+ * Uses the branch name (e.g. "main") so the URL never breaks after new commits.
+ *
+ * @param {string} relativePath  e.g. "/uploads/wallpaper-123.jpg"
+ * @returns {string}             Full raw GitHub URL, or the original path if env vars are not set.
+ */
+export function getRawGithubUrl(relativePath) {
+  const repo = process.env.GITHUB_REPO;
+  const branch = process.env.GITHUB_BRANCH || 'main';
+  if (!repo || !relativePath) return relativePath;
+  // relativePath is like "/uploads/foo.jpg" → stored at public/uploads/foo.jpg in the repo
+  const repoPath = `public${relativePath}`;
+  return `https://raw.githubusercontent.com/${repo}/${branch}/${repoPath}`;
+}
+
+/**
  * Configure local git username/email if not already configured (required for commit in clean/docker environments)
  */
 async function ensureGitConfig() {

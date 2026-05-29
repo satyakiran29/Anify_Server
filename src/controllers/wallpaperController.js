@@ -2,7 +2,7 @@ import { db } from '../utils/db.js';
 import fs from 'fs';
 import path from 'path';
 import { getAdminToken } from '../middleware/auth.js';
-import { triggerGitSync } from '../utils/gitSync.js';
+import { triggerGitSync, getRawGithubUrl } from '../utils/gitSync.js';
 
 // Helper to normalized strings for matching
 const normalize = (str) => (str || '').toLowerCase().trim();
@@ -210,10 +210,9 @@ export const wallpaperController = {
 
       // Check if a file was uploaded via multer
       if (req.file) {
-        // Base URL relative to server root
         const relativePath = `/uploads/${req.file.filename}`;
-        url = relativePath;
-        thumbnail = relativePath;
+        url = getRawGithubUrl(relativePath) || relativePath;
+        thumbnail = url;
       }
 
       // Validations
@@ -275,8 +274,9 @@ export const wallpaperController = {
       // Check if a new file is uploaded
       if (req.file) {
         const relativePath = `/uploads/${req.file.filename}`;
-        updateData.url = relativePath;
-        updateData.thumbnail = relativePath;
+        const githubUrl = getRawGithubUrl(relativePath) || relativePath;
+        updateData.url = githubUrl;
+        updateData.thumbnail = githubUrl;
 
         // Clean up the old uploaded file if it was a local asset
         if (existing.url && existing.url.startsWith('/uploads/')) {
