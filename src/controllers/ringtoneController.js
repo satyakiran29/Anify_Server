@@ -1,6 +1,7 @@
 import { ringtoneDb } from '../utils/ringtoneDb.js';
 import fs from 'fs';
 import path from 'path';
+import { triggerGitSync } from '../utils/gitSync.js';
 
 // Helper to normalized strings for matching
 const normalize = (str) => (str || '').toLowerCase().trim();
@@ -188,6 +189,8 @@ export const ringtoneController = {
         duration: duration || '0:30'
       });
 
+      triggerGitSync(`Admin: Added ringtone - ${name}`);
+
       res.status(201).json({
         status: 'success',
         message: 'Ringtone added successfully.',
@@ -237,6 +240,8 @@ export const ringtoneController = {
 
       const updated = ringtoneDb.update(id, updateData);
 
+      triggerGitSync(`Admin: Updated ringtone - ${updated.name || id}`);
+
       res.status(200).json({
         status: 'success',
         message: 'Ringtone updated successfully.',
@@ -268,6 +273,8 @@ export const ringtoneController = {
         status: 'success',
         message: 'Ringtone deleted successfully.'
       });
+
+      triggerGitSync(`Admin: Deleted ringtone - ${id}`);
     } catch (err) {
       next(err);
     }

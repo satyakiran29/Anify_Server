@@ -2,6 +2,7 @@ import { db } from '../utils/db.js';
 import fs from 'fs';
 import path from 'path';
 import { getAdminToken } from '../middleware/auth.js';
+import { triggerGitSync } from '../utils/gitSync.js';
 
 // Helper to normalized strings for matching
 const normalize = (str) => (str || '').toLowerCase().trim();
@@ -240,6 +241,8 @@ export const wallpaperController = {
         category
       });
 
+      triggerGitSync(`Admin: Added wallpaper - ${name}`);
+
       res.status(201).json({
         status: 'success',
         message: 'Wallpaper added successfully.',
@@ -291,6 +294,8 @@ export const wallpaperController = {
 
       const updated = db.update(id, updateData);
 
+      triggerGitSync(`Admin: Updated wallpaper - ${updated.name || id}`);
+
       res.status(200).json({
         status: 'success',
         message: 'Wallpaper updated successfully.',
@@ -322,6 +327,8 @@ export const wallpaperController = {
         status: 'success',
         message: 'Wallpaper deleted successfully.'
       });
+
+      triggerGitSync(`Admin: Deleted wallpaper - ${id}`);
     } catch (err) {
       next(err);
     }

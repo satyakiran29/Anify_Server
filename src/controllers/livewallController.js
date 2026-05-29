@@ -1,6 +1,7 @@
 import { liveDb } from '../utils/liveDb.js';
 import fs from 'fs';
 import path from 'path';
+import { triggerGitSync } from '../utils/gitSync.js';
 
 // Helper to normalized strings for matching
 const normalize = (str) => (str || '').toLowerCase().trim();
@@ -241,6 +242,8 @@ export const livewallController = {
         category
       });
 
+      triggerGitSync(`Admin: Added live wallpaper - ${name}`);
+
       res.status(201).json({
         status: 'success',
         message: 'Live wallpaper added successfully.',
@@ -311,6 +314,8 @@ export const livewallController = {
 
       const updated = liveDb.update(id, updateData);
 
+      triggerGitSync(`Admin: Updated live wallpaper - ${updated.name || id}`);
+
       res.status(200).json({
         status: 'success',
         message: 'Live wallpaper updated successfully.',
@@ -342,6 +347,8 @@ export const livewallController = {
         status: 'success',
         message: 'Live wallpaper deleted successfully.'
       });
+
+      triggerGitSync(`Admin: Deleted live wallpaper - ${id}`);
     } catch (err) {
       next(err);
     }
