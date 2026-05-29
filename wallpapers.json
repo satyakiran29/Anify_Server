@@ -2108,35 +2108,5 @@
     "dimensions": "1080p",
     "copyright": "Free",
     "category": "Artistic Scenery"
-  },
-  {
-    "id": "7e20b12bf0236f0daae5a2d996bee9ca",
-    "name": "102",
-    "author": "Anify",
-    "url": "/uploads/wallpaper-1780048579185-639030451.jpg",
-    "thumbnail": "/uploads/wallpaper-1780048579185-639030451.jpg",
-    "dimensions": "1080p",
-    "copyright": "Free",
-    "category": "Anime"
-  },
-  {
-    "id": "29f7e22406d2bb87f6c2c9225d001c27",
-    "name": "test",
-    "author": "Anify",
-    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780074476601-294544263.jpg",
-    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780074476601-294544263.jpg",
-    "dimensions": "1080p",
-    "copyright": "Free",
-    "category": "Anime"
-  },
-  {
-    "id": "06c3e3086a173a54f7b5b7a4ed06f6d7",
-    "name": "10000",
-    "author": "Anify",
-    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780075141208-738412983.jpg",
-    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780075141208-738412983.jpg",
-    "dimensions": "1080p",
-    "copyright": "Free",
-    "category": "Anime"
   }
 ]

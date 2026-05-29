@@ -12,7 +12,7 @@ export const livewallController = {
    */
   getLivewalls(req, res, next) {
     try {
-      let items = liveDb.getAll();
+      let items = [...liveDb.getAll()].reverse();
 
       // 1. Filtering by Category
       const { category, search, sort, page, limit } = req.query;
