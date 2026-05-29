@@ -43,7 +43,7 @@ export const wallpaperController = {
 
       // 4. Pagination
       const pageNum = parseInt(page, 10) || 1;
-      const limitNum = limit === '0' ? 0 : (parseInt(limit, 10) || 10);
+      const limitNum = limit === '0' ? 0 : (parseInt(limit, 10) || 1000);
       // limit=0 means return all items (admin use)
       const sanitizedLimit = limitNum === 0 ? 0 : Math.min(Math.max(limitNum, 1), 1000);
       const totalItems = items.length;
