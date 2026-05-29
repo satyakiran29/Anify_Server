@@ -32,19 +32,19 @@
   <!-- Live Stats row -->
   <div class="stats-container">
     <div class="stat-card">
-      <h3>Total Wallpapers</h3>
+      <h3><i class="fa-solid fa-images" style="margin-right:5px; color: var(--accent-cyan); opacity:0.7;"></i>Wallpapers</h3>
       <p id="statTotal">--</p>
     </div>
     <div class="stat-card">
-      <h3>Categories</h3>
+      <h3><i class="fa-solid fa-tag" style="margin-right:5px; color: var(--accent-purple); opacity:0.7;"></i>Categories</h3>
       <p id="statCategories">--</p>
     </div>
     <div class="stat-card">
-      <h3>Unique Authors</h3>
+      <h3><i class="fa-solid fa-user" style="margin-right:5px; color: var(--accent-pink); opacity:0.7;"></i>Authors</h3>
       <p id="statAuthors">--</p>
     </div>
     <div class="stat-card">
-      <h3>Uptime</h3>
+      <h3><i class="fa-solid fa-clock" style="margin-right:5px; color: var(--success); opacity:0.7;"></i>Uptime</h3>
       <p id="statUptime">--</p>
     </div>
   </div>
@@ -52,19 +52,19 @@
   <!-- Tabs Navigation -->
   <div class="tab-nav">
     <button class="tab-btn active" data-tab="explorer">
-      <i class="fa-solid fa-images"></i> Wallpaper Explorer
+      <i class="fa-solid fa-images"></i> <span>Wallpapers</span>
     </button>
     <button class="tab-btn" data-tab="live-explorer">
-      <i class="fa-solid fa-film"></i> Live Wallpapers
+      <i class="fa-solid fa-film"></i> <span>Live</span>
     </button>
     <button class="tab-btn" data-tab="ringtone-explorer">
-      <i class="fa-solid fa-music"></i> Ringtones
+      <i class="fa-solid fa-music"></i> <span>Ringtones</span>
     </button>
     <button class="tab-btn" data-tab="console">
-      <i class="fa-solid fa-terminal"></i> API Playground
+      <i class="fa-solid fa-terminal"></i> <span>API Console</span>
     </button>
     <button class="tab-btn" data-tab="admin">
-      <i class="fa-solid fa-user-shield"></i> Admin Portal
+      <i class="fa-solid fa-user-shield"></i> <span>Admin</span>
     </button>
   </div>
 
@@ -313,12 +313,17 @@
       </div>
 
       <!-- Admin Portal Header (visible when logged in) -->
-      <div id="adminPortalHeader" style="display: none; justify-content: space-between; align-items: center; margin-bottom: 25px; background: var(--bg-card); backdrop-filter: blur(12px); border: 1px solid var(--border-glass); padding: 15px 25px; border-radius: 16px;">
+      <div id="adminPortalHeader" style="display: none; justify-content: space-between; align-items: center; margin-bottom: 25px; background: rgba(0,242,254,0.04); backdrop-filter: blur(14px); border: 1px solid rgba(0,242,254,0.2); padding: 14px 24px; border-radius: 14px;">
         <div style="display: flex; align-items: center; gap: 10px;">
-          <i class="fa-solid fa-user-shield" style="color: var(--accent-cyan); font-size: 1.2rem;"></i>
-          <span style="font-weight: 600;">Logged in as Administrator</span>
+          <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent-cyan),var(--accent-purple));display:flex;align-items:center;justify-content:center;">
+            <i class="fa-solid fa-user-shield" style="color: #fff; font-size: 0.9rem;"></i>
+          </div>
+          <div>
+            <div style="font-weight: 700; font-size:0.95rem;">Administrator</div>
+            <div style="font-size:0.75rem; color: var(--accent-cyan);">Full access granted</div>
+          </div>
         </div>
-        <button class="btn btn-outline" id="adminLogoutBtn"><i class="fa-solid fa-sign-out-alt"></i> Logout</button>
+        <button class="btn btn-outline" id="adminLogoutBtn" style="font-size:0.82rem;"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
       </div>
 
       <!-- Admin Controls Grid (visible when logged in) -->
@@ -337,7 +342,7 @@
 
             <div class="form-group">
               <label for="wpType">Resource Type *</label>
-              <select id="wpType" required style="background: rgba(10,5,25,0.6); color: #fff; border: 1px solid var(--border-glass); border-radius: 8px; padding: 10px; width: 100%; font-family: var(--font-main); outline: none; margin-bottom: 5px;">
+              <select id="wpType" required>
                 <option value="static" selected>Static Wallpaper (Image)</option>
                 <option value="live">Live Wallpaper (Video)</option>
                 <option value="ringtone">Ringtone (Audio)</option>
@@ -423,20 +428,20 @@
             <!-- Live Upload input container -->
             <div class="form-group" id="liveUploadContainer" style="display: none;">
               <label>Upload Video (MP4/WEBM) *</label>
-              <div class="file-upload-area" id="liveVideoDropArea" style="margin-bottom: 12px; cursor: pointer;">
-                <i class="fa-solid fa-film upload-icon" style="font-size: 2rem; margin-bottom: 10px; color: var(--accent-purple);"></i>
+              <div class="file-upload-area" id="liveVideoDropArea" style="margin-bottom: 12px;">
+                <i class="fa-solid fa-film upload-icon" style="color: var(--accent-purple);"></i>
                 <div class="upload-text" id="liveVideoUploadText">Drag & Drop or Click to Upload Video</div>
                 <div class="upload-subtext">Supports MP4, WEBM (Max 50MB)</div>
-                <input type="file" id="wpLiveVideoFile" accept="video/*" style="display: none;">
+                <input type="file" id="wpLiveVideoFile" accept="video/*">
               </div>
               <div id="liveVideoSelectedName" style="font-size: 0.85rem; color: var(--accent-cyan); margin-top: 5px; margin-bottom: 15px; font-weight: 500; display: none;"></div>
 
               <label>Upload Preview Thumbnail (Optional)</label>
-              <div class="file-upload-area" id="liveThumbDropArea" style="cursor: pointer;">
-                <i class="fa-solid fa-image upload-icon" style="font-size: 2rem; margin-bottom: 10px; color: var(--accent-cyan);"></i>
+              <div class="file-upload-area" id="liveThumbDropArea">
+                <i class="fa-solid fa-image upload-icon" style="color: var(--accent-cyan);"></i>
                 <div class="upload-text" id="liveThumbUploadText">Drag & Drop or Click to Upload Thumbnail</div>
                 <div class="upload-subtext">Supports PNG, JPG, WEBP (Max 5MB)</div>
-                <input type="file" id="wpLiveThumbFile" accept="image/*" style="display: none;">
+                <input type="file" id="wpLiveThumbFile" accept="image/*">
               </div>
               <div id="liveThumbSelectedName" style="font-size: 0.85rem; color: var(--accent-cyan); margin-top: 8px; font-weight: 500; display: none;"></div>
             </div>
@@ -453,11 +458,11 @@
             <!-- Ringtone Upload input container -->
             <div class="form-group" id="ringtoneUploadContainer" style="display: none;">
               <label>Upload Audio (MP3/OGG/WAV) *</label>
-              <div class="file-upload-area" id="ringtoneDropArea" style="cursor: pointer;">
-                <i class="fa-solid fa-volume-high upload-icon" style="font-size: 2rem; margin-bottom: 10px; color: var(--accent-cyan);"></i>
+              <div class="file-upload-area" id="ringtoneDropArea">
+                <i class="fa-solid fa-volume-high upload-icon" style="color: var(--accent-cyan);"></i>
                 <div class="upload-text" id="ringtoneUploadText">Drag & Drop or Click to Upload Audio</div>
                 <div class="upload-subtext">Supports MP3, OGG, WAV (Max 15MB)</div>
-                <input type="file" id="wpRingtoneFile" accept="audio/*" style="display: none;">
+                <input type="file" id="wpRingtoneFile" accept="audio/*">
               </div>
               <div id="ringtoneSelectedName" style="font-size: 0.85rem; color: var(--accent-cyan); margin-top: 8px; font-weight: 500; display: none;"></div>
             </div>
