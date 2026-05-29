@@ -5,5 +5,19 @@
     "author": "Anify",
     "url": "https://satyakiran29.github.io/aniset/anify/ringtone/Pikachu%20Message.mp3",
     "duration": "0:1"
+  },
+  {
+    "id": "937e008c525cd12ff7c723c5457d0e8b",
+    "name": "naruto_theme",
+    "author": "Aniset",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/ringtone-1780076439025-659215231.mp3",
+    "duration": "0:45"
+  },
+  {
+    "id": "a51b4a9b78729ee8e4f73f4a07eb1d9a",
+    "name": "sasuke_theme",
+    "author": "Aniset",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/ringtone-1780076439025-99440963.ogg",
+    "duration": "0:45"
   }
 ]
