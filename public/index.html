@@ -54,11 +54,17 @@
     <button class="tab-btn active" data-tab="explorer">
       <i class="fa-solid fa-images"></i> Wallpaper Explorer
     </button>
+    <button class="tab-btn" data-tab="live-explorer">
+      <i class="fa-solid fa-film"></i> Live Wallpapers
+    </button>
+    <button class="tab-btn" data-tab="ringtone-explorer">
+      <i class="fa-solid fa-music"></i> Ringtones
+    </button>
     <button class="tab-btn" data-tab="console">
       <i class="fa-solid fa-terminal"></i> API Playground
     </button>
     <button class="tab-btn" data-tab="admin">
-      <i class="fa-solid fa-user-shield"></i> Admin Panel
+      <i class="fa-solid fa-user-shield"></i> Admin Portal
     </button>
   </div>
 
@@ -101,6 +107,73 @@
       </div>
     </section>
 
+    <!-- LIVE EXPLORER TAB -->
+    <section id="live-explorer" class="tab-content">
+      <div class="filter-bar">
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="liveSearchInput" placeholder="Search live wallpapers by name or author...">
+        </div>
+        <div class="filter-selects">
+          <select id="liveCategoryFilter" class="select-custom">
+            <option value="">All Categories</option>
+          </select>
+          <select id="liveSortFilter" class="select-custom">
+            <option value="">Default Order</option>
+            <option value="name">Alphabetical (Name)</option>
+            <option value="category">Alphabetical (Category)</option>
+          </select>
+          <select id="liveLimitFilter" class="select-custom">
+            <option value="12">12 per page</option>
+            <option value="24">24 per page</option>
+            <option value="48">48 per page</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Live Wallpaper grid -->
+      <div class="wallpaper-grid" id="liveWallpaperGrid">
+        <!-- Live cards injected dynamically -->
+      </div>
+
+      <!-- Live Pagination -->
+      <div class="pagination-container" id="livePaginationContainer">
+        <!-- Injected dynamically -->
+      </div>
+    </section>
+
+    <!-- RINGTONE EXPLORER TAB -->
+    <section id="ringtone-explorer" class="tab-content">
+      <div class="filter-bar">
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="ringtoneSearchInput" placeholder="Search ringtones by name or author...">
+        </div>
+        <div class="filter-selects">
+          <select id="ringtoneSortFilter" class="select-custom">
+            <option value="">Default Order</option>
+            <option value="name">Alphabetical (Name)</option>
+            <option value="author">Alphabetical (Author)</option>
+          </select>
+          <select id="ringtoneLimitFilter" class="select-custom">
+            <option value="12">12 per page</option>
+            <option value="24">24 per page</option>
+            <option value="48">48 per page</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Ringtone grid -->
+      <div class="wallpaper-grid" id="ringtoneGrid">
+        <!-- Ringtones injected dynamically -->
+      </div>
+
+      <!-- Ringtone Pagination -->
+      <div class="pagination-container" id="ringtonePaginationContainer">
+        <!-- Injected dynamically -->
+      </div>
+    </section>
+
     <!-- API CONSOLE TAB -->
     <section id="console" class="tab-content">
       <div class="api-grid">
@@ -137,6 +210,60 @@
               <span class="api-method-badge method-get">GET</span>
               <span class="api-path">/api/v1/wallpapers/:id</span>
               <div class="api-desc">Retrieve single wallpaper details.</div>
+            </div>
+
+            <div class="api-endpoint-card" data-endpoint="/api/v1/livewalls" data-desc="Get paginated list of live wallpapers. Supports search, category, and sorting filters.">
+              <span class="api-method-badge method-get">GET</span>
+              <span class="api-path">/api/v1/livewalls</span>
+              <div class="api-desc">Fetch live wallpapers list (paginated, supports query parameters).</div>
+            </div>
+
+            <div class="api-endpoint-card" data-endpoint="/api/v1/livewalls/random" data-desc="Returns a randomly selected live wallpaper, optionally filtered by category.">
+              <span class="api-method-badge method-get">GET</span>
+              <span class="api-path">/api/v1/livewalls/random</span>
+              <div class="api-desc">Get a random live wallpaper.</div>
+            </div>
+
+            <div class="api-endpoint-card" data-endpoint="/api/v1/livewalls/categories" data-desc="Fetch all live wallpaper categories and their counts.">
+              <span class="api-method-badge method-get">GET</span>
+              <span class="api-path">/api/v1/livewalls/categories</span>
+              <div class="api-desc">Fetch live categories breakdown.</div>
+            </div>
+
+            <div class="api-endpoint-card" data-endpoint="/api/v1/livewalls/stats" data-desc="Fetch operational live wallpaper server statistics and counts.">
+              <span class="api-method-badge method-get">GET</span>
+              <span class="api-path">/api/v1/livewalls/stats</span>
+              <div class="api-desc">Query live counts and metrics.</div>
+            </div>
+
+            <div class="api-endpoint-card" data-endpoint="/api/v1/livewalls/single" data-desc="Get details of a single live wallpaper by its unique ID. Append an active live ID to the endpoint.">
+              <span class="api-method-badge method-get">GET</span>
+              <span class="api-path">/api/v1/livewalls/:id</span>
+              <div class="api-desc">Retrieve single live wallpaper details.</div>
+            </div>
+
+            <div class="api-endpoint-card" data-endpoint="/api/v1/ringtones" data-desc="Get paginated list of ringtones. Supports search and sorting filters.">
+              <span class="api-method-badge method-get">GET</span>
+              <span class="api-path">/api/v1/ringtones</span>
+              <div class="api-desc">Fetch ringtones list (paginated, supports query parameters).</div>
+            </div>
+
+            <div class="api-endpoint-card" data-endpoint="/api/v1/ringtones/random" data-desc="Returns a randomly selected ringtone.">
+              <span class="api-method-badge method-get">GET</span>
+              <span class="api-path">/api/v1/ringtones/random</span>
+              <div class="api-desc">Get a random ringtone.</div>
+            </div>
+
+            <div class="api-endpoint-card" data-endpoint="/api/v1/ringtones/stats" data-desc="Fetch operational ringtone counts and stats.">
+              <span class="api-method-badge method-get">GET</span>
+              <span class="api-path">/api/v1/ringtones/stats</span>
+              <div class="api-desc">Query total ringtone counts and metrics.</div>
+            </div>
+
+            <div class="api-endpoint-card" data-endpoint="/api/v1/ringtones/single" data-desc="Get details of a single ringtone by its unique ID. Append an active ringtone ID to the endpoint.">
+              <span class="api-method-badge method-get">GET</span>
+              <span class="api-path">/api/v1/ringtones/:id</span>
+              <div class="api-desc">Retrieve single ringtone details.</div>
             </div>
 
           </div>
@@ -207,6 +334,15 @@
           </div>
           <form id="wallpaperForm" enctype="multipart/form-data">
             <input type="hidden" id="wpId">
+
+            <div class="form-group">
+              <label for="wpType">Resource Type *</label>
+              <select id="wpType" required style="background: rgba(10,5,25,0.6); color: #fff; border: 1px solid var(--border-glass); border-radius: 8px; padding: 10px; width: 100%; font-family: var(--font-main); outline: none; margin-bottom: 5px;">
+                <option value="static" selected>Static Wallpaper (Image)</option>
+                <option value="live">Live Wallpaper (Video)</option>
+                <option value="ringtone">Ringtone (Audio)</option>
+              </select>
+            </div>
             
             <div class="form-group">
               <label for="wpName">Wallpaper Name *</label>
@@ -242,9 +378,15 @@
               <input type="text" id="wpDimensions" placeholder="e.g. 1080p, 4K" value="1080p">
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="wpCopyrightGroup">
               <label for="wpCopyright">Copyright / License</label>
               <input type="text" id="wpCopyright" placeholder="e.g. Free, CC BY" value="Free">
+            </div>
+
+            <!-- Ringtone duration field (hidden by default) -->
+            <div class="form-group" id="ringtoneDurationGroup" style="display: none;">
+              <label for="wpDuration">Duration (mm:ss) *</label>
+              <input type="text" id="wpDuration" placeholder="e.g. 0:30, 0:01" value="0:30">
             </div>
 
             <!-- Upload Type Toggle -->
@@ -278,6 +420,54 @@
               <input type="url" id="wpUrl" placeholder="https://example.com/image.jpg">
             </div>
 
+            <!-- Live Upload input container -->
+            <div class="form-group" id="liveUploadContainer" style="display: none;">
+              <label>Upload Video (MP4/WEBM) *</label>
+              <div class="file-upload-area" id="liveVideoDropArea" style="margin-bottom: 12px; cursor: pointer;">
+                <i class="fa-solid fa-film upload-icon" style="font-size: 2rem; margin-bottom: 10px; color: var(--accent-purple);"></i>
+                <div class="upload-text" id="liveVideoUploadText">Drag & Drop or Click to Upload Video</div>
+                <div class="upload-subtext">Supports MP4, WEBM (Max 50MB)</div>
+                <input type="file" id="wpLiveVideoFile" accept="video/*" style="display: none;">
+              </div>
+              <div id="liveVideoSelectedName" style="font-size: 0.85rem; color: var(--accent-cyan); margin-top: 5px; margin-bottom: 15px; font-weight: 500; display: none;"></div>
+
+              <label>Upload Preview Thumbnail (Optional)</label>
+              <div class="file-upload-area" id="liveThumbDropArea" style="cursor: pointer;">
+                <i class="fa-solid fa-image upload-icon" style="font-size: 2rem; margin-bottom: 10px; color: var(--accent-cyan);"></i>
+                <div class="upload-text" id="liveThumbUploadText">Drag & Drop or Click to Upload Thumbnail</div>
+                <div class="upload-subtext">Supports PNG, JPG, WEBP (Max 5MB)</div>
+                <input type="file" id="wpLiveThumbFile" accept="image/*" style="display: none;">
+              </div>
+              <div id="liveThumbSelectedName" style="font-size: 0.85rem; color: var(--accent-cyan); margin-top: 8px; font-weight: 500; display: none;"></div>
+            </div>
+
+            <!-- Live Remote URL container -->
+            <div class="form-group" id="liveRemoteUrlContainer" style="display: none;">
+              <label for="wpLiveVideoUrl">Remote Video URL (MP4/WEBM) *</label>
+              <input type="url" id="wpLiveVideoUrl" placeholder="https://example.com/video.mp4" style="margin-bottom: 10px;">
+              
+              <label for="wpLiveThumbUrl">Remote Thumbnail URL (Optional)</label>
+              <input type="url" id="wpLiveThumbUrl" placeholder="https://example.com/thumbnail.jpg">
+            </div>
+
+            <!-- Ringtone Upload input container -->
+            <div class="form-group" id="ringtoneUploadContainer" style="display: none;">
+              <label>Upload Audio (MP3/OGG/WAV) *</label>
+              <div class="file-upload-area" id="ringtoneDropArea" style="cursor: pointer;">
+                <i class="fa-solid fa-volume-high upload-icon" style="font-size: 2rem; margin-bottom: 10px; color: var(--accent-cyan);"></i>
+                <div class="upload-text" id="ringtoneUploadText">Drag & Drop or Click to Upload Audio</div>
+                <div class="upload-subtext">Supports MP3, OGG, WAV (Max 15MB)</div>
+                <input type="file" id="wpRingtoneFile" accept="audio/*" style="display: none;">
+              </div>
+              <div id="ringtoneSelectedName" style="font-size: 0.85rem; color: var(--accent-cyan); margin-top: 8px; font-weight: 500; display: none;"></div>
+            </div>
+
+            <!-- Ringtone Remote URL container -->
+            <div class="form-group" id="ringtoneRemoteUrlContainer" style="display: none;">
+              <label for="wpRingtoneUrl">Remote Audio URL *</label>
+              <input type="url" id="wpRingtoneUrl" placeholder="https://example.com/audio.mp3">
+            </div>
+
             <div class="form-actions">
               <button type="submit" class="btn btn-primary" id="submitFormBtn">Save Wallpaper</button>
             </div>
@@ -286,7 +476,7 @@
 
         <!-- Wallpaper Management Table List -->
         <div class="admin-list-card">
-          <h2 style="font-size: 1.3rem; margin-bottom: 25px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+          <h2 style="font-size: 1.3rem; margin-bottom: 15px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
             <span>Manage Wallpapers</span>
             <div style="display: flex; gap: 12px; align-items: center;">
               <div style="position: relative;">
@@ -296,6 +486,11 @@
               <span style="font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); white-space: nowrap;" id="adminListCount">Loading...</span>
             </div>
           </h2>
+          <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <button class="btn btn-primary" id="adminTableToggleStatic" style="padding: 6px 12px; font-size: 0.85rem;" type="button"><i class="fa-solid fa-image"></i> Static Wallpapers</button>
+            <button class="btn btn-outline" id="adminTableToggleLive" style="padding: 6px 12px; font-size: 0.85rem;" type="button"><i class="fa-solid fa-film"></i> Live Wallpapers</button>
+            <button class="btn btn-outline" id="adminTableToggleRingtone" style="padding: 6px 12px; font-size: 0.85rem;" type="button"><i class="fa-solid fa-music"></i> Ringtones</button>
+          </div>
           <div class="table-responsive admin-table-container">
             <table>
               <thead>
@@ -323,8 +518,9 @@
   <div id="wpLightbox" class="lightbox-modal">
     <span class="lightbox-close" id="lightboxClose">&times;</span>
     <div class="lightbox-content-card">
-      <div class="lightbox-image-box">
-        <img id="lightboxImg" src="" alt="Wallpaper Preview">
+      <div class="lightbox-image-box" style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 300px; background: rgba(0,0,0,0.3); border-radius: 12px; overflow: hidden;">
+        <img id="lightboxImg" src="" alt="Wallpaper Preview" style="display: block; max-width: 100%; max-height: 80vh; object-fit: contain;">
+        <video id="lightboxVideo" autoplay loop muted playsinline controls style="display: none; width: 100%; max-height: 80vh; object-fit: contain; background: #000; border-radius: 8px;"></video>
       </div>
       <div class="lightbox-details-box">
         <div>

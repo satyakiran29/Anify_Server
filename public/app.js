@@ -5,6 +5,25 @@ let currentSearch = '';
 let currentCategory = '';
 let currentSort = '';
 let selectedWallpaperIdForEdit = null;
+
+// Live State management
+let currentLivePage = 1;
+let currentLiveLimit = 12;
+let currentLiveSearch = '';
+let currentLiveCategory = '';
+let currentLiveSort = '';
+let selectedLiveWallpaperIdForEdit = null;
+
+// Ringtone State management
+let currentRingtonePage = 1;
+let currentRingtoneLimit = 12;
+let currentRingtoneSearch = '';
+let currentRingtoneSort = '';
+let selectedRingtoneIdForEdit = null;
+let currentPlayingAudio = null; // Track active playing Audio
+let currentPlayingButton = null; // Track active playing Button
+
+let currentAdminTableMode = 'static'; // 'static', 'live', or 'ringtone'
 let currentActiveTerminalEndpoint = null;
 let adminToken = localStorage.getItem('anify_admin_token') || null;
 
@@ -27,6 +46,21 @@ const limitFilter = document.getElementById('limitFilter');
 const wallpaperGrid = document.getElementById('wallpaperGrid');
 const paginationContainer = document.getElementById('paginationContainer');
 
+// Live Explorer DOM
+const liveSearchInput = document.getElementById('liveSearchInput');
+const liveCategoryFilter = document.getElementById('liveCategoryFilter');
+const liveSortFilter = document.getElementById('liveSortFilter');
+const liveLimitFilter = document.getElementById('liveLimitFilter');
+const liveWallpaperGrid = document.getElementById('liveWallpaperGrid');
+const livePaginationContainer = document.getElementById('livePaginationContainer');
+
+// Ringtone Explorer DOM
+const ringtoneSearchInput = document.getElementById('ringtoneSearchInput');
+const ringtoneSortFilter = document.getElementById('ringtoneSortFilter');
+const ringtoneLimitFilter = document.getElementById('ringtoneLimitFilter');
+const ringtoneGrid = document.getElementById('ringtoneGrid');
+const ringtonePaginationContainer = document.getElementById('ringtonePaginationContainer');
+
 // API Console DOM
 const apiCards = document.querySelectorAll('.api-endpoint-card');
 const jsonPre = document.getElementById('jsonPre');
@@ -35,6 +69,7 @@ const copyJsonBtn = document.getElementById('copyJsonBtn');
 // Admin DOM
 const wallpaperForm = document.getElementById('wallpaperForm');
 const wpIdInput = document.getElementById('wpId');
+const wpTypeSelect = document.getElementById('wpType');
 const wpNameInput = document.getElementById('wpName');
 const wpAuthorInput = document.getElementById('wpAuthor');
 const wpCategorySelect = document.getElementById('wpCategory');
@@ -54,6 +89,33 @@ const adminTableBody = document.getElementById('adminTableBody');
 const adminListCount = document.getElementById('adminListCount');
 const adminSearchInput = document.getElementById('adminSearchInput');
 
+// Live Admin DOM
+const liveUploadContainer = document.getElementById('liveUploadContainer');
+const wpLiveVideoFileInput = document.getElementById('wpLiveVideoFile');
+const wpLiveThumbFileInput = document.getElementById('wpLiveThumbFile');
+const liveVideoDropArea = document.getElementById('liveVideoDropArea');
+const liveThumbDropArea = document.getElementById('liveThumbDropArea');
+const liveVideoSelectedName = document.getElementById('liveVideoSelectedName');
+const liveThumbSelectedName = document.getElementById('liveThumbSelectedName');
+const liveRemoteUrlContainer = document.getElementById('liveRemoteUrlContainer');
+const wpLiveVideoUrlInput = document.getElementById('wpLiveVideoUrl');
+const wpLiveThumbUrlInput = document.getElementById('wpLiveThumbUrl');
+
+// Ringtone Admin DOM
+const wpDurationInput = document.getElementById('wpDuration');
+const ringtoneDurationGroup = document.getElementById('ringtoneDurationGroup');
+const ringtoneUploadContainer = document.getElementById('ringtoneUploadContainer');
+const wpRingtoneFileInput = document.getElementById('wpRingtoneFile');
+const ringtoneDropArea = document.getElementById('ringtoneDropArea');
+const ringtoneSelectedName = document.getElementById('ringtoneSelectedName');
+const ringtoneRemoteUrlContainer = document.getElementById('ringtoneRemoteUrlContainer');
+const wpRingtoneUrlInput = document.getElementById('wpRingtoneUrl');
+
+// Table Toggles
+const adminTableToggleStatic = document.getElementById('adminTableToggleStatic');
+const adminTableToggleLive = document.getElementById('adminTableToggleLive');
+const adminTableToggleRingtone = document.getElementById('adminTableToggleRingtone');
+
 // Auth elements
 const adminLoginCard = document.getElementById('adminLoginCard');
 const adminPortalHeader = document.getElementById('adminPortalHeader');
@@ -67,6 +129,7 @@ const adminLogoutBtn = document.getElementById('adminLogoutBtn');
 const wpLightbox = document.getElementById('wpLightbox');
 const lightboxClose = document.getElementById('lightboxClose');
 const lightboxImg = document.getElementById('lightboxImg');
+const lightboxVideo = document.getElementById('lightboxVideo');
 const lightboxCategory = document.getElementById('lightboxCategory');
 const lightboxTitle = document.getElementById('lightboxTitle');
 const lightboxAuthor = document.getElementById('lightboxAuthor');
@@ -79,8 +142,13 @@ document.addEventListener('DOMContentLoaded', () => {
   setupTabs();
   loadStats();
   loadCategories();
+  loadLiveCategories();
   loadExplorerWallpapers();
+  loadLiveExplorerWallpapers();
+  loadRingtones();
   setupExplorerFilters();
+  setupLiveExplorerFilters();
+  setupRingtoneFilters();
   setupApiConsole();
   setupAdminPanel();
   setupLightbox();
@@ -132,11 +200,20 @@ function setupTabs() {
         }
       });
 
+      // Stop audio playback if navigating away from Ringtones
+      if (tabName !== 'ringtone-explorer' && tabName !== 'admin') {
+        stopRingtoneAudio();
+      }
+
       // Special triggers on tab focus
       if (tabName === 'admin') {
         toggleAdminViewState();
       } else if (tabName === 'explorer') {
         loadExplorerWallpapers();
+      } else if (tabName === 'live-explorer') {
+        loadLiveExplorerWallpapers();
+      } else if (tabName === 'ringtone-explorer') {
+        loadRingtones();
       }
     });
   });
@@ -419,7 +496,15 @@ function toggleAdminViewState() {
     adminLoginCard.style.display = 'none';
     adminPortalHeader.style.display = 'flex';
     adminPanelContent.style.display = 'grid';
-    loadAdminWallpapers();
+    setupAdminTableToggles();
+    syncAdminTableToggleUI();
+    if (currentAdminTableMode === 'static') {
+      loadAdminWallpapers();
+    } else if (currentAdminTableMode === 'live') {
+      loadAdminLivewalls();
+    } else {
+      loadAdminRingtones();
+    }
   } else {
     adminLoginCard.style.display = 'block';
     adminPortalHeader.style.display = 'none';
@@ -472,24 +557,13 @@ function setupAdminPanel() {
     toggleAdminViewState();
   });
 
-  // Source Toggle Listener
+  // Type change & Source change triggers
+  wpTypeSelect.addEventListener('change', toggleFormFields);
   imageSourceGroup.forEach(radio => {
-    radio.addEventListener('change', () => {
-      if (radio.value === 'upload') {
-        fileUploadContainer.style.display = 'block';
-        remoteUrlContainer.style.display = 'none';
-        wpFileInput.required = selectedWallpaperIdForEdit === null; // only required on add
-        wpUrlInput.required = false;
-      } else {
-        fileUploadContainer.style.display = 'none';
-        remoteUrlContainer.style.display = 'block';
-        wpFileInput.required = false;
-        wpUrlInput.required = true;
-      }
-    });
+    radio.addEventListener('change', toggleFormFields);
   });
 
-  // File selected display
+  // File selected displays (Static Image)
   wpFileInput.addEventListener('change', () => {
     if (wpFileInput.files.length > 0) {
       const file = wpFileInput.files[0];
@@ -500,68 +574,146 @@ function setupAdminPanel() {
     }
   });
 
-  // Drag & drop handlers
-  ['dragenter', 'dragover'].forEach(eventName => {
-    dropArea.addEventListener(eventName, (e) => {
-      e.preventDefault();
-      dropArea.style.borderColor = 'var(--accent-cyan)';
-      dropArea.style.backgroundColor = 'rgba(0, 242, 254, 0.05)';
-    }, false);
-  });
-
-  ['dragleave', 'drop'].forEach(eventName => {
-    dropArea.addEventListener(eventName, (e) => {
-      e.preventDefault();
-      dropArea.style.borderColor = 'var(--border-glass)';
-      dropArea.style.backgroundColor = 'rgba(10, 5, 25, 0.4)';
-    }, false);
-  });
-
-  dropArea.addEventListener('drop', (e) => {
-    const dt = e.dataTransfer;
-    const files = dt.files;
-    if (files.length > 0) {
-      wpFileInput.files = files;
-      // Trigger file display
-      const event = new Event('change');
-      wpFileInput.dispatchEvent(event);
+  // File selected displays (Live Video)
+  wpLiveVideoFileInput.addEventListener('change', () => {
+    if (wpLiveVideoFileInput.files.length > 0) {
+      const file = wpLiveVideoFileInput.files[0];
+      liveVideoSelectedName.textContent = `Selected Video: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+      liveVideoSelectedName.style.display = 'block';
+    } else {
+      liveVideoSelectedName.style.display = 'none';
     }
   });
+
+  // File selected displays (Live Thumbnail)
+  wpLiveThumbFileInput.addEventListener('change', () => {
+    if (wpLiveThumbFileInput.files.length > 0) {
+      const file = wpLiveThumbFileInput.files[0];
+      liveThumbSelectedName.textContent = `Selected Thumbnail: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+      liveThumbSelectedName.style.display = 'block';
+    } else {
+      liveThumbSelectedName.style.display = 'none';
+    }
+  });
+
+  // File selected displays (Ringtone Audio)
+  wpRingtoneFileInput.addEventListener('change', () => {
+    if (wpRingtoneFileInput.files.length > 0) {
+      const file = wpRingtoneFileInput.files[0];
+      ringtoneSelectedName.textContent = `Selected Audio: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+      ringtoneSelectedName.style.display = 'block';
+    } else {
+      ringtoneSelectedName.style.display = 'none';
+    }
+  });
+
+  // Drag & drop handlers for Static Drop Area
+  setupDragAndDrop(dropArea, wpFileInput);
+  
+  // Drag & drop handlers for Live Video Drop Area
+  setupDragAndDrop(liveVideoDropArea, wpLiveVideoFileInput);
+
+  // Drag & drop handlers for Live Thumbnail Drop Area
+  setupDragAndDrop(liveThumbDropArea, wpLiveThumbFileInput);
+
+  // Drag & drop handlers for Ringtone Drop Area
+  setupDragAndDrop(ringtoneDropArea, wpRingtoneFileInput);
 
   // Form Submit Handler
   wallpaperForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
+    const type = wpTypeSelect.value; // 'static', 'live', or 'ringtone'
     const name = wpNameInput.value.trim();
     const author = wpAuthorInput.value.trim();
     const category = wpCategorySelect.value;
     const dimensions = wpDimensionsInput.value.trim();
     const copyright = wpCopyrightInput.value.trim();
+    const duration = wpDurationInput.value.trim();
     const source = document.querySelector('input[name="imageSource"]:checked').value;
     
     // Construct FormData to handle binary uploads
     const formData = new FormData();
     formData.append('name', name);
     formData.append('author', author);
-    formData.append('category', category);
-    formData.append('dimensions', dimensions);
-    formData.append('copyright', copyright);
 
-    if (source === 'upload') {
-      if (wpFileInput.files.length > 0) {
-        formData.append('image', wpFileInput.files[0]);
-      } else if (!selectedWallpaperIdForEdit) {
-        showToast('Please select an image file to upload.', 'error');
-        return;
-      }
+    let isEditMode = false;
+    if (type === 'static') {
+      isEditMode = !!selectedWallpaperIdForEdit;
+    } else if (type === 'live') {
+      isEditMode = !!selectedLiveWallpaperIdForEdit;
     } else {
-      const url = wpUrlInput.value.trim();
-      if (!url) {
-        showToast('Please provide a remote image URL.', 'error');
-        return;
+      isEditMode = !!selectedRingtoneIdForEdit;
+    }
+
+    if (type === 'static') {
+      formData.append('category', category);
+      formData.append('dimensions', dimensions);
+      formData.append('copyright', copyright);
+
+      if (source === 'upload') {
+        if (wpFileInput.files.length > 0) {
+          formData.append('image', wpFileInput.files[0]);
+        } else if (!isEditMode) {
+          showToast('Please select an image file to upload.', 'error');
+          return;
+        }
+      } else {
+        const url = wpUrlInput.value.trim();
+        if (!url) {
+          showToast('Please provide a remote image URL.', 'error');
+          return;
+        }
+        formData.append('url', url);
+        formData.append('thumbnail', url);
       }
-      formData.append('url', url);
-      formData.append('thumbnail', url);
+    } else if (type === 'live') {
+      formData.append('category', category);
+      formData.append('dimensions', dimensions);
+      formData.append('copyright', copyright);
+
+      if (source === 'upload') {
+        if (wpLiveVideoFileInput.files.length > 0) {
+          formData.append('video', wpLiveVideoFileInput.files[0]);
+        } else if (!isEditMode) {
+          showToast('Please select a video file to upload.', 'error');
+          return;
+        }
+        if (wpLiveThumbFileInput.files.length > 0) {
+          formData.append('thumbnail', wpLiveThumbFileInput.files[0]);
+        }
+      } else {
+        const videoUrl = wpLiveVideoUrlInput.value.trim();
+        const thumbUrl = wpLiveThumbUrlInput.value.trim();
+        if (!videoUrl) {
+          showToast('Please provide a remote video URL.', 'error');
+          return;
+        }
+        formData.append('url', videoUrl);
+        if (thumbUrl) {
+          formData.append('thumbnail', thumbUrl);
+        } else {
+          formData.append('thumbnail', videoUrl);
+        }
+      }
+    } else { // 'ringtone'
+      formData.append('duration', duration);
+
+      if (source === 'upload') {
+        if (wpRingtoneFileInput.files.length > 0) {
+          formData.append('audio', wpRingtoneFileInput.files[0]);
+        } else if (!isEditMode) {
+          showToast('Please select an audio file to upload.', 'error');
+          return;
+        }
+      } else {
+        const audioUrl = wpRingtoneUrlInput.value.trim();
+        if (!audioUrl) {
+          showToast('Please provide a remote audio URL.', 'error');
+          return;
+        }
+        formData.append('url', audioUrl);
+      }
     }
 
     submitFormBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
@@ -572,21 +724,23 @@ function setupAdminPanel() {
       const headers = {
         'Authorization': `Bearer ${adminToken}`
       };
-      if (selectedWallpaperIdForEdit) {
-        // Edit Endpoint
-        res = await fetch(`/api/v1/wallpapers/${selectedWallpaperIdForEdit}`, {
-          method: 'PUT',
-          headers,
-          body: formData
-        });
+      
+      let endpoint = '';
+      if (type === 'static') {
+        endpoint = isEditMode ? `/api/v1/wallpapers/${selectedWallpaperIdForEdit}` : '/api/v1/wallpapers';
+      } else if (type === 'live') {
+        endpoint = isEditMode ? `/api/v1/livewalls/${selectedLiveWallpaperIdForEdit}` : '/api/v1/livewalls';
       } else {
-        // Add Endpoint
-        res = await fetch('/api/v1/wallpapers', {
-          method: 'POST',
-          headers,
-          body: formData
-        });
+        endpoint = isEditMode ? `/api/v1/ringtones/${selectedRingtoneIdForEdit}` : '/api/v1/ringtones';
       }
+
+      const method = isEditMode ? 'PUT' : 'POST';
+
+      res = await fetch(endpoint, {
+        method,
+        headers,
+        body: formData
+      });
 
       if (res.status === 401) {
         adminToken = null;
@@ -599,16 +753,29 @@ function setupAdminPanel() {
       const data = await res.json();
       
       if (res.ok && data.status === 'success') {
-        showToast(data.message || 'Wallpaper saved successfully!');
+        showToast(data.message || 'Saved successfully!');
         resetForm();
         loadStats();
         loadCategories();
-        loadAdminWallpapers();
+        loadLiveCategories();
+        if (type === 'static') {
+          currentAdminTableMode = 'static';
+          syncAdminTableToggleUI();
+          loadAdminWallpapers();
+        } else if (type === 'live') {
+          currentAdminTableMode = 'live';
+          syncAdminTableToggleUI();
+          loadAdminLivewalls();
+        } else {
+          currentAdminTableMode = 'ringtone';
+          syncAdminTableToggleUI();
+          loadAdminRingtones();
+        }
       } else {
-        showToast(data.message || 'Failed to save wallpaper.', 'error');
+        showToast(data.message || 'Failed to save.', 'error');
       }
     } catch (err) {
-      showToast('Connection error. Failed to save wallpaper.', 'error');
+      showToast('Connection error. Failed to save.', 'error');
       console.error(err);
     } finally {
       submitFormBtn.textContent = 'Save Wallpaper';
@@ -628,8 +795,13 @@ function setupAdminPanel() {
     rows.forEach(row => {
       const name = row.querySelector('td:nth-child(2) div:first-child').textContent.toLowerCase();
       const id = row.querySelector('td:nth-child(2) div:last-child').textContent.toLowerCase();
-      const category = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-      const author = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+      
+      // Category/Author columns may vary, so check safe selectors
+      const col3 = row.querySelector('td:nth-child(3)');
+      const col4 = row.querySelector('td:nth-child(4)');
+      
+      const category = col3 ? col3.textContent.toLowerCase() : '';
+      const author = col4 ? col4.textContent.toLowerCase() : '';
       
       if (name.includes(query) || id.includes(query) || category.includes(query) || author.includes(query)) {
         row.style.display = '';
@@ -646,22 +818,38 @@ function setupAdminPanel() {
 // Reset form fields back to Add Mode
 function resetForm() {
   selectedWallpaperIdForEdit = null;
+  selectedLiveWallpaperIdForEdit = null;
+  selectedRingtoneIdForEdit = null;
   wpIdInput.value = '';
   wpNameInput.value = '';
   wpAuthorInput.value = 'Anify';
   wpCategorySelect.value = 'Anime';
   wpDimensionsInput.value = '1080p';
   wpCopyrightInput.value = 'Free';
+  wpDurationInput.value = '0:30';
+  
+  // Clear file inputs and display names
   wpFileInput.value = '';
   wpUrlInput.value = '';
-  fileSelectedName.style.display = 'none';
+  if (fileSelectedName) fileSelectedName.style.display = 'none';
+
+  wpLiveVideoFileInput.value = '';
+  wpLiveThumbFileInput.value = '';
+  wpLiveVideoUrlInput.value = '';
+  wpLiveThumbUrlInput.value = '';
+  liveVideoSelectedName.style.display = 'none';
+  liveThumbSelectedName.style.display = 'none';
+
+  wpRingtoneFileInput.value = '';
+  wpRingtoneUrlInput.value = '';
+  if (ringtoneSelectedName) ringtoneSelectedName.style.display = 'none';
   
-  // Set upload back to checked
+  // Reset select elements
+  wpTypeSelect.value = 'static';
   document.querySelector('input[name="imageSource"][value="upload"]').checked = true;
-  fileUploadContainer.style.display = 'block';
-  remoteUrlContainer.style.display = 'none';
-  wpFileInput.required = true;
-  wpUrlInput.required = false;
+
+  // Sync field visibility
+  toggleFormFields();
 
   formTitle.textContent = 'Add Wallpaper';
   submitFormBtn.textContent = 'Save Wallpaper';
@@ -671,7 +859,7 @@ function resetForm() {
 // Load List of Wallpapers for Admin Panel
 async function loadAdminWallpapers() {
   try {
-    adminTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</td></tr>';
+    adminTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center"><i class="fa-solid fa-spinner fa-spin"></i> Loading Wallpapers...</td></tr>';
     adminListCount.textContent = 'Loading...';
 
     // Fetch all wallpapers for admin management
@@ -720,7 +908,68 @@ async function loadAdminWallpapers() {
       });
 
       // Bind action handlers
-      setupAdminTableActions(wallpapers);
+      setupAdminTableActions(wallpapers, 'static');
+    }
+  } catch (err) {
+    adminTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--danger)">Error loading admin database.</td></tr>';
+    adminListCount.textContent = 'Connection Error';
+    console.error(err);
+  }
+}
+
+// Load List of Live Wallpapers for Admin Panel
+async function loadAdminLivewalls() {
+  try {
+    adminTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center"><i class="fa-solid fa-spinner fa-spin"></i> Loading Live Wallpapers...</td></tr>';
+    adminListCount.textContent = 'Loading...';
+
+    const res = await fetch('/api/v1/livewalls?limit=1000');
+    const data = await res.json();
+    
+    if (data.status === 'success') {
+      const wallpapers = data.data.livewalls;
+      adminSearchInput.value = '';
+      adminListCount.textContent = `showing ${wallpapers.length} of ${data.pagination.total}`;
+      
+      if (wallpapers.length === 0) {
+        adminTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center">No live wallpapers found in database.</td></tr>';
+        return;
+      }
+
+      adminTableBody.innerHTML = '';
+      wallpapers.forEach(wp => {
+        const row = document.createElement('tr');
+        
+        const thumbUrl = wp.thumbnail || wp.url;
+
+        row.innerHTML = `
+          <td>
+            <div style="position:relative; width:45px; height:60px; overflow:hidden; border-radius:4px; border:1px solid rgba(255,255,255,0.1)">
+              <img class="table-thumbnail" src="${thumbUrl}" alt="preview" onerror="this.src='https://placehold.co/45x60/120e2e/00f2fe?text=Video'" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
+              <i class="fa-solid fa-film" style="position:absolute; bottom:3px; right:3px; font-size:10px; color:#fff; background:rgba(0,0,0,0.6); padding:2px; border-radius:2px;"></i>
+            </div>
+          </td>
+          <td>
+            <div style="font-weight: 600;">${wp.name}</div>
+            <div style="font-size: 0.75rem; color: var(--text-secondary); font-family: var(--font-mono);">${wp.id}</div>
+          </td>
+          <td><span class="wp-category-badge" style="margin: 0; background:rgba(138,75,243,0.1); border:1px solid var(--accent-purple); color:var(--accent-purple)">${wp.category}</span></td>
+          <td>${wp.author}</td>
+          <td style="text-align: right;">
+            <div class="wp-actions" style="justify-content: flex-end;">
+              <button class="btn btn-outline edit-btn" style="padding: 6px 12px; font-size: 0.8rem;" data-id="${wp.id}">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button class="btn btn-danger delete-btn" style="padding: 6px 12px; font-size: 0.8rem;" data-id="${wp.id}">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        `;
+        adminTableBody.appendChild(row);
+      });
+
+      setupAdminTableActions(wallpapers, 'live');
     }
   } catch (err) {
     adminTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--danger)">Error loading admin database.</td></tr>';
@@ -730,42 +979,71 @@ async function loadAdminWallpapers() {
 }
 
 // Bind Edit & Delete functions
-function setupAdminTableActions(wallpapers) {
+function setupAdminTableActions(items, type = 'static') {
   // Edit Handlers
   const editButtons = document.querySelectorAll('.edit-btn');
   editButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const id = btn.getAttribute('data-id');
-      const wp = wallpapers.find(w => w.id === id);
+      const wp = items.find(w => w.id === id);
       if (!wp) return;
 
-      selectedWallpaperIdForEdit = id;
+      resetForm();
+
       wpIdInput.value = wp.id;
       wpNameInput.value = wp.name;
       wpAuthorInput.value = wp.author;
-      wpCategorySelect.value = wp.category;
-      wpDimensionsInput.value = wp.dimensions;
-      wpCopyrightInput.value = wp.copyright;
+      if (wp.category) wpCategorySelect.value = wp.category;
+      if (wp.dimensions) wpDimensionsInput.value = wp.dimensions;
+      if (wp.copyright) wpCopyrightInput.value = wp.copyright;
+      if (wp.duration) wpDurationInput.value = wp.duration;
+
+      wpTypeSelect.value = type;
 
       // Check if URL is local upload or remote
-      if (wp.url.startsWith('/uploads/')) {
-        document.querySelector('input[name="imageSource"][value="upload"]').checked = true;
-        fileUploadContainer.style.display = 'block';
-        remoteUrlContainer.style.display = 'none';
-        fileSelectedName.textContent = `Currently using uploaded file: ${wp.url.replace('/uploads/', '')}`;
-        fileSelectedName.style.display = 'block';
-        wpFileInput.required = false; // file not required on edits
-        wpUrlInput.required = false;
-      } else {
-        document.querySelector('input[name="imageSource"][value="url"]').checked = true;
-        fileUploadContainer.style.display = 'none';
-        remoteUrlContainer.style.display = 'block';
-        wpUrlInput.value = wp.url;
-        wpFileInput.required = false;
-        wpUrlInput.required = true;
+      const isLocal = wp.url.startsWith('/uploads/');
+      
+      if (type === 'static') {
+        selectedWallpaperIdForEdit = id;
+        if (isLocal) {
+          document.querySelector('input[name="imageSource"][value="upload"]').checked = true;
+          fileSelectedName.textContent = `Currently using uploaded file: ${wp.url.replace('/uploads/', '')}`;
+          fileSelectedName.style.display = 'block';
+        } else {
+          document.querySelector('input[name="imageSource"][value="url"]').checked = true;
+          wpUrlInput.value = wp.url;
+        }
+      } else if (type === 'live') {
+        selectedLiveWallpaperIdForEdit = id;
+        if (isLocal) {
+          document.querySelector('input[name="imageSource"][value="upload"]').checked = true;
+          liveVideoSelectedName.textContent = `Currently using uploaded video: ${wp.url.replace('/uploads/', '')}`;
+          liveVideoSelectedName.style.display = 'block';
+          if (wp.thumbnail && wp.thumbnail.startsWith('/uploads/')) {
+            liveThumbSelectedName.textContent = `Currently using uploaded thumbnail: ${wp.thumbnail.replace('/uploads/', '')}`;
+            liveThumbSelectedName.style.display = 'block';
+          }
+        } else {
+          document.querySelector('input[name="imageSource"][value="url"]').checked = true;
+          wpLiveVideoUrlInput.value = wp.url;
+          wpLiveThumbUrlInput.value = wp.thumbnail || '';
+        }
+      } else { // 'ringtone'
+        selectedRingtoneIdForEdit = id;
+        if (isLocal) {
+          document.querySelector('input[name="imageSource"][value="upload"]').checked = true;
+          ringtoneSelectedName.textContent = `Currently using uploaded audio: ${wp.url.replace('/uploads/', '')}`;
+          ringtoneSelectedName.style.display = 'block';
+        } else {
+          document.querySelector('input[name="imageSource"][value="url"]').checked = true;
+          wpRingtoneUrlInput.value = wp.url;
+        }
       }
 
-      formTitle.textContent = 'Edit Wallpaper';
+      // Sync inputs visibility
+      toggleFormFields();
+
+      formTitle.textContent = type === 'static' ? 'Edit Wallpaper' : (type === 'live' ? 'Edit Live Wallpaper' : 'Edit Ringtone');
       submitFormBtn.textContent = 'Update Details';
       cancelEditBtn.style.display = 'block';
       
@@ -787,7 +1065,10 @@ function setupAdminTableActions(wallpapers) {
       }
 
       try {
-        const res = await fetch(`/api/v1/wallpapers/${id}`, {
+        const endpoint = type === 'static' 
+          ? `/api/v1/wallpapers/${id}` 
+          : (type === 'live' ? `/api/v1/livewalls/${id}` : `/api/v1/ringtones/${id}`);
+        const res = await fetch(endpoint, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${adminToken}`
@@ -808,17 +1089,22 @@ function setupAdminTableActions(wallpapers) {
           showToast(`"${wpName}" deleted successfully.`);
           loadStats();
           loadCategories();
-          loadAdminWallpapers();
-          
-          // If deleted wallpaper was currently being edited, reset the form
-          if (selectedWallpaperIdForEdit === id) {
-            resetForm();
+          loadLiveCategories();
+          if (type === 'static') {
+            loadAdminWallpapers();
+            if (selectedWallpaperIdForEdit === id) resetForm();
+          } else if (type === 'live') {
+            loadAdminLivewalls();
+            if (selectedLiveWallpaperIdForEdit === id) resetForm();
+          } else {
+            loadAdminRingtones();
+            if (selectedRingtoneIdForEdit === id) resetForm();
           }
         } else {
-          showToast(data.message || 'Failed to delete wallpaper.', 'error');
+          showToast(data.message || 'Failed to delete.', 'error');
         }
       } catch (err) {
-        showToast('Connection error. Failed to delete wallpaper.', 'error');
+        showToast('Connection error. Failed to delete.', 'error');
         console.error(err);
       }
     });
@@ -845,11 +1131,24 @@ function setupLightbox() {
 
 // Open Lightbox with wallpaper data
 function openLightbox(wp) {
-  lightboxImg.src = wp.url;
+  const isVideo = wp.url.endsWith('.mp4') || wp.url.endsWith('.webm') || wp.url.endsWith('.mov') || wp.url.includes('livewall-');
+
+  if (isVideo) {
+    lightboxImg.style.display = 'none';
+    lightboxVideo.style.display = 'block';
+    lightboxVideo.src = wp.url;
+    lightboxVideo.play().catch(err => console.log('Autoplay prevented:', err));
+  } else {
+    lightboxImg.style.display = 'block';
+    lightboxVideo.style.display = 'none';
+    lightboxImg.src = wp.url;
+    lightboxVideo.src = '';
+  }
+
   lightboxCategory.textContent = wp.category;
   lightboxTitle.textContent = wp.name;
   lightboxAuthor.textContent = `by ${wp.author}`;
-  lightboxResolution.textContent = wp.dimensions || '1080p';
+  lightboxResolution.textContent = wp.dimensions || (isVideo ? '1080x1920' : '1080p');
   lightboxLicense.textContent = wp.copyright || 'Free';
   lightboxDownloadBtn.href = wp.url;
 
@@ -862,6 +1161,8 @@ function closeLightbox() {
   wpLightbox.style.display = 'none';
   document.body.style.overflow = ''; // Re-enable background scrolling
   lightboxImg.src = ''; // Clear source to stop loading
+  lightboxVideo.pause();
+  lightboxVideo.src = '';
 }
 
 // Prettify & Syntax Highlight JSON payload
@@ -886,3 +1187,629 @@ function syntaxHighlight(json) {
     return '<span class="json-' + cls + '">' + match + '</span>';
   });
 }
+
+// ----------------------------------------------------
+// LIVE WALLPAPER UTILITIES & INTERACTIVE UI
+// ----------------------------------------------------
+
+// Load Live Wallpapers for Explorer Tab
+async function loadLiveExplorerWallpapers() {
+  try {
+    liveWallpaperGrid.innerHTML = '<div class="terminal-prompt" style="grid-column: 1/-1; text-align:center;"><i class="fa-solid fa-spinner fa-spin" style="margin-right:8px;"></i>Loading Live Wallpapers...</div>';
+    
+    const params = new URLSearchParams({
+      page: currentLivePage,
+      limit: currentLiveLimit
+    });
+    if (currentLiveSearch) params.append('search', currentLiveSearch);
+    if (currentLiveCategory) params.append('category', currentLiveCategory);
+    if (currentLiveSort) params.append('sort', currentLiveSort);
+
+    const res = await fetch(`/api/v1/livewalls?${params.toString()}`);
+    const data = await res.json();
+    
+    if (data.status === 'success') {
+      const wallpapers = data.data.livewalls;
+      const pagination = data.pagination;
+      
+      if (wallpapers.length === 0) {
+        liveWallpaperGrid.innerHTML = '<div class="terminal-prompt" style="grid-column: 1/-1; text-align:center;"><i class="fa-solid fa-image-slash" style="margin-right:8px; font-size:1.5rem;"></i>No live wallpapers found.</div>';
+        livePaginationContainer.innerHTML = '';
+        return;
+      }
+
+      liveWallpaperGrid.innerHTML = '';
+      wallpapers.forEach(wp => {
+        const card = document.createElement('div');
+        card.className = 'wp-card';
+        
+        const thumbUrl = wp.thumbnail || wp.url;
+        
+        card.innerHTML = `
+          <div class="wp-thumbnail-container">
+            <img src="${thumbUrl}" alt="${wp.name}" onerror="this.src='https://placehold.co/400x600/120e2e/00f2fe?text=Video+Preview'">
+            <div class="wp-overlay">
+              <span class="wp-category-badge" style="background:var(--accent-purple); border-color:var(--accent-purple);">${wp.category}</span>
+              <h3 class="wp-name">${wp.name}</h3>
+              <p class="wp-author">by ${wp.author}</p>
+              <div class="wp-meta-specs">
+                <span><i class="fa-solid fa-expand"></i> ${wp.dimensions}</span>
+                <span><i class="fa-solid fa-film"></i> Live</span>
+              </div>
+              <div class="wp-actions">
+                <button class="btn btn-primary open-lightbox-btn" style="background:var(--accent-purple);"><i class="fa-solid fa-play"></i> Play Preview</button>
+              </div>
+            </div>
+          </div>
+          <div class="wp-card-details">
+            <div class="wp-title-row">
+              <span style="font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:180px;">${wp.name}</span>
+              <span style="font-size:0.75rem; color:var(--accent-purple); font-weight:600; text-transform:uppercase;">Live</span>
+            </div>
+            <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:2px;">by ${wp.author}</div>
+          </div>
+        `;
+
+        // Click actions
+        const playBtn = card.querySelector('.open-lightbox-btn');
+        playBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openLightbox(wp);
+        });
+
+        const container = card.querySelector('.wp-thumbnail-container');
+        container.addEventListener('click', () => openLightbox(wp));
+
+        liveWallpaperGrid.appendChild(card);
+      });
+
+      renderLivePagination(pagination);
+    }
+  } catch (err) {
+    console.error('Failed to load live explorer wallpapers', err);
+    liveWallpaperGrid.innerHTML = '<div class="terminal-prompt" style="grid-column:1/-1; color:var(--danger); text-align:center;"><i class="fa-solid fa-triangle-exclamation"></i> Error loading live wallpapers.</div>';
+  }
+}
+
+// Load Unique Categories for Live Dropdown
+async function loadLiveCategories() {
+  try {
+    const res = await fetch('/api/v1/livewalls/categories');
+    const data = await res.json();
+    if (data.status === 'success') {
+      const cats = data.data.categories;
+      liveCategoryFilter.innerHTML = '<option value="">All Categories</option>';
+      cats.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.name;
+        opt.textContent = `${c.name} (${c.count})`;
+        liveCategoryFilter.appendChild(opt);
+      });
+    }
+  } catch (err) {
+    console.error('Failed to load live categories', err);
+  }
+}
+
+// Live Explorer Filters listeners
+function setupLiveExplorerFilters() {
+  liveSearchInput.addEventListener('input', debounce(() => {
+    currentLiveSearch = liveSearchInput.value;
+    currentLivePage = 1;
+    loadLiveExplorerWallpapers();
+  }, 300));
+
+  liveCategoryFilter.addEventListener('change', () => {
+    currentLiveCategory = liveCategoryFilter.value;
+    currentLivePage = 1;
+    loadLiveExplorerWallpapers();
+  });
+
+  liveSortFilter.addEventListener('change', () => {
+    currentLiveSort = liveSortFilter.value;
+    currentLivePage = 1;
+    loadLiveExplorerWallpapers();
+  });
+
+  liveLimitFilter.addEventListener('change', () => {
+    currentLiveLimit = parseInt(liveLimitFilter.value, 10);
+    currentLivePage = 1;
+    loadLiveExplorerWallpapers();
+  });
+}
+
+// Render Live pagination buttons
+function renderLivePagination(pagination) {
+  livePaginationContainer.innerHTML = '';
+  if (pagination.pages <= 1) return;
+
+  const prevBtn = document.createElement('button');
+  prevBtn.className = 'btn btn-outline';
+  prevBtn.innerHTML = '<i class="fa-solid fa-angle-left"></i>';
+  prevBtn.disabled = pagination.page === 1;
+  prevBtn.addEventListener('click', () => {
+    currentLivePage = pagination.page - 1;
+    loadLiveExplorerWallpapers();
+  });
+  livePaginationContainer.appendChild(prevBtn);
+
+  const pageInfo = document.createElement('span');
+  pageInfo.className = 'page-info';
+  pageInfo.textContent = `Page ${pagination.page} of ${pagination.pages}`;
+  livePaginationContainer.appendChild(pageInfo);
+
+  const nextBtn = document.createElement('button');
+  nextBtn.className = 'btn btn-outline';
+  nextBtn.innerHTML = '<i class="fa-solid fa-angle-right"></i>';
+  nextBtn.disabled = pagination.page === pagination.pages;
+  nextBtn.addEventListener('click', () => {
+    currentLivePage = pagination.page + 1;
+    loadLiveExplorerWallpapers();
+  });
+  livePaginationContainer.appendChild(nextBtn);
+}
+
+// Form Drag and Drop Helper
+function setupDragAndDrop(area, input) {
+  if (!area || !input) return;
+
+  // Add click to select file
+  area.addEventListener('click', () => input.click());
+
+  ['dragenter', 'dragover'].forEach(eventName => {
+    area.addEventListener(eventName, (e) => {
+      e.preventDefault();
+      area.style.borderColor = 'var(--accent-cyan)';
+      area.style.backgroundColor = 'rgba(0, 242, 254, 0.05)';
+    }, false);
+  });
+
+  ['dragleave', 'drop'].forEach(eventName => {
+    area.addEventListener(eventName, (e) => {
+      e.preventDefault();
+      area.style.borderColor = 'var(--border-glass)';
+      area.style.backgroundColor = 'rgba(10, 5, 25, 0.4)';
+    }, false);
+  });
+
+  area.addEventListener('drop', (e) => {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    if (files.length > 0) {
+      input.files = files;
+      const event = new Event('change');
+      input.dispatchEvent(event);
+    }
+  });
+}
+
+// Form Field Toggler
+function toggleFormFields() {
+  const type = wpTypeSelect.value; // 'static', 'live', or 'ringtone'
+  const source = document.querySelector('input[name="imageSource"]:checked').value; // 'upload' or 'url'
+
+  const sourceLabel = document.getElementById('imageSourceGroup').querySelector('label');
+  
+  // Show/Hide category, dimensions, copyright, duration
+  const categoryGroup = wpCategorySelect.closest('.form-group');
+  const dimensionsGroup = wpDimensionsInput.closest('.form-group');
+  const copyrightGroup = document.getElementById('wpCopyrightGroup') || wpCopyrightInput.closest('.form-group');
+
+  if (type === 'ringtone') {
+    if (sourceLabel) sourceLabel.textContent = 'Audio Source';
+    
+    if (categoryGroup) categoryGroup.style.display = 'none';
+    if (dimensionsGroup) dimensionsGroup.style.display = 'none';
+    if (copyrightGroup) copyrightGroup.style.display = 'none';
+    if (ringtoneDurationGroup) ringtoneDurationGroup.style.display = 'block';
+    
+    // Manage input requirements
+    wpCategorySelect.required = false;
+    wpDimensionsInput.required = false;
+    wpCopyrightInput.required = false;
+    wpDurationInput.required = true;
+    
+    // Manage source containers
+    if (source === 'upload') {
+      fileUploadContainer.style.display = 'none';
+      remoteUrlContainer.style.display = 'none';
+      liveUploadContainer.style.display = 'none';
+      liveRemoteUrlContainer.style.display = 'none';
+      ringtoneUploadContainer.style.display = 'block';
+      ringtoneRemoteUrlContainer.style.display = 'none';
+      wpRingtoneFileInput.required = selectedRingtoneIdForEdit === null;
+      wpRingtoneUrlInput.required = false;
+    } else {
+      fileUploadContainer.style.display = 'none';
+      remoteUrlContainer.style.display = 'none';
+      liveUploadContainer.style.display = 'none';
+      liveRemoteUrlContainer.style.display = 'none';
+      ringtoneUploadContainer.style.display = 'none';
+      ringtoneRemoteUrlContainer.style.display = 'block';
+      wpRingtoneFileInput.required = false;
+      wpRingtoneUrlInput.required = true;
+    }
+    
+    // Disable other type file requirements
+    wpFileInput.required = false;
+    wpUrlInput.required = false;
+    wpLiveVideoFileInput.required = false;
+    wpLiveVideoUrlInput.required = false;
+  } else {
+    // static or live
+    if (categoryGroup) categoryGroup.style.display = 'block';
+    if (dimensionsGroup) dimensionsGroup.style.display = 'block';
+    if (copyrightGroup) copyrightGroup.style.display = 'block';
+    if (ringtoneDurationGroup) ringtoneDurationGroup.style.display = 'none';
+    
+    wpCategorySelect.required = true;
+    wpDurationInput.required = false;
+    
+    if (type === 'static') {
+      if (sourceLabel) sourceLabel.textContent = 'Image Source';
+      if (source === 'upload') {
+        fileUploadContainer.style.display = 'block';
+        remoteUrlContainer.style.display = 'none';
+        liveUploadContainer.style.display = 'none';
+        liveRemoteUrlContainer.style.display = 'none';
+        ringtoneUploadContainer.style.display = 'none';
+        ringtoneRemoteUrlContainer.style.display = 'none';
+        wpFileInput.required = selectedWallpaperIdForEdit === null;
+        wpUrlInput.required = false;
+      } else {
+        fileUploadContainer.style.display = 'none';
+        remoteUrlContainer.style.display = 'block';
+        liveUploadContainer.style.display = 'none';
+        liveRemoteUrlContainer.style.display = 'none';
+        ringtoneUploadContainer.style.display = 'none';
+        ringtoneRemoteUrlContainer.style.display = 'none';
+        wpFileInput.required = false;
+        wpUrlInput.required = true;
+      }
+      wpLiveVideoFileInput.required = false;
+      wpLiveVideoUrlInput.required = false;
+      wpRingtoneFileInput.required = false;
+      wpRingtoneUrlInput.required = false;
+    } else { // 'live'
+      if (sourceLabel) sourceLabel.textContent = 'Video Source';
+      if (source === 'upload') {
+        fileUploadContainer.style.display = 'none';
+        remoteUrlContainer.style.display = 'none';
+        liveUploadContainer.style.display = 'block';
+        liveRemoteUrlContainer.style.display = 'none';
+        ringtoneUploadContainer.style.display = 'none';
+        ringtoneRemoteUrlContainer.style.display = 'none';
+        wpLiveVideoFileInput.required = selectedLiveWallpaperIdForEdit === null;
+        wpLiveVideoUrlInput.required = false;
+      } else {
+        fileUploadContainer.style.display = 'none';
+        remoteUrlContainer.style.display = 'none';
+        liveUploadContainer.style.display = 'none';
+        liveRemoteUrlContainer.style.display = 'block';
+        ringtoneUploadContainer.style.display = 'none';
+        ringtoneRemoteUrlContainer.style.display = 'none';
+        wpLiveVideoFileInput.required = false;
+        wpLiveVideoUrlInput.required = true;
+      }
+      wpFileInput.required = false;
+      wpUrlInput.required = false;
+      wpRingtoneFileInput.required = false;
+      wpRingtoneUrlInput.required = false;
+    }
+  }
+}
+
+// Setup Admin table toggles Static vs Live vs Ringtone lists
+function setupAdminTableToggles() {
+  if (!adminTableToggleStatic || !adminTableToggleLive || !adminTableToggleRingtone) return;
+
+  adminTableToggleStatic.addEventListener('click', () => {
+    currentAdminTableMode = 'static';
+    syncAdminTableToggleUI();
+    loadAdminWallpapers();
+  });
+
+  adminTableToggleLive.addEventListener('click', () => {
+    currentAdminTableMode = 'live';
+    syncAdminTableToggleUI();
+    loadAdminLivewalls();
+  });
+
+  adminTableToggleRingtone.addEventListener('click', () => {
+    currentAdminTableMode = 'ringtone';
+    syncAdminTableToggleUI();
+    loadAdminRingtones();
+  });
+}
+
+function syncAdminTableToggleUI() {
+  if (!adminTableToggleStatic || !adminTableToggleLive || !adminTableToggleRingtone) return;
+  if (currentAdminTableMode === 'static') {
+    adminTableToggleStatic.className = 'btn btn-primary';
+    adminTableToggleLive.className = 'btn btn-outline';
+    adminTableToggleRingtone.className = 'btn btn-outline';
+  } else if (currentAdminTableMode === 'live') {
+    adminTableToggleStatic.className = 'btn btn-outline';
+    adminTableToggleLive.className = 'btn btn-primary';
+    adminTableToggleRingtone.className = 'btn btn-outline';
+  } else {
+    adminTableToggleStatic.className = 'btn btn-outline';
+    adminTableToggleLive.className = 'btn btn-outline';
+    adminTableToggleRingtone.className = 'btn btn-primary';
+  }
+}
+
+// ----------------------------------------------------
+// RINGTONE UTILITIES & INTERACTIVE UI
+// ----------------------------------------------------
+
+// Load Ringtones for Explorer Tab
+async function loadRingtones() {
+  try {
+    ringtoneGrid.innerHTML = '<div class="terminal-prompt" style="grid-column: 1/-1; text-align:center;"><i class="fa-solid fa-spinner fa-spin" style="margin-right:8px;"></i>Loading Ringtones...</div>';
+    
+    const params = new URLSearchParams({
+      page: currentRingtonePage,
+      limit: currentRingtoneLimit
+    });
+    if (currentRingtoneSearch) params.append('search', currentRingtoneSearch);
+    if (currentRingtoneSort) params.append('sort', currentRingtoneSort);
+
+    const res = await fetch(`/api/v1/ringtones?${params.toString()}`);
+    const data = await res.json();
+    
+    if (data.status === 'success') {
+      const ringtones = data.data.ringtones;
+      const pagination = data.pagination;
+      
+      if (ringtones.length === 0) {
+        ringtoneGrid.innerHTML = '<div class="terminal-prompt" style="grid-column: 1/-1; text-align:center;"><i class="fa-solid fa-music-slash" style="margin-right:8px; font-size:1.5rem;"></i>No ringtones found.</div>';
+        ringtonePaginationContainer.innerHTML = '';
+        return;
+      }
+
+      ringtoneGrid.innerHTML = '';
+      ringtones.forEach(rt => {
+        const card = document.createElement('div');
+        card.className = 'wp-card ringtone-card';
+        card.style.display = 'flex';
+        card.style.flexDirection = 'column';
+        card.style.justifyContent = 'space-between';
+        card.style.padding = '20px';
+        card.style.height = '180px';
+        card.style.background = 'var(--bg-card)';
+        card.style.border = '1px solid var(--border-glass)';
+        card.style.borderRadius = '16px';
+        card.style.position = 'relative';
+        card.style.transition = 'all 0.3s ease';
+
+        card.innerHTML = `
+          <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+            <div style="display: flex; align-items: center; gap: 15px; width: calc(100% - 60px);">
+              <div class="audio-play-btn" data-url="${rt.url}" style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3); transition: transform 0.2s ease;">
+                <i class="fa-solid fa-play" style="color: #fff; font-size: 1.1rem; margin-left: 2px;"></i>
+              </div>
+              <div style="overflow: hidden; width: 100%;">
+                <h3 style="font-size: 1.05rem; font-weight: 700; margin: 0; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${rt.name}">${rt.name}</h3>
+                <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 3px 0 0 0;">by ${rt.author}</p>
+              </div>
+            </div>
+            <div style="text-align: right; flex-shrink: 0;">
+              <span class="wp-category-badge" style="background: rgba(0, 242, 254, 0.1); border-color: var(--accent-cyan); color: var(--accent-cyan); margin: 0;">${rt.duration}</span>
+            </div>
+          </div>
+          <div style="border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 15px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.75rem; color: var(--text-secondary); font-family: var(--font-mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 150px;">ID: ${rt.id}</span>
+            <a href="${rt.url}" download="${rt.name}" target="_blank" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.75rem; display: flex; align-items: center; gap: 5px;">
+              <i class="fa-solid fa-download"></i> Download
+            </a>
+          </div>
+        `;
+
+        card.addEventListener('mouseenter', () => {
+          card.style.borderColor = 'var(--accent-cyan)';
+          card.style.transform = 'translateY(-3px)';
+          card.style.boxShadow = '0 10px 25px rgba(0, 242, 254, 0.15)';
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.borderColor = 'var(--border-glass)';
+          card.style.transform = 'translateY(0)';
+          card.style.boxShadow = 'none';
+        });
+
+        const playBtn = card.querySelector('.audio-play-btn');
+        if (playBtn) {
+          playBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            playRingtone(rt.url, playBtn);
+          });
+        }
+
+        ringtoneGrid.appendChild(card);
+      });
+
+      renderRingtonePagination(pagination);
+    }
+  } catch (err) {
+    console.error('Failed to load explorer ringtones', err);
+    ringtoneGrid.innerHTML = '<div class="terminal-prompt" style="grid-column:1/-1; color:var(--danger); text-align:center;"><i class="fa-solid fa-triangle-exclamation"></i> Error loading ringtones.</div>';
+  }
+}
+
+// Render Ringtone pagination buttons
+function renderRingtonePagination(pagination) {
+  ringtonePaginationContainer.innerHTML = '';
+  if (pagination.pages <= 1) return;
+
+  const prevBtn = document.createElement('button');
+  prevBtn.className = 'btn btn-outline';
+  prevBtn.innerHTML = '<i class="fa-solid fa-angle-left"></i>';
+  prevBtn.disabled = pagination.page === 1;
+  prevBtn.addEventListener('click', () => {
+    currentRingtonePage = pagination.page - 1;
+    loadRingtones();
+  });
+  ringtonePaginationContainer.appendChild(prevBtn);
+
+  const pageInfo = document.createElement('span');
+  pageInfo.className = 'page-info';
+  pageInfo.textContent = `Page ${pagination.page} of ${pagination.pages}`;
+  ringtonePaginationContainer.appendChild(pageInfo);
+
+  const nextBtn = document.createElement('button');
+  nextBtn.className = 'btn btn-outline';
+  nextBtn.innerHTML = '<i class="fa-solid fa-angle-right"></i>';
+  nextBtn.disabled = pagination.page === pagination.pages;
+  nextBtn.addEventListener('click', () => {
+    currentRingtonePage = pagination.page + 1;
+    loadRingtones();
+  });
+  ringtonePaginationContainer.appendChild(nextBtn);
+}
+
+// Ringtone Filters listeners
+function setupRingtoneFilters() {
+  if (!ringtoneSearchInput) return;
+  
+  ringtoneSearchInput.addEventListener('input', debounce(() => {
+    currentRingtoneSearch = ringtoneSearchInput.value;
+    currentRingtonePage = 1;
+    loadRingtones();
+  }, 300));
+
+  ringtoneSortFilter.addEventListener('change', () => {
+    currentRingtoneSort = ringtoneSortFilter.value;
+    currentRingtonePage = 1;
+    loadRingtones();
+  });
+
+  ringtoneLimitFilter.addEventListener('change', () => {
+    currentRingtoneLimit = parseInt(ringtoneLimitFilter.value, 10);
+    currentRingtonePage = 1;
+    loadRingtones();
+  });
+}
+
+// Play/Pause Ringtone Audio
+function playRingtone(url, btn) {
+  const icon = btn.querySelector('i');
+  
+  if (currentPlayingAudio && currentPlayingButton === btn) {
+    if (!currentPlayingAudio.paused) {
+      currentPlayingAudio.pause();
+      icon.className = 'fa-solid fa-play';
+      icon.style.marginLeft = '2px';
+      btn.style.transform = 'scale(1)';
+    } else {
+      currentPlayingAudio.play().catch(err => {
+        showToast('Playback failed. Please check the URL.', 'error');
+        console.error(err);
+      });
+      icon.className = 'fa-solid fa-pause';
+      icon.style.marginLeft = '0';
+      btn.style.transform = 'scale(1.05)';
+    }
+    return;
+  }
+  
+  stopRingtoneAudio();
+  
+  const audio = new Audio(url);
+  currentPlayingAudio = audio;
+  currentPlayingButton = btn;
+  
+  icon.className = 'fa-solid fa-spinner fa-spin';
+  icon.style.marginLeft = '0';
+  
+  audio.play()
+    .then(() => {
+      icon.className = 'fa-solid fa-pause';
+      icon.style.marginLeft = '0';
+      btn.style.transform = 'scale(1.05)';
+    })
+    .catch(err => {
+      showToast('Failed to play audio. Check URL or network.', 'error');
+      console.error(err);
+      stopRingtoneAudio();
+    });
+    
+  audio.addEventListener('ended', () => {
+    stopRingtoneAudio();
+  });
+}
+
+// Stop current active playing ringtone
+function stopRingtoneAudio() {
+  if (currentPlayingAudio) {
+    currentPlayingAudio.pause();
+    currentPlayingAudio = null;
+  }
+  if (currentPlayingButton) {
+    const icon = currentPlayingButton.querySelector('i');
+    if (icon) {
+      icon.className = 'fa-solid fa-play';
+      icon.style.marginLeft = '2px';
+    }
+    currentPlayingButton.style.transform = 'scale(1)';
+    currentPlayingButton = null;
+  }
+}
+
+// Load List of Ringtones for Admin Panel
+async function loadAdminRingtones() {
+  try {
+    adminTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center"><i class="fa-solid fa-spinner fa-spin"></i> Loading Ringtones...</td></tr>';
+    adminListCount.textContent = 'Loading...';
+
+    const res = await fetch('/api/v1/ringtones?limit=1000');
+    const data = await res.json();
+    
+    if (data.status === 'success') {
+      const ringtones = data.data.ringtones;
+      adminSearchInput.value = '';
+      adminListCount.textContent = `showing ${ringtones.length} of ${data.pagination.total}`;
+      
+      if (ringtones.length === 0) {
+        adminTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center">No ringtones found in database.</td></tr>';
+        return;
+      }
+
+      adminTableBody.innerHTML = '';
+      ringtones.forEach(rt => {
+        const row = document.createElement('tr');
+        
+        row.innerHTML = `
+          <td>
+            <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center; background:rgba(0,242,254,0.1); border:1px solid var(--accent-cyan); border-radius:8px; color:var(--accent-cyan)">
+              <i class="fa-solid fa-music" style="font-size:18px;"></i>
+            </div>
+          </td>
+          <td>
+            <div style="font-weight: 600;">${rt.name}</div>
+            <div style="font-size: 0.75rem; color: var(--text-secondary); font-family: var(--font-mono);">${rt.id}</div>
+          </td>
+          <td><span class="wp-category-badge" style="margin: 0; background:rgba(0,242,254,0.1); border:1px solid var(--accent-cyan); color:var(--accent-cyan)">${rt.duration}</span></td>
+          <td>${rt.author}</td>
+          <td style="text-align: right;">
+            <div class="wp-actions" style="justify-content: flex-end;">
+              <button class="btn btn-outline edit-btn" style="padding: 6px 12px; font-size: 0.8rem;" data-id="${rt.id}">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button class="btn btn-danger delete-btn" style="padding: 6px 12px; font-size: 0.8rem;" data-id="${rt.id}">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        `;
+        adminTableBody.appendChild(row);
+      });
+
+      setupAdminTableActions(ringtones, 'ringtone');
+    }
+  } catch (err) {
+    adminTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--danger)">Error loading admin database.</td></tr>';
+    adminListCount.textContent = 'Connection Error';
+    console.error(err);
+  }
+}
+
