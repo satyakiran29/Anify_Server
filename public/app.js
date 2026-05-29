@@ -6,6 +6,11 @@ let currentCategory = '';
 let currentSort = '';
 let selectedWallpaperIdForEdit = null;
 
+// Live uptime ticker
+let _uptimeSeconds = 0;
+let _uptimeTicker = null;
+
+
 // Live State management
 let currentLivePage = 1;
 let currentLiveLimit = 12;
@@ -222,6 +227,7 @@ function setupTabs() {
 // Load System Statistics
 async function loadStats() {
   try {
+    const fetchStart = Date.now();
     const res = await fetch('/api/v1/wallpapers/stats');
     const data = await res.json();
     if (data.status === 'success') {
@@ -229,17 +235,32 @@ async function loadStats() {
       statTotal.textContent = s.totalWallpapers;
       statCategories.textContent = s.totalCategories;
       statAuthors.textContent = s.totalAuthors;
-      
-      // Format uptime
-      const hrs = Math.floor(s.serverUptimeSeconds / 3600);
-      const mins = Math.floor((s.serverUptimeSeconds % 3600) / 60);
-      const secs = s.serverUptimeSeconds % 60;
-      statUptime.textContent = `${hrs}h ${mins}m ${secs}s`;
+
+      // Seed the live counter: server uptime + round-trip latency
+      _uptimeSeconds = s.serverUptimeSeconds + Math.round((Date.now() - fetchStart) / 1000);
+
+      // Start (or restart) the 1-second local ticker
+      if (_uptimeTicker) clearInterval(_uptimeTicker);
+      _uptimeTicker = setInterval(() => {
+        _uptimeSeconds++;
+        renderUptime(_uptimeSeconds);
+      }, 1000);
+
+      renderUptime(_uptimeSeconds);
     }
   } catch (err) {
     console.error('Failed to load server stats', err);
   }
 }
+
+function renderUptime(totalSecs) {
+  const hrs  = Math.floor(totalSecs / 3600);
+  const mins = Math.floor((totalSecs % 3600) / 60);
+  const secs = totalSecs % 60;
+  statUptime.textContent =
+    `${String(hrs).padStart(2,'0')}h ${String(mins).padStart(2,'0')}m ${String(secs).padStart(2,'0')}s`;
+}
+
 
 // Load Unique Categories for Filter Dropdown
 async function loadCategories() {
@@ -337,10 +358,13 @@ async function loadExplorerWallpapers() {
         
         // Render preview image
         const thumbUrl = wp.thumbnail;
+        const localFallback = thumbUrl.includes('raw.githubusercontent.com') && thumbUrl.includes('/public/uploads/')
+          ? thumbUrl.replace(/https:\/\/raw\.githubusercontent\.com\/[^/]+\/[^/]+\/[^/]+\/public/, '')
+          : 'https://placehold.co/400x600/120e2e/00f2fe?text=Image+Not+Found';
         
         card.innerHTML = `
           <div class="wp-thumbnail-container">
-            <img src="${thumbUrl}" alt="${wp.name}" onerror="this.src='https://placehold.co/400x600/120e2e/00f2fe?text=Image+Not+Found'">
+            <img src="${thumbUrl}" alt="${wp.name}" onerror="this.onerror=null;this.src='${localFallback}'">
             <div class="wp-overlay">
               <span class="wp-category-badge">${wp.category}</span>
               <h3 class="wp-name">${wp.name}</h3>
@@ -863,7 +887,7 @@ async function loadAdminWallpapers() {
     adminListCount.textContent = 'Loading...';
 
     // Fetch all wallpapers for admin management
-    const res = await fetch('/api/v1/wallpapers?limit=1000');
+    const res = await fetch('/api/v1/wallpapers?limit=0');
     const data = await res.json();
     
     if (data.status === 'success') {
@@ -882,10 +906,14 @@ async function loadAdminWallpapers() {
         
         // Standardize thumbnail URL
         const thumbUrl = wp.thumbnail;
+        // Local fallback: if GitHub URL isn't live yet, serve from local disk
+        const localFallback = thumbUrl.includes('raw.githubusercontent.com') && thumbUrl.includes('/public/uploads/')
+          ? thumbUrl.replace(/https:\/\/raw\.githubusercontent\.com\/[^/]+\/[^/]+\/[^/]+\/public/, '')
+          : 'https://placehold.co/45x60/120e2e/00f2fe?text=Err';
 
         row.innerHTML = `
           <td>
-            <img class="table-thumbnail" src="${thumbUrl}" alt="preview" onerror="this.src='https://placehold.co/45x60/120e2e/00f2fe?text=Err'">
+            <img class="table-thumbnail" src="${thumbUrl}" alt="preview" onerror="this.onerror=null;this.src='${localFallback}'">
           </td>
           <td>
             <div style="font-weight: 600;">${wp.name}</div>
@@ -923,7 +951,7 @@ async function loadAdminLivewalls() {
     adminTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center"><i class="fa-solid fa-spinner fa-spin"></i> Loading Live Wallpapers...</td></tr>';
     adminListCount.textContent = 'Loading...';
 
-    const res = await fetch('/api/v1/livewalls?limit=1000');
+    const res = await fetch('/api/v1/livewalls?limit=0');
     const data = await res.json();
     
     if (data.status === 'success') {
@@ -941,11 +969,14 @@ async function loadAdminLivewalls() {
         const row = document.createElement('tr');
         
         const thumbUrl = wp.thumbnail || wp.url;
+        const localFallback = thumbUrl.includes('raw.githubusercontent.com') && thumbUrl.includes('/public/uploads/')
+          ? thumbUrl.replace(/https:\/\/raw\.githubusercontent\.com\/[^/]+\/[^/]+\/[^/]+\/public/, '')
+          : 'https://placehold.co/45x60/120e2e/00f2fe?text=Video';
 
         row.innerHTML = `
           <td>
             <div style="position:relative; width:45px; height:60px; overflow:hidden; border-radius:4px; border:1px solid rgba(255,255,255,0.1)">
-              <img class="table-thumbnail" src="${thumbUrl}" alt="preview" onerror="this.src='https://placehold.co/45x60/120e2e/00f2fe?text=Video'" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
+              <img class="table-thumbnail" src="${thumbUrl}" alt="preview" onerror="this.onerror=null;this.src='${localFallback}'" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
               <i class="fa-solid fa-film" style="position:absolute; bottom:3px; right:3px; font-size:10px; color:#fff; background:rgba(0,0,0,0.6); padding:2px; border-radius:2px;"></i>
             </div>
           </td>
@@ -1000,14 +1031,19 @@ function setupAdminTableActions(items, type = 'static') {
 
       wpTypeSelect.value = type;
 
-      // Check if URL is local upload or remote
-      const isLocal = wp.url.startsWith('/uploads/');
+      // Check if URL is a local upload or a GitHub-hosted upload (not yet pushed = treat as local)
+      const isLocal = wp.url.startsWith('/uploads/') || 
+        (wp.url.includes('raw.githubusercontent.com') && wp.url.includes('/public/uploads/'));
+      // Derive a display filename regardless of URL format
+      const uploadFilename = wp.url.includes('/uploads/')
+        ? wp.url.split('/uploads/').pop()
+        : wp.url.split('/').pop();
       
       if (type === 'static') {
         selectedWallpaperIdForEdit = id;
         if (isLocal) {
           document.querySelector('input[name="imageSource"][value="upload"]').checked = true;
-          fileSelectedName.textContent = `Currently using uploaded file: ${wp.url.replace('/uploads/', '')}`;
+          fileSelectedName.textContent = `Currently using uploaded file: ${uploadFilename}`;
           fileSelectedName.style.display = 'block';
         } else {
           document.querySelector('input[name="imageSource"][value="url"]').checked = true;
@@ -1017,10 +1053,11 @@ function setupAdminTableActions(items, type = 'static') {
         selectedLiveWallpaperIdForEdit = id;
         if (isLocal) {
           document.querySelector('input[name="imageSource"][value="upload"]').checked = true;
-          liveVideoSelectedName.textContent = `Currently using uploaded video: ${wp.url.replace('/uploads/', '')}`;
+          liveVideoSelectedName.textContent = `Currently using uploaded video: ${uploadFilename}`;
           liveVideoSelectedName.style.display = 'block';
-          if (wp.thumbnail && wp.thumbnail.startsWith('/uploads/')) {
-            liveThumbSelectedName.textContent = `Currently using uploaded thumbnail: ${wp.thumbnail.replace('/uploads/', '')}`;
+          if (wp.thumbnail && (wp.thumbnail.startsWith('/uploads/') || (wp.thumbnail.includes('raw.githubusercontent.com') && wp.thumbnail.includes('/public/uploads/')))) {
+            const thumbFilename = wp.thumbnail.includes('/uploads/') ? wp.thumbnail.split('/uploads/').pop() : wp.thumbnail.split('/').pop();
+            liveThumbSelectedName.textContent = `Currently using uploaded thumbnail: ${thumbFilename}`;
             liveThumbSelectedName.style.display = 'block';
           }
         } else {
@@ -1032,7 +1069,7 @@ function setupAdminTableActions(items, type = 'static') {
         selectedRingtoneIdForEdit = id;
         if (isLocal) {
           document.querySelector('input[name="imageSource"][value="upload"]').checked = true;
-          ringtoneSelectedName.textContent = `Currently using uploaded audio: ${wp.url.replace('/uploads/', '')}`;
+          ringtoneSelectedName.textContent = `Currently using uploaded audio: ${uploadFilename}`;
           ringtoneSelectedName.style.display = 'block';
         } else {
           document.querySelector('input[name="imageSource"][value="url"]').checked = true;
@@ -1133,15 +1170,45 @@ function setupLightbox() {
 function openLightbox(wp) {
   const isVideo = wp.url.endsWith('.mp4') || wp.url.endsWith('.webm') || wp.url.endsWith('.mov') || wp.url.includes('livewall-');
 
+  // Helper to get local fallback URL if it's a GitHub URL
+  const getFallbackUrl = (url) => {
+    if (url && url.includes('raw.githubusercontent.com') && url.includes('/public/uploads/')) {
+      return url.replace(/https:\/\/raw\.githubusercontent\.com\/[^/]+\/[^/]+\/[^/]+\/public/, '');
+    }
+    return url;
+  };
+
+  const mainUrl = wp.url;
+  const fallbackUrl = getFallbackUrl(mainUrl);
+
   if (isVideo) {
     lightboxImg.style.display = 'none';
     lightboxVideo.style.display = 'block';
-    lightboxVideo.src = wp.url;
+    
+    // Set source and setup onerror handler
+    lightboxVideo.src = mainUrl;
+    lightboxVideo.onerror = () => {
+      // Avoid infinite loop if fallback also fails
+      if (lightboxVideo.src !== window.location.origin + fallbackUrl && lightboxVideo.getAttribute('src') !== fallbackUrl) {
+        console.log('Video failed to load from GitHub, trying local fallback:', fallbackUrl);
+        lightboxVideo.src = fallbackUrl;
+        lightboxVideo.play().catch(err => console.log('Autoplay prevented:', err));
+      }
+    };
     lightboxVideo.play().catch(err => console.log('Autoplay prevented:', err));
   } else {
     lightboxImg.style.display = 'block';
     lightboxVideo.style.display = 'none';
-    lightboxImg.src = wp.url;
+    
+    // Set source and setup onerror handler
+    lightboxImg.src = mainUrl;
+    lightboxImg.onerror = () => {
+      // Avoid infinite loop if fallback also fails
+      if (lightboxImg.src !== window.location.origin + fallbackUrl && lightboxImg.getAttribute('src') !== fallbackUrl) {
+        console.log('Image failed to load from GitHub, trying local fallback:', fallbackUrl);
+        lightboxImg.src = fallbackUrl;
+      }
+    };
     lightboxVideo.src = '';
   }
 
@@ -1150,7 +1217,7 @@ function openLightbox(wp) {
   lightboxAuthor.textContent = `by ${wp.author}`;
   lightboxResolution.textContent = wp.dimensions || (isVideo ? '1080x1920' : '1080p');
   lightboxLicense.textContent = wp.copyright || 'Free';
-  lightboxDownloadBtn.href = wp.url;
+  lightboxDownloadBtn.href = fallbackUrl;
 
   wpLightbox.style.display = 'flex';
   document.body.style.overflow = 'hidden'; // Disable background scrolling
@@ -1224,10 +1291,13 @@ async function loadLiveExplorerWallpapers() {
         card.className = 'wp-card';
         
         const thumbUrl = wp.thumbnail || wp.url;
+        const localFallback = thumbUrl.includes('raw.githubusercontent.com') && thumbUrl.includes('/public/uploads/')
+          ? thumbUrl.replace(/https:\/\/raw\.githubusercontent\.com\/[^/]+\/[^/]+\/[^/]+\/public/, '')
+          : 'https://placehold.co/400x600/120e2e/00f2fe?text=Video+Preview';
         
         card.innerHTML = `
           <div class="wp-thumbnail-container">
-            <img src="${thumbUrl}" alt="${wp.name}" onerror="this.src='https://placehold.co/400x600/120e2e/00f2fe?text=Video+Preview'">
+            <img src="${thumbUrl}" alt="${wp.name}" onerror="this.onerror=null;this.src='${localFallback}'">
             <div class="wp-overlay">
               <span class="wp-category-badge" style="background:var(--accent-purple); border-color:var(--accent-purple);">${wp.category}</span>
               <h3 class="wp-name">${wp.name}</h3>
@@ -1583,10 +1653,15 @@ async function loadRingtones() {
         card.style.position = 'relative';
         card.style.transition = 'all 0.3s ease';
 
+        const rtUrl = rt.url;
+        const localFallback = rtUrl.includes('raw.githubusercontent.com') && rtUrl.includes('/public/uploads/')
+          ? rtUrl.replace(/https:\/\/raw\.githubusercontent\.com\/[^/]+\/[^/]+\/[^/]+\/public/, '')
+          : rtUrl;
+
         card.innerHTML = `
           <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
             <div style="display: flex; align-items: center; gap: 15px; width: calc(100% - 60px);">
-              <div class="audio-play-btn" data-url="${rt.url}" style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3); transition: transform 0.2s ease;">
+              <div class="audio-play-btn" data-url="${rtUrl}" style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3); transition: transform 0.2s ease;">
                 <i class="fa-solid fa-play" style="color: #fff; font-size: 1.1rem; margin-left: 2px;"></i>
               </div>
               <div style="overflow: hidden; width: 100%;">
@@ -1600,7 +1675,7 @@ async function loadRingtones() {
           </div>
           <div style="border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 15px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
             <span style="font-size: 0.75rem; color: var(--text-secondary); font-family: var(--font-mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 150px;">ID: ${rt.id}</span>
-            <a href="${rt.url}" download="${rt.name}" target="_blank" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.75rem; display: flex; align-items: center; gap: 5px;">
+            <a href="${localFallback}" download="${rt.name}" target="_blank" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.75rem; display: flex; align-items: center; gap: 5px;">
               <i class="fa-solid fa-download"></i> Download
             </a>
           </div>
@@ -1714,6 +1789,11 @@ function playRingtone(url, btn) {
   
   stopRingtoneAudio();
   
+  // Reconstruct local fallback if github raw URL isn't live yet
+  const localFallback = url.includes('raw.githubusercontent.com') && url.includes('/public/uploads/')
+    ? url.replace(/https:\/\/raw\.githubusercontent\.com\/[^/]+\/[^/]+\/[^/]+\/public/, '')
+    : null;
+
   const audio = new Audio(url);
   currentPlayingAudio = audio;
   currentPlayingButton = btn;
@@ -1728,9 +1808,29 @@ function playRingtone(url, btn) {
       btn.style.transform = 'scale(1.05)';
     })
     .catch(err => {
-      showToast('Failed to play audio. Check URL or network.', 'error');
-      console.error(err);
-      stopRingtoneAudio();
+      if (localFallback && audio.src !== window.location.origin + localFallback) {
+        console.log('Ringtone GitHub URL failed, trying local fallback:', localFallback);
+        const fallbackAudio = new Audio(localFallback);
+        currentPlayingAudio = fallbackAudio;
+        fallbackAudio.play()
+          .then(() => {
+            icon.className = 'fa-solid fa-pause';
+            icon.style.marginLeft = '0';
+            btn.style.transform = 'scale(1.05)';
+          })
+          .catch(fallbackErr => {
+            showToast('Failed to play audio. Check URL or network.', 'error');
+            console.error(fallbackErr);
+            stopRingtoneAudio();
+          });
+        fallbackAudio.addEventListener('ended', () => {
+          stopRingtoneAudio();
+        });
+      } else {
+        showToast('Failed to play audio. Check URL or network.', 'error');
+        console.error(err);
+        stopRingtoneAudio();
+      }
     });
     
   audio.addEventListener('ended', () => {
@@ -1761,7 +1861,7 @@ async function loadAdminRingtones() {
     adminTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center"><i class="fa-solid fa-spinner fa-spin"></i> Loading Ringtones...</td></tr>';
     adminListCount.textContent = 'Loading...';
 
-    const res = await fetch('/api/v1/ringtones?limit=1000');
+    const res = await fetch('/api/v1/ringtones?limit=0');
     const data = await res.json();
     
     if (data.status === 'success') {

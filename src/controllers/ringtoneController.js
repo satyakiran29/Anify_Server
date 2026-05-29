@@ -36,12 +36,12 @@ export const ringtoneController = {
 
       // 3. Pagination
       const pageNum = parseInt(page, 10) || 1;
-      const limitNum = parseInt(limit, 10) || 10;
-      const sanitizedLimit = Math.min(Math.max(limitNum, 1), 50); // limit between 1 and 50
+      const limitNum = limit === '0' ? 0 : (parseInt(limit, 10) || 10);
+      // limit=0 means return all items (admin use)
+      const sanitizedLimit = limitNum === 0 ? 0 : Math.min(Math.max(limitNum, 1), 50);
       const totalItems = items.length;
-      const totalPages = Math.ceil(totalItems / sanitizedLimit);
-      const startIndex = (pageNum - 1) * sanitizedLimit;
-      const paginatedItems = items.slice(startIndex, startIndex + sanitizedLimit);
+      const paginatedItems = sanitizedLimit === 0 ? items : items.slice((pageNum - 1) * sanitizedLimit, pageNum * sanitizedLimit);
+      const totalPages = sanitizedLimit === 0 ? 1 : Math.ceil(totalItems / sanitizedLimit);
 
       res.status(200).json({
         status: 'success',
