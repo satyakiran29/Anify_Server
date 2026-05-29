@@ -44,7 +44,7 @@ export const livewallController = {
       const pageNum = parseInt(page, 10) || 1;
       const limitNum = limit === '0' ? 0 : (parseInt(limit, 10) || 10);
       // limit=0 means return all items (admin use)
-      const sanitizedLimit = limitNum === 0 ? 0 : Math.min(Math.max(limitNum, 1), 50);
+      const sanitizedLimit = limitNum === 0 ? 0 : Math.min(Math.max(limitNum, 1), 1000);
       const totalItems = items.length;
       const paginatedItems = sanitizedLimit === 0 ? items : items.slice((pageNum - 1) * sanitizedLimit, pageNum * sanitizedLimit);
       const totalPages = sanitizedLimit === 0 ? 1 : Math.ceil(totalItems / sanitizedLimit);
