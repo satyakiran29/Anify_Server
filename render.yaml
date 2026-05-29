@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: anify-server
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: API_PREFIX
+        value: /api/v1
+      - key: ADMIN_PASSWORD
+        value: admin123 # You can override this in the Render dashboard env vars
