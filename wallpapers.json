@@ -2108,5 +2108,15 @@
     "dimensions": "1080p",
     "copyright": "Free",
     "category": "Artistic Scenery"
+  },
+  {
+    "id": "51e9016396a99dcba2c28d1fb7c468af",
+    "name": "110",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780076153592-213568049.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780076153592-213568049.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
   }
 ]
