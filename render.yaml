@@ -15,7 +15,7 @@ services:
   - type: cron
     name: anify-keep-alive
     runtime: node
-    schedule: "*/14 * * * *" # Every 14 minutes (Render spin-down is 15 minutes)
+    schedule: "*/13 * * * *" # Every 13 minutes (Render spin-down is 15 minutes)
     buildCommand: npm install
     startCommand: node src/scripts/keepAlive.js
     envVars:
