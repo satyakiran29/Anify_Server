@@ -16,7 +16,7 @@ router.get('/:id', wallpaperController.getWallpaperById);
 router.post('/auth/login', wallpaperController.loginAdmin);
 
 // Write/Modify routes (secured with requireAdmin)
-router.post('/', requireAdmin, upload.single('image'), wallpaperController.createWallpaper);
+router.post('/', requireAdmin, upload.array('image', 50), wallpaperController.createWallpaper);
 router.put('/:id', requireAdmin, upload.single('image'), wallpaperController.updateWallpaper);
 router.delete('/:id', requireAdmin, wallpaperController.deleteWallpaper);
 

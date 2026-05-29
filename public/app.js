@@ -589,12 +589,23 @@ function setupAdminPanel() {
 
   // File selected displays (Static Image)
   wpFileInput.addEventListener('change', () => {
-    if (wpFileInput.files.length > 0) {
-      const file = wpFileInput.files[0];
-      fileSelectedName.textContent = `Selected: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+    const files = wpFileInput.files;
+    if (files.length > 0) {
+      if (files.length === 1) {
+        fileSelectedName.textContent = `Selected: ${files[0].name} (${(files[0].size / 1024 / 1024).toFixed(2)} MB)`;
+        wpNameInput.required = (selectedWallpaperIdForEdit === null);
+      } else {
+        let totalSize = 0;
+        for (let i = 0; i < files.length; i++) {
+          totalSize += files[i].size;
+        }
+        fileSelectedName.textContent = `Selected: ${files.length} files (Total ${(totalSize / 1024 / 1024).toFixed(2)} MB)`;
+        wpNameInput.required = false; // Name optional for group uploads
+      }
       fileSelectedName.style.display = 'block';
     } else {
       fileSelectedName.style.display = 'none';
+      wpNameInput.required = (selectedWallpaperIdForEdit === null);
     }
   });
 
@@ -622,12 +633,23 @@ function setupAdminPanel() {
 
   // File selected displays (Ringtone Audio)
   wpRingtoneFileInput.addEventListener('change', () => {
-    if (wpRingtoneFileInput.files.length > 0) {
-      const file = wpRingtoneFileInput.files[0];
-      ringtoneSelectedName.textContent = `Selected Audio: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+    const files = wpRingtoneFileInput.files;
+    if (files.length > 0) {
+      if (files.length === 1) {
+        ringtoneSelectedName.textContent = `Selected Audio: ${files[0].name} (${(files[0].size / 1024 / 1024).toFixed(2)} MB)`;
+        wpNameInput.required = (selectedRingtoneIdForEdit === null);
+      } else {
+        let totalSize = 0;
+        for (let i = 0; i < files.length; i++) {
+          totalSize += files[i].size;
+        }
+        ringtoneSelectedName.textContent = `Selected: ${files.length} files (Total ${(totalSize / 1024 / 1024).toFixed(2)} MB)`;
+        wpNameInput.required = false; // Name optional for group uploads
+      }
       ringtoneSelectedName.style.display = 'block';
     } else {
       ringtoneSelectedName.style.display = 'none';
+      wpNameInput.required = (selectedRingtoneIdForEdit === null);
     }
   });
 
@@ -677,7 +699,9 @@ function setupAdminPanel() {
 
       if (source === 'upload') {
         if (wpFileInput.files.length > 0) {
-          formData.append('image', wpFileInput.files[0]);
+          for (let i = 0; i < wpFileInput.files.length; i++) {
+            formData.append('image', wpFileInput.files[i]);
+          }
         } else if (!isEditMode) {
           showToast('Please select an image file to upload.', 'error');
           return;
@@ -725,7 +749,9 @@ function setupAdminPanel() {
 
       if (source === 'upload') {
         if (wpRingtoneFileInput.files.length > 0) {
-          formData.append('audio', wpRingtoneFileInput.files[0]);
+          for (let i = 0; i < wpRingtoneFileInput.files.length; i++) {
+            formData.append('audio', wpRingtoneFileInput.files[i]);
+          }
         } else if (!isEditMode) {
           showToast('Please select an audio file to upload.', 'error');
           return;
@@ -846,6 +872,7 @@ function resetForm() {
   selectedRingtoneIdForEdit = null;
   wpIdInput.value = '';
   wpNameInput.value = '';
+  wpNameInput.required = true;
   wpAuthorInput.value = 'Anify';
   wpCategorySelect.value = 'Anime';
   wpDimensionsInput.value = '1080p';

@@ -13,7 +13,7 @@ router.get('/:id', ringtoneController.getRingtoneById);
 
 // Write/Modify routes (secured with requireAdmin)
 // Supports uploading audio file (as 'audio')
-router.post('/', requireAdmin, uploadRingtone.single('audio'), ringtoneController.createRingtone);
+router.post('/', requireAdmin, uploadRingtone.array('audio', 50), ringtoneController.createRingtone);
 router.put('/:id', requireAdmin, uploadRingtone.single('audio'), ringtoneController.updateRingtone);
 router.delete('/:id', requireAdmin, ringtoneController.deleteRingtone);
 

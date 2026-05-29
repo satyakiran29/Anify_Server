@@ -208,14 +208,59 @@ export const wallpaperController = {
       let url = req.body.url;
       let thumbnail = req.body.thumbnail;
 
-      // Check if a file was uploaded via multer
-      if (req.file) {
-        const relativePath = `/uploads/${req.file.filename}`;
-        url = getRawGithubUrl(relativePath) || relativePath;
-        thumbnail = url;
+      const createdWallpapers = [];
+
+      // Check if files were uploaded via multer (group upload)
+      if (req.files && req.files.length > 0) {
+        if (!category) {
+          return res.status(400).json({
+            status: 'fail',
+            message: 'Wallpaper category is required for uploads.'
+          });
+        }
+
+        for (let i = 0; i < req.files.length; i++) {
+          const file = req.files[i];
+          const relativePath = `/uploads/${file.filename}`;
+          const fileUrl = getRawGithubUrl(relativePath) || relativePath;
+
+          // Determine wallpaper name:
+          // If name is provided: "Name - 1", "Name - 2", etc.
+          // Otherwise, use original filename without extension
+          let wpName = '';
+          if (name) {
+            wpName = req.files.length > 1 ? `${name} - ${i + 1}` : name;
+          } else {
+            const ext = path.extname(file.originalname);
+            wpName = path.basename(file.originalname, ext);
+          }
+
+          const newWp = db.add({
+            name: wpName,
+            author: author || 'Anonymous',
+            url: fileUrl,
+            thumbnail: fileUrl,
+            dimensions: dimensions || '1080p',
+            copyright: copyright || 'Free',
+            category
+          });
+          createdWallpapers.push(newWp);
+        }
+
+        // Trigger a single Git sync for the group upload
+        const groupName = name || `${req.files.length} wallpapers`;
+        triggerGitSync(`Admin: Added group wallpapers - ${groupName}`);
+
+        return res.status(201).json({
+          status: 'success',
+          message: `${req.files.length} wallpapers added successfully.`,
+          data: {
+            wallpapers: createdWallpapers
+          }
+        });
       }
 
-      // Validations
+      // Fallback/standard URL upload
       if (!name || !category) {
         return res.status(400).json({
           status: 'fail',
