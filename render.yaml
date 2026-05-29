@@ -11,3 +11,18 @@ services:
         value: /api/v1
       - key: ADMIN_PASSWORD
         value: admin123 # You can override this in the Render dashboard env vars
+
+  - type: cron
+    name: anify-keep-alive
+    runtime: node
+    schedule: "*/14 * * * *" # Every 14 minutes (Render spin-down is 15 minutes)
+    buildCommand: npm install
+    startCommand: node src/scripts/keepAlive.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: RENDER_EXTERNAL_URL
+        fromService:
+          type: web
+          name: anify-server
+          property: host
