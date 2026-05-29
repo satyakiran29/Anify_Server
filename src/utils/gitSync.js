@@ -76,7 +76,9 @@ export async function triggerGitSync(commitMessage) {
     if (token) {
       console.log(`[GitSync] Pushing to remote repository using GITHUB_TOKEN authentication...`);
       const pushUrl = `https://${token}@github.com/${repo}.git`;
-      await execPromise(`git push "${pushUrl}" HEAD`);
+      const { stdout: branchOut } = await execPromise('git rev-parse --abbrev-ref HEAD');
+      const branch = branchOut.trim();
+      await execPromise(`git push "${pushUrl}" HEAD:refs/heads/${branch}`);
     } else {
       console.log(`[GitSync] Pushing to remote repository using default credentials...`);
       await execPromise('git push');
