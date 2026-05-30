@@ -2178,5 +2178,35 @@
     "dimensions": "1080p",
     "copyright": "Free",
     "category": "Anime"
+  },
+  {
+    "id": "b28a86f48abb7380b36407cd45ecb7f9",
+    "name": "one piece - 1",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780131376428-1110942.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780131376428-1110942.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
+  },
+  {
+    "id": "1e68a4a8a6d69011d94b2bccfa372d66",
+    "name": "one piece - 2",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780131376430-710860170.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780131376430-710860170.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
+  },
+  {
+    "id": "d9c5c2bb1360c4c64a46e4516725b548",
+    "name": "one piece - 3",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780131376472-691604855.png",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780131376472-691604855.png",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
   }
 ]
