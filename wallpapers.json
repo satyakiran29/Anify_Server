@@ -2408,5 +2408,85 @@
     "dimensions": "1080p",
     "copyright": "Free",
     "category": "General"
+  },
+  {
+    "id": "dfa086344c5dd0e0baefaea469bb55c9",
+    "name": "minimal - 1",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780163260797-940030204.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780163260797-940030204.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "04495ce26a7f036ca244c421eeaa477f",
+    "name": "minimal - 2",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780163261015-12932769.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780163261015-12932769.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "ea45a7b7547fac51acaa94d7c5c9e266",
+    "name": "minimal - 3",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780163261254-842725532.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780163261254-842725532.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "eb42634b9717652f857c17d8f0228397",
+    "name": "minimal - 4",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780163261321-979230902.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780163261321-979230902.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "3f52aa912c4ca7028879c452cd0695f0",
+    "name": "minimal - 5",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780163261414-102004792.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780163261414-102004792.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "7061edfd3161f8b27658bfac1a733c89",
+    "name": "minimal - 6",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780163261468-83868499.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780163261468-83868499.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "a5a7f188110fc60a87f4c8ac2f80840d",
+    "name": "minimal - 7",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780163261534-618122169.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780163261534-618122169.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "5921e0f8a34c313dbf065ed300517388",
+    "name": "minimal - 8",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780163261596-965287147.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780163261596-965287147.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "General"
   }
 ]
