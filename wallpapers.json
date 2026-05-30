@@ -2108,5 +2108,15 @@
     "dimensions": "1080p",
     "copyright": "Free",
     "category": "Artistic Scenery"
+  },
+  {
+    "id": "0c904b435ac050b48b5f67b162f0ad57",
+    "name": "naruto",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780130111629-325758158.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780130111629-325758158.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
   }
 ]
