@@ -67,4 +67,22 @@ app.listen(PORT, () => {
   console.log(` API Endpoint: http://localhost:${PORT}${API_PREFIX}/wallpapers`);
   console.log(` Explorer Dashboard: http://localhost:${PORT}`);
   console.log(`===================================================`);
+
+  // Self-ping to prevent Render spin-down
+  const RENDER_EXTERNAL_URL = process.env.RENDER_EXTERNAL_URL;
+  if (RENDER_EXTERNAL_URL) {
+    const pingUrl = `${RENDER_EXTERNAL_URL.replace(/\/$/, '')}${API_PREFIX}/wallpapers/stats`;
+    const pingInterval = 10 * 60 * 1000; // 10 minutes
+
+    console.log(`[Keep-Alive] Self-ping active. Target: ${pingUrl}`);
+
+    setInterval(async () => {
+      try {
+        const response = await fetch(pingUrl);
+        console.log(`[Keep-Alive] Self-ping status: ${response.status}`);
+      } catch (error) {
+        console.error(`[Keep-Alive] Self-ping failed:`, error.message);
+      }
+    }, pingInterval);
+  }
 });
