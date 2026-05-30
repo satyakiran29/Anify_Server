@@ -2208,5 +2208,25 @@
     "dimensions": "1080p",
     "copyright": "Free",
     "category": "Anime"
+  },
+  {
+    "id": "27dd90fb36c09c54b4b02fbb094af1d4",
+    "name": "chainsaw man - 1",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780131777419-95203212.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780131777419-95203212.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
+  },
+  {
+    "id": "677646b141e775248c86c2bf2cf63f7d",
+    "name": "chainsaw man - 2",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780131778689-430279007.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780131778689-430279007.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
   }
 ]
