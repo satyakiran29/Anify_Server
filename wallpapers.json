@@ -2488,5 +2488,15 @@
     "dimensions": "1080p",
     "copyright": "Free",
     "category": "General"
+  },
+  {
+    "id": "0056a776df26ad1fe585465cea07e6a9",
+    "name": "amoled ganesh",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1781463521365-490111420.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1781463521365-490111420.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
   }
 ]
