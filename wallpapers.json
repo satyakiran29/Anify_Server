@@ -2461,7 +2461,7 @@
   },
   {
     "id": "7061edfd3161f8b27658bfac1a733c89",
-    "name": "minimal wallpaper",
+    "name": "minimal - 6",
     "author": "Anify",
     "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780163261468-83868499.jpg",
     "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1780163261468-83868499.jpg",
@@ -2488,15 +2488,5 @@
     "dimensions": "1080p",
     "copyright": "Free",
     "category": "General"
-  },
-  {
-    "id": "0056a776df26ad1fe585465cea07e6a9",
-    "name": "amoled ganesh",
-    "author": "Anify",
-    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1781463521365-490111420.jpg",
-    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1781463521365-490111420.jpg",
-    "dimensions": "1080p",
-    "copyright": "Free",
-    "category": "Anime"
   }
 ]
