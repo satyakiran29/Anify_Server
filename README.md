@@ -183,6 +183,15 @@ All requests follow the standardized format `/api/v1/{resource}`. Below is an ov
 | **PUT** | `/api/v1/ringtones/:id` | Admin | Update ringtone details and duration properties. |
 | **DELETE** | `/api/v1/ringtones/:id` | Admin | Remove ringtone and clean up its local file from disk. |
 
+### External Integrations
+
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| **GET** | `/api/v1/pexels/curated` | Public | Returns curated premium wallpapers from Pexels. |
+| **GET** | `/api/v1/pexels/search` | Public | Search Pexels API. Query parameters: `query`, `page`, `per_page`, `orientation`. |
+| **GET** | `/api/v1/wallhaven/search` | Public | Search mobile vertical wallpapers on Wallhaven. Query parameters: `query`, `page`. |
+| **GET** | `/api/v1/wallhaven/random` | Public | Returns random mobile vertical wallpapers from Wallhaven. Query parameters: `page`. |
+
 ---
 
 ### Authentication

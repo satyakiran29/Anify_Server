@@ -6,6 +6,17 @@ let currentCategory = '';
 let currentSort = '';
 let selectedWallpaperIdForEdit = null;
 
+// Pexels State management
+let currentPexelsPage = 1;
+let currentPexelsLimit = 12;
+let currentPexelsSearch = '';
+let currentPexelsOrientation = '';
+
+// Wallhaven State management
+let currentWallhavenPage = 1;
+let currentWallhavenLimit = 24;
+let currentWallhavenSearch = '';
+
 // Live uptime ticker
 let _uptimeSeconds = 0;
 let _uptimeTicker = null;
@@ -50,6 +61,21 @@ const sortFilter = document.getElementById('sortFilter');
 const limitFilter = document.getElementById('limitFilter');
 const wallpaperGrid = document.getElementById('wallpaperGrid');
 const paginationContainer = document.getElementById('paginationContainer');
+
+// Pexels Explorer DOM
+const pexelsSearchInput = document.getElementById('pexelsSearchInput');
+const pexelsCategoryFilter = document.getElementById('pexelsCategoryFilter');
+const pexelsOrientationFilter = document.getElementById('pexelsOrientationFilter');
+const pexelsLimitFilter = document.getElementById('pexelsLimitFilter');
+const pexelsWallpaperGrid = document.getElementById('pexelsWallpaperGrid');
+const pexelsPaginationContainer = document.getElementById('pexelsPaginationContainer');
+
+// Wallhaven Explorer DOM
+const wallhavenSearchInput = document.getElementById('wallhavenSearchInput');
+const wallhavenCategoryFilter = document.getElementById('wallhavenCategoryFilter');
+const wallhavenLimitFilter = document.getElementById('wallhavenLimitFilter');
+const wallhavenWallpaperGrid = document.getElementById('wallhavenWallpaperGrid');
+const wallhavenPaginationContainer = document.getElementById('wallhavenPaginationContainer');
 
 // Live Explorer DOM
 const liveSearchInput = document.getElementById('liveSearchInput');
@@ -149,9 +175,13 @@ document.addEventListener('DOMContentLoaded', () => {
   loadCategories();
   loadLiveCategories();
   loadExplorerWallpapers();
+  loadPexelsWallpapers();
+  loadWallhavenWallpapers();
   loadLiveExplorerWallpapers();
   loadRingtones();
   setupExplorerFilters();
+  setupPexelsFilters();
+  setupWallhavenFilters();
   setupLiveExplorerFilters();
   setupRingtoneFilters();
   setupApiConsole();
@@ -215,6 +245,10 @@ function setupTabs() {
         toggleAdminViewState();
       } else if (tabName === 'explorer') {
         loadExplorerWallpapers();
+      } else if (tabName === 'pexels-explorer') {
+        loadPexelsWallpapers();
+      } else if (tabName === 'wallhaven-explorer') {
+        loadWallhavenWallpapers();
       } else if (tabName === 'live-explorer') {
         loadLiveExplorerWallpapers();
       } else if (tabName === 'ringtone-explorer') {
@@ -441,6 +475,157 @@ function renderPagination(pagination) {
   });
   paginationContainer.appendChild(nextBtn);
 }
+
+// Wallhaven Filters listeners
+function setupWallhavenFilters() {
+  if (!wallhavenSearchInput) return;
+  wallhavenSearchInput.addEventListener('input', debounce(() => {
+    currentWallhavenSearch = wallhavenSearchInput.value;
+    if (wallhavenCategoryFilter) wallhavenCategoryFilter.value = '';
+    currentWallhavenPage = 1;
+    loadWallhavenWallpapers();
+  }, 500));
+
+  if (wallhavenCategoryFilter) {
+    wallhavenCategoryFilter.addEventListener('change', () => {
+      if (wallhavenCategoryFilter.value) {
+        currentWallhavenSearch = wallhavenCategoryFilter.value;
+        if (wallhavenSearchInput) wallhavenSearchInput.value = currentWallhavenSearch;
+      } else {
+        currentWallhavenSearch = '';
+        if (wallhavenSearchInput) wallhavenSearchInput.value = '';
+      }
+      currentWallhavenPage = 1;
+      loadWallhavenWallpapers();
+    });
+  }
+
+  wallhavenLimitFilter.addEventListener('change', () => {
+    currentWallhavenLimit = parseInt(wallhavenLimitFilter.value, 10);
+    currentWallhavenPage = 1;
+    loadWallhavenWallpapers();
+  });
+}
+
+// Load Wallpapers for Wallhaven Tab
+async function loadWallhavenWallpapers() {
+  if (!wallhavenWallpaperGrid) return;
+  try {
+    wallhavenWallpaperGrid.innerHTML = '<div class="terminal-prompt" style="grid-column: 1/-1; text-align:center;"><i class="fa-solid fa-spinner fa-spin" style="margin-right:8px;"></i>Fetching Wallhaven mobile wallpapers...</div>';
+    
+    let endpoint = `/api/v1/wallhaven/random?page=${currentWallhavenPage}`;
+    if (currentWallhavenSearch) {
+      const params = new URLSearchParams({
+        query: currentWallhavenSearch,
+        page: currentWallhavenPage
+      });
+      endpoint = `/api/v1/wallhaven/search?${params.toString()}`;
+    }
+
+    const res = await fetch(endpoint);
+    const data = await res.json();
+    
+    if (data.status === 'success') {
+      const wallpapers = data.data.wallpapers;
+      const pagination = data.pagination;
+      
+      if (wallpapers.length === 0) {
+        wallhavenWallpaperGrid.innerHTML = '<div class="terminal-prompt" style="grid-column: 1/-1; text-align:center;"><i class="fa-solid fa-image-slash" style="margin-right:8px; font-size:1.5rem;"></i>No mobile wallpapers found on Wallhaven for this search.</div>';
+        wallhavenPaginationContainer.innerHTML = '';
+        if (document.getElementById('wallhavenCountDisplay')) document.getElementById('wallhavenCountDisplay').textContent = '0 Wallpapers';
+        return;
+      }
+
+      if (document.getElementById('wallhavenCountDisplay')) {
+        document.getElementById('wallhavenCountDisplay').textContent = `${pagination.total.toLocaleString()} Wallpapers`;
+      }
+
+      wallhavenWallpaperGrid.innerHTML = '';
+      wallpapers.forEach(wp => {
+        const card = document.createElement('div');
+        card.className = 'wp-card';
+        
+        card.innerHTML = `
+          <div class="wp-thumbnail-container">
+            <img src="${wp.thumbnail}" alt="${wp.name}" loading="lazy">
+            <div class="wp-overlay">
+              <span class="wp-category-badge" style="background:var(--accent-cyan)">${wp.category}</span>
+              <h3 class="wp-name">${wp.name}</h3>
+              <p class="wp-author">by ${wp.author}</p>
+              <div class="wp-meta-specs">
+                <span><i class="fa-solid fa-expand"></i> ${wp.dimensions}</span>
+                <span><i class="fa-solid fa-copyright"></i> ${wp.copyright}</span>
+              </div>
+              <div class="wp-actions">
+                <button class="btn btn-primary open-lightbox-btn"><i class="fa-solid fa-eye"></i> View</button>
+              </div>
+            </div>
+          </div>
+          <div class="wp-card-details">
+            <div class="wp-title-row">
+              <span style="font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:180px;">${wp.name}</span>
+              <span style="font-size:0.75rem; color:var(--accent-cyan); font-weight:600; text-transform:uppercase;">${wp.category}</span>
+            </div>
+          </div>
+        `;
+
+        // Bind Lightbox trigger clicks
+        const openLightboxBtn = card.querySelector('.open-lightbox-btn');
+        openLightboxBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openLightbox(wp);
+        });
+        const thumbContainer = card.querySelector('.wp-thumbnail-container');
+        thumbContainer.addEventListener('click', () => {
+          openLightbox(wp);
+        });
+
+        wallhavenWallpaperGrid.appendChild(card);
+      });
+
+      renderWallhavenPagination(pagination);
+    } else {
+      wallhavenWallpaperGrid.innerHTML = `<div class="terminal-prompt" style="grid-column:1/-1; color:var(--danger); text-align:center;"><i class="fa-solid fa-triangle-exclamation"></i> ${data.message || 'Error'}</div>`;
+    }
+  } catch (err) {
+    console.error('Failed to load Wallhaven wallpapers', err);
+    wallhavenWallpaperGrid.innerHTML = '<div class="terminal-prompt" style="grid-column:1/-1; color:var(--danger); text-align:center;"><i class="fa-solid fa-triangle-exclamation"></i> Error communicating with server.</div>';
+  }
+}
+
+// Render Wallhaven pagination buttons
+function renderWallhavenPagination(pagination) {
+  if (!wallhavenPaginationContainer) return;
+  wallhavenPaginationContainer.innerHTML = '';
+  
+  if (pagination.pages <= 1) return;
+
+  const prevBtn = document.createElement('button');
+  prevBtn.className = 'btn btn-outline';
+  prevBtn.innerHTML = '<i class="fa-solid fa-angle-left"></i>';
+  prevBtn.disabled = pagination.page === 1;
+  prevBtn.addEventListener('click', () => {
+    currentWallhavenPage = pagination.page - 1;
+    loadWallhavenWallpapers();
+  });
+  wallhavenPaginationContainer.appendChild(prevBtn);
+
+  const pageInfo = document.createElement('span');
+  pageInfo.className = 'page-info';
+  pageInfo.textContent = `Page ${pagination.page} of ${pagination.pages}`;
+  wallhavenPaginationContainer.appendChild(pageInfo);
+
+  const nextBtn = document.createElement('button');
+  nextBtn.className = 'btn btn-outline';
+  nextBtn.innerHTML = '<i class="fa-solid fa-angle-right"></i>';
+  nextBtn.disabled = pagination.page === pagination.pages;
+  nextBtn.addEventListener('click', () => {
+    currentWallhavenPage = pagination.page + 1;
+    loadWallhavenWallpapers();
+  });
+  wallhavenPaginationContainer.appendChild(nextBtn);
+}
+
 
 // API Console playground setup
 function setupApiConsole() {
@@ -1940,3 +2125,170 @@ async function loadAdminRingtones() {
   }
 }
 
+// ==========================================
+// Pexels API Operations
+// ==========================================
+
+// Pexels Filters setup
+function setupPexelsFilters() {
+  if (!pexelsSearchInput) return;
+  pexelsSearchInput.addEventListener('input', debounce(() => {
+    currentPexelsSearch = pexelsSearchInput.value;
+    if (pexelsCategoryFilter) pexelsCategoryFilter.value = '';
+    currentPexelsPage = 1;
+    loadPexelsWallpapers();
+  }, 500));
+
+  if (pexelsCategoryFilter) {
+    pexelsCategoryFilter.addEventListener('change', () => {
+      if (pexelsCategoryFilter.value) {
+        currentPexelsSearch = pexelsCategoryFilter.value;
+        if (pexelsSearchInput) pexelsSearchInput.value = currentPexelsSearch;
+      } else {
+        currentPexelsSearch = '';
+        if (pexelsSearchInput) pexelsSearchInput.value = '';
+      }
+      currentPexelsPage = 1;
+      loadPexelsWallpapers();
+    });
+  }
+
+  pexelsOrientationFilter.addEventListener('change', () => {
+    currentPexelsOrientation = pexelsOrientationFilter.value;
+    currentPexelsPage = 1;
+    loadPexelsWallpapers();
+  });
+
+  pexelsLimitFilter.addEventListener('change', () => {
+    currentPexelsLimit = parseInt(pexelsLimitFilter.value, 10);
+    currentPexelsPage = 1;
+    loadPexelsWallpapers();
+  });
+}
+
+async function loadPexelsWallpapers() {
+  if (!pexelsWallpaperGrid) return;
+
+  try {
+    pexelsWallpaperGrid.innerHTML = '<div class="terminal-prompt" style="grid-column: 1/-1; text-align:center;"><i class="fa-solid fa-spinner fa-spin" style="margin-right:8px;"></i>Fetching from Pexels API...</div>';
+    
+    // Construct request URL
+    let endpoint = '/api/v1/pexels/curated';
+    const params = new URLSearchParams({
+      page: currentPexelsPage,
+      per_page: currentPexelsLimit
+    });
+
+    if (currentPexelsSearch) {
+      endpoint = '/api/v1/pexels/search';
+      params.append('query', currentPexelsSearch);
+      if (currentPexelsOrientation) {
+        params.append('orientation', currentPexelsOrientation);
+      }
+    }
+
+    const res = await fetch(`${endpoint}?${params.toString()}`);
+    const data = await res.json();
+    
+    if (res.ok && data.status === 'success') {
+      const wallpapers = data.data.wallpapers;
+      const pagination = data.pagination;
+      
+      if (wallpapers.length === 0) {
+        pexelsWallpaperGrid.innerHTML = '<div class="terminal-prompt" style="grid-column: 1/-1; text-align:center;"><i class="fa-solid fa-image-slash" style="margin-right:8px; font-size:1.5rem;"></i>No photos found on Pexels. Try another search.</div>';
+        pexelsPaginationContainer.innerHTML = '';
+        if (document.getElementById('pexelsCountDisplay')) document.getElementById('pexelsCountDisplay').textContent = '0 Wallpapers';
+        return;
+      }
+
+      if (document.getElementById('pexelsCountDisplay')) {
+        document.getElementById('pexelsCountDisplay').textContent = `${pagination.total.toLocaleString()} Wallpapers`;
+      }
+
+      pexelsWallpaperGrid.innerHTML = '';
+      wallpapers.forEach(wp => {
+        const card = document.createElement('div');
+        card.className = 'wp-card';
+        
+        card.innerHTML = `
+          <div class="wp-thumbnail-container">
+            <img src="${wp.thumbnail}" alt="${wp.name}" onerror="this.onerror=null;this.src='https://placehold.co/400x600/120e2e/00f2fe?text=Image+Not+Found'">
+            <div class="wp-overlay">
+              <span class="wp-category-badge">${wp.category}</span>
+              <h3 class="wp-name">${wp.name}</h3>
+              <p class="wp-author">by ${wp.author}</p>
+              <div class="wp-meta-specs">
+                <span><i class="fa-solid fa-expand"></i> ${wp.dimensions}</span>
+                <span><i class="fa-solid fa-copyright"></i> Free</span>
+              </div>
+              <div class="wp-actions">
+                <button class="btn btn-primary open-lightbox-btn"><i class="fa-solid fa-eye"></i> View Details</button>
+              </div>
+            </div>
+          </div>
+          <div class="wp-card-details">
+            <div class="wp-title-row">
+              <span style="font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:180px;">${wp.name}</span>
+              <span style="font-size:0.75rem; color:var(--accent-cyan); font-weight:600; text-transform:uppercase;">Pexels</span>
+            </div>
+            <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:2px;">by ${wp.author}</div>
+          </div>
+        `;
+
+        // Bind Lightbox triggers
+        const openLightboxBtn = card.querySelector('.open-lightbox-btn');
+        openLightboxBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openLightbox(wp);
+        });
+
+        const thumbContainer = card.querySelector('.wp-thumbnail-container');
+        thumbContainer.addEventListener('click', () => {
+          openLightbox(wp);
+        });
+
+        pexelsWallpaperGrid.appendChild(card);
+      });
+
+      renderPexelsPagination(pagination);
+    } else {
+      pexelsWallpaperGrid.innerHTML = `<div class="terminal-prompt" style="grid-column: 1/-1; color:var(--danger); text-align:center;"><i class="fa-solid fa-triangle-exclamation"></i> Error: ${data.message || 'Failed to search Pexels.'}</div>`;
+      pexelsPaginationContainer.innerHTML = '';
+    }
+  } catch (err) {
+    console.error('Failed to load Pexels wallpapers', err);
+    pexelsWallpaperGrid.innerHTML = '<div class="terminal-prompt" style="grid-column:1/-1; color:var(--danger); text-align:center;"><i class="fa-solid fa-triangle-exclamation"></i> Connection error loading Pexels wallpapers.</div>';
+    pexelsPaginationContainer.innerHTML = '';
+  }
+}
+
+function renderPexelsPagination(pagination) {
+  pexelsPaginationContainer.innerHTML = '';
+  
+  if (pagination.pages <= 1) return;
+
+  const prevBtn = document.createElement('button');
+  prevBtn.className = 'btn btn-outline';
+  prevBtn.innerHTML = '<i class="fa-solid fa-angle-left"></i>';
+  prevBtn.disabled = pagination.page === 1;
+  prevBtn.addEventListener('click', () => {
+    currentPexelsPage = pagination.page - 1;
+    loadPexelsWallpapers();
+  });
+  pexelsPaginationContainer.appendChild(prevBtn);
+
+  const pageInfo = document.createElement('span');
+  pageInfo.className = 'page-info';
+  pageInfo.textContent = `Page ${pagination.page} of ${pagination.pages}`;
+  pexelsPaginationContainer.appendChild(pageInfo);
+
+  const nextBtn = document.createElement('button');
+  nextBtn.className = 'btn btn-outline';
+  nextBtn.innerHTML = '<i class="fa-solid fa-angle-right"></i>';
+  nextBtn.disabled = pagination.page === pagination.pages;
+  nextBtn.addEventListener('click', () => {
+    currentPexelsPage = pagination.page + 1;
+    loadPexelsWallpapers();
+  });
+  pexelsPaginationContainer.appendChild(nextBtn);
+}

@@ -1,12 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert';
 import express from 'express';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
+
 import { initDatabase } from '../src/utils/db.js';
 import { initLiveDatabase } from '../src/utils/liveDb.js';
 import { initRingtoneDatabase } from '../src/utils/ringtoneDb.js';
 import wallpaperRouter from '../src/routes/wallpaperRoutes.js';
 import livewallRouter from '../src/routes/livewallRoutes.js';
 import ringtoneRouter from '../src/routes/ringtoneRoutes.js';
+import pexelsRouter from '../src/routes/pexelsRoutes.js';
 
 // Setup lightweight application for tests
 const app = express();
@@ -14,6 +20,7 @@ app.use(express.json());
 app.use('/api/v1/wallpapers', wallpaperRouter);
 app.use('/api/v1/livewalls', livewallRouter);
 app.use('/api/v1/ringtones', ringtoneRouter);
+app.use('/api/v1/pexels', pexelsRouter);
 
 let server;
 let port;
@@ -380,3 +387,44 @@ test('POST, GET, PUT, and DELETE ringtone lifecycle with authentication', async 
   const verifyRes = await fetch(`http://localhost:${port}/api/v1/ringtones/${rtId}`);
   assert.strictEqual(verifyRes.status, 404);
 });
+
+test('GET /api/v1/pexels/curated returns curated list of wallpapers', async () => {
+  const res = await fetch(`http://localhost:${port}/api/v1/pexels/curated?per_page=2`);
+  assert.strictEqual(res.status, 200);
+  
+  const data = await res.json();
+  assert.strictEqual(data.status, 'success');
+  assert.ok(Array.isArray(data.data.wallpapers));
+  assert.strictEqual(data.results, 2);
+  assert.ok(data.pagination);
+  assert.strictEqual(data.pagination.limit, 2);
+  
+  if (data.data.wallpapers.length > 0) {
+    const wp = data.data.wallpapers[0];
+    assert.ok(wp.id.startsWith('pexels_'));
+    assert.ok(wp.name);
+    assert.ok(wp.author);
+    assert.ok(wp.url);
+    assert.ok(wp.thumbnail);
+    assert.ok(wp.dimensions);
+  }
+});
+
+test('GET /api/v1/pexels/search returns search results', async () => {
+  const res = await fetch(`http://localhost:${port}/api/v1/pexels/search?query=nature&per_page=2`);
+  assert.strictEqual(res.status, 200);
+  
+  const data = await res.json();
+  assert.strictEqual(data.status, 'success');
+  assert.ok(Array.isArray(data.data.wallpapers));
+  assert.strictEqual(data.results, 2);
+  assert.ok(data.pagination);
+  assert.strictEqual(data.pagination.limit, 2);
+  
+  if (data.data.wallpapers.length > 0) {
+    const wp = data.data.wallpapers[0];
+    assert.ok(wp.id.startsWith('pexels_'));
+    assert.strictEqual(wp.category, 'Nature');
+  }
+});
+
