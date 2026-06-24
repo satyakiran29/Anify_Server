@@ -65,7 +65,7 @@ app.use(errorHandler);
 // Launch server
 app.listen(PORT, () => {
   console.log(`===================================================`);
-  console.log(` Anify Wallpaper API Server is active!`);
+  console.log(` Anify Server is active!`);
   console.log(` Port: ${PORT}`);
   console.log(` Environment: ${process.env.NODE_ENV || 'production'}`);
   console.log(` API Endpoint: http://localhost:${PORT}${API_PREFIX}/wallpapers`);
