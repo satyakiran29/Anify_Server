@@ -310,10 +310,28 @@
               <div class="api-desc">Fetch KWGTs list (paginated).</div>
             </div>
 
+            <div class="api-endpoint-card" data-endpoint="/api/v1/kwgts/random" data-desc="Returns a randomly selected KWGT widget, optionally filtered by category.">
+              <span class="api-method-badge method-get">GET</span>
+              <span class="api-path">/api/v1/kwgts/random</span>
+              <div class="api-desc">Get a random KWGT widget.</div>
+            </div>
+
             <div class="api-endpoint-card" data-endpoint="/api/v1/kwgts/categories" data-desc="Fetch all KWGT categories with their counts and an icon for each category.">
               <span class="api-method-badge method-get">GET</span>
               <span class="api-path">/api/v1/kwgts/categories</span>
               <div class="api-desc">Fetch KWGT categories breakdown.</div>
+            </div>
+
+            <div class="api-endpoint-card" data-endpoint="/api/v1/kwgts/stats" data-desc="Fetch operational KWGT widget counts and stats.">
+              <span class="api-method-badge method-get">GET</span>
+              <span class="api-path">/api/v1/kwgts/stats</span>
+              <div class="api-desc">Query KWGT counts and metrics.</div>
+            </div>
+
+            <div class="api-endpoint-card" data-endpoint="/api/v1/kwgts/single" data-desc="Get details of a single KWGT widget by its unique ID. Append an active KWGT ID to the endpoint.">
+              <span class="api-method-badge method-get">GET</span>
+              <span class="api-path">/api/v1/kwgts/:id</span>
+              <div class="api-desc">Retrieve single KWGT details.</div>
             </div>
 
           </div>

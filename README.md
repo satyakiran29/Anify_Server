@@ -183,6 +183,19 @@ All requests follow the standardized format `/api/v1/{resource}`. Below is an ov
 | **PUT** | `/api/v1/ringtones/:id` | Admin | Update ringtone details and duration properties. |
 | **DELETE** | `/api/v1/ringtones/:id` | Admin | Remove ringtone and clean up its local file from disk. |
 
+### KWGT Endpoints
+
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| **GET** | `/api/v1/kwgts` | Public | Returns paginated list of KWGT widgets. Query parameters: `page`, `limit`, `search`, `category`, `sort`. |
+| **GET** | `/api/v1/kwgts/random` | Public | Returns random KWGT widgets. Query parameters: `limit`, `category`. |
+| **GET** | `/api/v1/kwgts/categories` | Public | Returns KWGT categories and counts. |
+| **GET** | `/api/v1/kwgts/stats` | Public | Returns KWGT database statistics. |
+| **GET** | `/api/v1/kwgts/:id` | Public | Returns details of a specific KWGT widget. |
+| **POST** | `/api/v1/kwgts` | Admin | Upload KWGT widget files. Supports multipart fields: `file` (.kwgt file) and `thumbnail` (preview image). |
+| **PUT** | `/api/v1/kwgts/:id` | Admin | Update KWGT details and replace file or thumbnail. |
+| **DELETE** | `/api/v1/kwgts/:id` | Admin | Remove KWGT widget and delete associated disk assets. |
+
 ---
 
 ### Authentication
