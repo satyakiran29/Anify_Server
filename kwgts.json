@@ -1,5 +1,415 @@
 [
   {
+    "id": "f935e8aab6f27d1ac22b5a3513552f7c",
+    "name": "Universal Music v19",
+    "author": "Shivam Jha",
+    "authorUrl": "",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/Universal_music_v19_by_Shivam_Jha_Stable_build_.kwgt",
+    "thumbnail": "",
+    "copyright": "Free",
+    "category": "Music"
+  },
+  {
+    "id": "9f75a30d930d8bc6bb41c9ab12c3da23",
+    "name": "Clean Time Date Info",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Clean_Time_Date_Info.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Clean_Time_Date_Info.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "315573eba0ebc0da68a945784619c663",
+    "name": "Interstellar Analog",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Interstellar_Analog.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Interstellar_Analog.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "7f1620347863d0261093e9b97e2469b6",
+    "name": "Interstellar Analog Khaki Field Murph Auto",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Interstellar_Analog_Khaki_Field_Murph_Auto.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Interstellar_Analog_Khaki_Field_Murph_Auto.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "0775395ac4a6c4a695d5155b44e2e0a6",
+    "name": "Interstellar Endurance",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Interstellar_Endurance.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Interstellar_Endurance.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "3f41b374a5d27def495a875f809d493e",
+    "name": "Interstellar Endurance Analog",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Interstellar_Endurance_Analog.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Interstellar_Endurance_Analog.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "369653f559842f34144fcb283a09bd93",
+    "name": "Interstellar Endurance Analog 2",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Interstellar_Endurance_Analog_2.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Interstellar_Endurance_Analog_2.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "6de84d30b4ca89ff971527d213d7b64a",
+    "name": "iOS Battery Widget",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/iOS_Battery_Widget.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/iOS_Battery_Widget.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "482ad7c24adbdfe749461d774436a193",
+    "name": "Material3 Expanded Media Player",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Material3_Expanded_Media_Player.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Material3_Expanded_Media_Player.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "8aa43a6f9bcd7c668a67210d7e8b066c",
+    "name": "Material3 Media Player Output",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Material3_Media_Player_Output.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Material3_Media_Player_Output.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "cce0d91b5dc6352ffe4de9432171d6d7",
+    "name": "material notification widget",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/material_notification_widget.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/material_notification_widget.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "4307f5b3db02e8bd65a0c4fe50927a02",
+    "name": "Minimal Media Player",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Minimal_Media_Player.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Minimal_Media_Player.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "7b2df6f58724160232cf782913d175ca",
+    "name": "Minimal Media Player 2",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Minimal_Media_Player_2.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Minimal_Media_Player_2.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "577115ae184d0ac989a8e5e677991120",
+    "name": "Minimal Media Player 3",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Minimal_Media_Player_3.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Minimal_Media_Player_3.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "fc8abd73e0261e0940c18a2344c5cca9",
+    "name": "Mini Media Player",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Mini_Media_Player.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Mini_Media_Player.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "b9f24a01b468f427e39064d8ecd541fb",
+    "name": "Nothing Analog",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Analog_.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Analog_.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "5f76333ca54d686c07ddc6235d5f8ab9",
+    "name": "Nothing Analog 2",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Analog_2.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Analog_2.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "422f368444ac3dbec3b4ec8340add52a",
+    "name": "Nothing Analog 3",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Analog_3.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Analog_3.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "024f6a70223039693090fe7b97ad9dab",
+    "name": "Nothing Analog 5",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Analog_5.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Analog_5.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "61d84937589858fba911fd2e2d465667",
+    "name": "Nothing Analog 5 Transparent",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Analog_5_Transparent.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Analog_5_Transparent.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "ca4795c9dc85dc5541275fa615edf0a6",
+    "name": "Nothing Battery",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Battery.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Battery.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "3b12f89639277ffd4f00d4d871ba5fb9",
+    "name": "Nothing Battery2",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Battery2.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Battery2.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "702f6a5fe0622a63245d48a0187d36ce",
+    "name": "Nothing Battery Mini",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Battery_Mini.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Battery_Mini.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "25bcb8bf75b0c0ba50394da804dcf831",
+    "name": "Nothing CPU",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_CPU.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_CPU.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "da8735144944eef8b64e4515b7b0681c",
+    "name": "Nothing Date Time",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Date_Time.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Date_Time.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "a48009e241d1c19f8303a1d9798b8967",
+    "name": "Nothing Date Time2",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Date_Time2.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Date_Time2.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "126844f45a29b0c0448299211963ce88",
+    "name": "Nothing Date Time3",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Date_Time3.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Date_Time3.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "b77068a4f60668a3cf95e4260757e913",
+    "name": "Nothing Digital",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Digital.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Digital.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "62d81009299345e658c045059bf7ab6e",
+    "name": "Nothing Digital2",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Digital2.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Digital2.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "d820eb52c27b58ef088988dfc3a9098f",
+    "name": "Nothing Digital3",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Digital3.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Digital3.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "7b21c298a244397cfba59759bd6edc4b",
+    "name": "Nothing Digital4",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Digital4.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Digital4.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "a5795ba7bfab6925cb0b6048a1117a3d",
+    "name": "Nothing Digital Clock",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Digital_Clock.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Digital_Clock.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "6a904036f1bf013e1f6701f028ba5b34",
+    "name": "Nothing Future Clock",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Future_Clock.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Future_Clock.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "86e48524878da9b0d2d8a7c070302c9a",
+    "name": "Nothing Master Widget",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Master_Widget.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Master_Widget.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "3b15c70dd112120d8f2245a1d279b644",
+    "name": "Nothing Media Player",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Media_Player.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Media_Player.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "cc0a97dbd748ae1eabb0ae576022a8ac",
+    "name": "Nothing Media Player2",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Media_Player2.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Media_Player2.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "f676c27d4d7962aecedd638b54e47f32",
+    "name": "Nothing Media Player3",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Media_Player3.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Media_Player3.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "8cb6fbe2f104cb80625b6550c85c5c0f",
+    "name": "Nothing Mini Calender",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Mini_Calender.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Mini_Calender.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "eb411b59bf851e2cc76d658821cca58d",
+    "name": "Nothing Sun Info",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Sun_Info.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Sun_Info.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "2a26ee43c3e97b903ce771fc21b5d896",
+    "name": "Nothing Temp",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Temp.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Nothing_Temp.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "54f5f772193c80e1d19c469c0fd2029d",
+    "name": "Universal Media Player",
+    "author": "Aum Gupta",
+    "authorUrl": "https://github.com/AumGupta/KWGT-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Universal_Media_Player.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Universal_Media_Player.kwgt.png",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
     "id": "1216e9231c6122f6a82257595530ae54",
     "name": "NEETScape Main V1",
     "author": "YakkaSTDs",
