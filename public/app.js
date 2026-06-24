@@ -747,6 +747,7 @@ function setupAdminPanel() {
     const type = wpTypeSelect.value; // 'static', 'live', or 'ringtone'
     const name = wpNameInput.value.trim();
     const author = wpAuthorInput.value.trim();
+    const authorUrl = wpAuthorUrlInput.value.trim();
     const category = wpCategorySelect.value;
     const dimensions = wpDimensionsInput.value.trim();
     const copyright = wpCopyrightInput.value.trim();
