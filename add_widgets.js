@@ -52,7 +52,7 @@ files.forEach(file => {
             kwgts.push({
                 name: name,
                 author: "Anify",
-                authorUrl: "https://github.com/AumGupta/KWGT-Widgets",
+                authorUrl: "https://github.com/satyakiran29",
                 url: `https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/${file}`,
                 thumbnail: hasPreview ? `https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/${previewFile}` : "",
                 copyright: "Free",
