@@ -428,5 +428,65 @@
     "thumbnail": "",
     "copyright": "Free",
     "category": "General"
+  },
+  {
+    "id": "e931b6dfb4c27891a1348df872a9e530",
+    "name": "Schwi Dola Theme Pt1 V11",
+    "author": "YakkaSTDs",
+    "authorUrl": "https://github.com/YakkaSTDs/SchwiDolaTheme",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Schwi_Dola_Theme_Pt1_V11.kwgt",
+    "thumbnail": "",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "f29ca13b82dfab319c5ad4b6279f041d",
+    "name": "Schwi Dola Theme Pt2 V11",
+    "author": "YakkaSTDs",
+    "authorUrl": "https://github.com/YakkaSTDs/SchwiDolaTheme",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Schwi_Dola_Theme_Pt2_V11.kwgt",
+    "thumbnail": "",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "4b68e98bc3a5472199b4f9d93e8a6012",
+    "name": "Nothing Calendar",
+    "author": "Georg9741",
+    "authorUrl": "https://github.com/Georg9741/Kustom-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Calendar.kwgt",
+    "thumbnail": "",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "9d6c1b3f548e4210a71d88a101b70c32",
+    "name": "Nothing Maps",
+    "author": "Georg9741",
+    "authorUrl": "https://github.com/Georg9741/Kustom-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Maps.kwgt",
+    "thumbnail": "",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "18f921d7b32c448fba10f76906ea192c",
+    "name": "Nothing Photos",
+    "author": "Georg9741",
+    "authorUrl": "https://github.com/Georg9741/Kustom-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Photos.kwgt",
+    "thumbnail": "",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "84c98d6fa7134215b0213b16029329a1",
+    "name": "Nothing Spotify",
+    "author": "Georg9741",
+    "authorUrl": "https://github.com/Georg9741/Kustom-Widgets",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/Spotify.kwgt",
+    "thumbnail": "",
+    "copyright": "Free",
+    "category": "General"
   }
 ]
