@@ -1,11 +1,11 @@
-# Anify Wallpaper API Server
+# Anify Server
 
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D%2018.0.0-blue.svg)](https://nodejs.org/)
 [![Express.js Framework](https://img.shields.io/badge/framework-Express%20v4-green.svg)](https://expressjs.com/)
 [![License](https://img.shields.io/badge/license-MIT-purple.svg)](LICENSE)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](#)
 
-Anify Wallpaper API Server is a high-performance REST API backend and interactive management console designed to power personalization applications (such as the Anify Android app). It serves high-quality static wallpapers, live (video) wallpapers, and audio ringtones with zero-database configuration overhead, utilizing optimized JSON flat-file storage and self-healing caches.
+Anify Server is a high-performance REST API backend and interactive management console designed to power personalization applications (such as the Anify Android app). It serves high-quality static wallpapers, live (video) wallpapers, and audio ringtones with zero-database configuration overhead, utilizing optimized JSON flat-file storage and self-healing caches.
 
 ---
 
@@ -140,7 +140,7 @@ npm start
 Upon launching, the console outputs:
 ```text
 ===================================================
- Anify Wallpaper API Server is active!
+ Anify Server is active!
  Port: 3000
  Environment: production
  API Endpoint: http://localhost:3000/api/v1/wallpapers
