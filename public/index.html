@@ -60,6 +60,9 @@
     <button class="tab-btn" data-tab="ringtone-explorer">
       <i class="fa-solid fa-music"></i> <span>Ringtones</span>
     </button>
+    <button class="tab-btn" data-tab="kwgt-explorer">
+      <i class="fa-solid fa-shapes"></i> <span>KWGTs</span>
+    </button>
     <button class="tab-btn" data-tab="console">
       <i class="fa-solid fa-terminal"></i> <span>API Console</span>
     </button>
@@ -174,6 +177,41 @@
       </div>
     </section>
 
+    <!-- KWGT EXPLORER TAB -->
+    <section id="kwgt-explorer" class="tab-content">
+      <div class="filter-bar">
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="kwgtSearchInput" placeholder="Search KWGTs by name or author...">
+        </div>
+        <div class="filter-selects">
+          <select id="kwgtCategoryFilter" class="select-custom">
+            <option value="">All Categories</option>
+          </select>
+          <select id="kwgtSortFilter" class="select-custom">
+            <option value="">Default Order</option>
+            <option value="name">Alphabetical (Name)</option>
+            <option value="category">Alphabetical (Category)</option>
+          </select>
+          <select id="kwgtLimitFilter" class="select-custom">
+            <option value="12">12 per page</option>
+            <option value="24">24 per page</option>
+            <option value="48">48 per page</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- KWGT grid -->
+      <div class="wallpaper-grid" id="kwgtGrid">
+        <!-- KWGTs injected dynamically -->
+      </div>
+
+      <!-- KWGT Pagination -->
+      <div class="pagination-container" id="kwgtPaginationContainer">
+        <!-- Injected dynamically -->
+      </div>
+    </section>
+
     <!-- API CONSOLE TAB -->
     <section id="console" class="tab-content">
       <div class="api-grid">
@@ -260,10 +298,22 @@
               <div class="api-desc">Query total ringtone counts and metrics.</div>
             </div>
 
-            <div class="api-endpoint-card" data-endpoint="/api/v1/ringtones/single" data-desc="Get details of a single ringtone by its unique ID. Append an active ringtone ID to the endpoint.">
+            <div class="api-endpoint-card" data-endpoint="/api/v1/ringtones/:id" data-desc="Get details of a single ringtone by its unique ID. Append an active ringtone ID to the endpoint.">
               <span class="api-method-badge method-get">GET</span>
               <span class="api-path">/api/v1/ringtones/:id</span>
               <div class="api-desc">Retrieve single ringtone details.</div>
+            </div>
+
+            <div class="api-endpoint-card" data-endpoint="/api/v1/kwgts" data-desc="Get paginated list of KWGTs. Supports search, category, and sorting filters.">
+              <span class="api-method-badge method-get">GET</span>
+              <span class="api-path">/api/v1/kwgts</span>
+              <div class="api-desc">Fetch KWGTs list (paginated).</div>
+            </div>
+
+            <div class="api-endpoint-card" data-endpoint="/api/v1/kwgts/categories" data-desc="Fetch all KWGT categories with their counts and an icon for each category.">
+              <span class="api-method-badge method-get">GET</span>
+              <span class="api-path">/api/v1/kwgts/categories</span>
+              <div class="api-desc">Fetch KWGT categories breakdown.</div>
             </div>
 
           </div>
@@ -346,6 +396,7 @@
                 <option value="static" selected>Static Wallpaper (Image)</option>
                 <option value="live">Live Wallpaper (Video)</option>
                 <option value="ringtone">Ringtone (Audio)</option>
+                <option value="kwgt">KWGT (Widget)</option>
               </select>
             </div>
             
@@ -357,6 +408,11 @@
             <div class="form-group">
               <label for="wpAuthor">Author / Creator</label>
               <input type="text" id="wpAuthor" placeholder="e.g. Aniset" value="Anify">
+            </div>
+
+            <div class="form-group" id="authorUrlGroup" style="display: none;">
+              <label for="wpAuthorUrl">Author URL / Credits</label>
+              <input type="url" id="wpAuthorUrl" placeholder="https://example.com/author">
             </div>
 
             <div class="form-group">
@@ -423,6 +479,36 @@
             <div class="form-group" id="remoteUrlContainer" style="display: none;">
               <label for="wpUrl">Remote Image URL *</label>
               <input type="url" id="wpUrl" placeholder="https://example.com/image.jpg">
+            </div>
+
+            <!-- KWGT Upload input container -->
+            <div class="form-group" id="kwgtUploadContainer" style="display: none;">
+              <label>Upload File (.kwgt) *</label>
+              <div class="file-upload-area" id="kwgtDropArea" style="margin-bottom: 12px;">
+                <i class="fa-solid fa-shapes upload-icon" style="color: var(--accent-purple);"></i>
+                <div class="upload-text" id="kwgtUploadText">Drag & Drop or Click to Upload .kwgt File</div>
+                <div class="upload-subtext">Supports .kwgt files (Max 15MB)</div>
+                <input type="file" id="wpKwgtFile" accept=".kwgt" multiple>
+              </div>
+              <div id="kwgtSelectedName" style="font-size: 0.85rem; color: var(--accent-cyan); margin-top: 5px; margin-bottom: 15px; font-weight: 500; display: none;"></div>
+
+              <label>Upload Preview Thumbnail (Optional)</label>
+              <div class="file-upload-area" id="kwgtThumbDropArea">
+                <i class="fa-solid fa-image upload-icon" style="color: var(--accent-cyan);"></i>
+                <div class="upload-text" id="kwgtThumbUploadText">Drag & Drop or Click to Upload Thumbnail</div>
+                <div class="upload-subtext">Supports PNG, JPG, WEBP (Max 5MB)</div>
+                <input type="file" id="wpKwgtThumbFile" accept="image/*">
+              </div>
+              <div id="kwgtThumbSelectedName" style="font-size: 0.85rem; color: var(--accent-cyan); margin-top: 8px; font-weight: 500; display: none;"></div>
+            </div>
+
+            <!-- KWGT Remote URL container -->
+            <div class="form-group" id="kwgtRemoteUrlContainer" style="display: none;">
+              <label for="wpKwgtUrl">Remote File URL (.kwgt) *</label>
+              <input type="url" id="wpKwgtUrl" placeholder="https://example.com/file.kwgt" style="margin-bottom: 10px;">
+              
+              <label for="wpKwgtThumbUrl">Remote Thumbnail URL (Optional)</label>
+              <input type="url" id="wpKwgtThumbUrl" placeholder="https://example.com/thumbnail.jpg">
             </div>
 
             <!-- Live Upload input container -->
@@ -495,6 +581,7 @@
             <button class="btn btn-primary" id="adminTableToggleStatic" style="padding: 6px 12px; font-size: 0.85rem;" type="button"><i class="fa-solid fa-image"></i> Static Wallpapers</button>
             <button class="btn btn-outline" id="adminTableToggleLive" style="padding: 6px 12px; font-size: 0.85rem;" type="button"><i class="fa-solid fa-film"></i> Live Wallpapers</button>
             <button class="btn btn-outline" id="adminTableToggleRingtone" style="padding: 6px 12px; font-size: 0.85rem;" type="button"><i class="fa-solid fa-music"></i> Ringtones</button>
+            <button class="btn btn-outline" id="adminTableToggleKwgt" style="padding: 6px 12px; font-size: 0.85rem;" type="button"><i class="fa-solid fa-shapes"></i> KWGTs</button>
           </div>
           <div class="table-responsive admin-table-container">
             <table>

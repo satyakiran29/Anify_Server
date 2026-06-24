@@ -9,9 +9,11 @@ import { fileURLToPath } from 'url';
 import { initDatabase } from './utils/db.js';
 import { initLiveDatabase } from './utils/liveDb.js';
 import { initRingtoneDatabase } from './utils/ringtoneDb.js';
+import { initKwgtDatabase } from './utils/kwgtDb.js';
 import wallpaperRouter from './routes/wallpaperRoutes.js';
 import livewallRouter from './routes/livewallRoutes.js';
 import ringtoneRouter from './routes/ringtoneRoutes.js';
+import kwgtRouter from './routes/kwgtRoutes.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
 // Load environment variables
@@ -25,6 +27,7 @@ const __dirname = path.dirname(__filename);
 initDatabase();
 initLiveDatabase();
 initRingtoneDatabase();
+initKwgtDatabase();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -51,6 +54,7 @@ app.use(express.static('public'));
 app.use(`${API_PREFIX}/wallpapers`, wallpaperRouter);
 app.use(`${API_PREFIX}/livewalls`, livewallRouter);
 app.use(`${API_PREFIX}/ringtones`, ringtoneRouter);
+app.use(`${API_PREFIX}/kwgts`, kwgtRouter);
 
 // Handles undefined route requests
 app.all('*', notFoundHandler);
