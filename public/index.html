@@ -20,7 +20,7 @@
   <header>
     <div class="brand">
       <div class="logo-glow">A</div>
-      <h1>Anify Server Console <span style="font-size: 0.85rem; vertical-align: middle; margin-left: 8px; font-weight: 800; letter-spacing: 1px; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-transform: uppercase;">v2.0.0</span></h1>
+      <h1>Anify Server Console</h1>
     </div>
     <p>Premium Wallpaper REST API & Admin Management Portal</p>
     <div class="server-status">
@@ -53,12 +53,6 @@
   <div class="tab-nav">
     <button class="tab-btn active" data-tab="explorer">
       <i class="fa-solid fa-images"></i> <span>Wallpapers</span>
-    </button>
-    <button class="tab-btn" data-tab="pexels-explorer">
-      <i class="fa-solid fa-globe"></i> <span>Pexels</span>
-    </button>
-    <button class="tab-btn" data-tab="wallhaven-explorer">
-      <i class="fa-solid fa-mobile-screen"></i> <span>Wallhaven</span>
     </button>
     <button class="tab-btn" data-tab="live-explorer">
       <i class="fa-solid fa-film"></i> <span>Live</span>
@@ -109,123 +103,6 @@
 
       <!-- Pagination -->
       <div class="pagination-container" id="paginationContainer">
-        <!-- Injected dynamically -->
-      </div>
-    </section>
-
-    <!-- PEXELS EXPLORER TAB -->
-    <section id="pexels-explorer" class="tab-content">
-      <div class="filter-bar">
-        <div class="search-input-wrapper">
-          <i class="fa-solid fa-magnifying-glass search-icon"></i>
-          <input type="text" id="pexelsSearchInput" placeholder="Search premium wallpapers from Pexels API...">
-        </div>
-        <div class="filter-selects" style="align-items: center;">
-          <span id="pexelsCountDisplay" style="color:var(--accent-cyan); font-weight:600; font-size:0.9rem; margin-right:15px; white-space:nowrap;"></span>
-          <select id="pexelsCategoryFilter" class="select-custom">
-            <option value="">All Categories</option>
-            <option value="Amoled">Amoled</option>
-            <option value="Nature">Nature</option>
-            <option value="Abstract">Abstract</option>
-            <option value="Space">Space</option>
-            <option value="Architecture">Architecture</option>
-            <option value="Minimalist">Minimalist</option>
-            <option value="Animals">Animals</option>
-            <option value="Cars">Cars</option>
-            <option value="City">City</option>
-            <option value="Travel">Travel</option>
-            <option value="Food">Food</option>
-            <option value="Texture">Texture</option>
-            <option value="Neon">Neon</option>
-            <option value="Dark">Dark</option>
-            <option value="Macro">Macro</option>
-            <option value="Vintage">Vintage</option>
-            <option value="Typography">Typography</option>
-            <option value="People">People</option>
-            <option value="Technology">Technology</option>
-            <option value="Music">Music</option>
-            <option value="Sports">Sports</option>
-            <option value="Fashion">Fashion</option>
-            <option value="Retro">Retro</option>
-            <option value="Holidays">Holidays</option>
-          </select>
-          <select id="pexelsOrientationFilter" class="select-custom">
-            <option value="">All Orientations</option>
-            <option value="landscape">Landscape</option>
-            <option value="portrait">Portrait</option>
-            <option value="square">Square</option>
-          </select>
-          <select id="pexelsLimitFilter" class="select-custom">
-            <option value="12">12 per page</option>
-            <option value="24">24 per page</option>
-            <option value="48">48 per page</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Pexels Wallpaper grid -->
-      <div class="wallpaper-grid" id="pexelsWallpaperGrid">
-        <!-- Pexels cards injected dynamically -->
-      </div>
-
-      <!-- Pexels Pagination -->
-      <div class="pagination-container" id="pexelsPaginationContainer">
-        <!-- Injected dynamically -->
-      </div>
-    </section>
-
-    <!-- WALLHAVEN EXPLORER TAB -->
-    <section id="wallhaven-explorer" class="tab-content">
-      <div class="filter-bar">
-        <div class="search-input-wrapper">
-          <i class="fa-solid fa-magnifying-glass search-icon"></i>
-          <input type="text" id="wallhavenSearchInput" placeholder="Search mobile wallpapers from Wallhaven...">
-        </div>
-        <div class="filter-selects" style="align-items: center;">
-          <span id="wallhavenCountDisplay" style="color:var(--accent-cyan); font-weight:600; font-size:0.9rem; margin-right:15px; white-space:nowrap;"></span>
-          <select id="wallhavenCategoryFilter" class="select-custom">
-            <option value="">All Categories</option>
-            <option value="Amoled">Amoled</option>
-            <option value="OLED">OLED / True Black</option>
-            <option value="Anime">Anime</option>
-            <option value="Abstract">Abstract</option>
-            <option value="Cars">Cars</option>
-            <option value="Landscape">Landscape</option>
-            <option value="Digital Art">Digital Art</option>
-            <option value="Cyberpunk">Cyberpunk</option>
-            <option value="Gaming">Gaming</option>
-            <option value="Fantasy">Fantasy</option>
-            <option value="Sci-Fi">Sci-Fi</option>
-            <option value="Movies">Movies</option>
-            <option value="Minimalism">Minimalism</option>
-            <option value="Mecha">Mecha</option>
-            <option value="Scenery">Scenery</option>
-            <option value="Aesthetic">Aesthetic</option>
-            <option value="Vector">Vector</option>
-            <option value="Illustration">Illustration</option>
-            <option value="Pattern">Pattern</option>
-            <option value="Typography">Typography</option>
-            <option value="Cute">Cute</option>
-            <option value="Pets">Pets</option>
-            <option value="Superheroes">Superheroes</option>
-            <option value="Technology">Technology</option>
-            <option value="Macro">Macro</option>
-            <option value="Gradient">Gradient</option>
-          </select>
-          <select id="wallhavenLimitFilter" class="select-custom">
-            <option value="24">24 per page</option>
-            <option value="48">48 per page</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Wallhaven Wallpaper grid -->
-      <div class="wallpaper-grid" id="wallhavenWallpaperGrid">
-        <!-- Wallhaven cards injected dynamically -->
-      </div>
-
-      <!-- Wallhaven Pagination -->
-      <div class="pagination-container" id="wallhavenPaginationContainer">
         <!-- Injected dynamically -->
       </div>
     </section>
@@ -333,30 +210,6 @@
               <span class="api-method-badge method-get">GET</span>
               <span class="api-path">/api/v1/wallpapers/:id</span>
               <div class="api-desc">Retrieve single wallpaper details.</div>
-            </div>
-
-            <div class="api-endpoint-card" data-endpoint="/api/v1/pexels/curated" data-desc="Fetch trending/curated photos from Pexels. Supports page and per_page parameters.">
-              <span class="api-method-badge method-get">GET</span>
-              <span class="api-path">/api/v1/pexels/curated</span>
-              <div class="api-desc">Get curated Pexels wallpapers.</div>
-            </div>
-
-            <div class="api-endpoint-card" data-endpoint="/api/v1/pexels/search?query=anime" data-desc="Search Pexels wallpapers using query search terms. Supports page, per_page, orientation, etc.">
-              <span class="api-method-badge method-get">GET</span>
-              <span class="api-path">/api/v1/pexels/search</span>
-              <div class="api-desc">Search photos on Pexels by keyword.</div>
-            </div>
-
-            <div class="api-endpoint-card" data-endpoint="/api/v1/wallhaven/random" data-desc="Fetch random mobile wallpapers from Wallhaven free API.">
-              <span class="api-method-badge method-get">GET</span>
-              <span class="api-path">/api/v1/wallhaven/random</span>
-              <div class="api-desc">Get random Wallhaven wallpapers.</div>
-            </div>
-
-            <div class="api-endpoint-card" data-endpoint="/api/v1/wallhaven/search?query=anime" data-desc="Search Wallhaven mobile wallpapers.">
-              <span class="api-method-badge method-get">GET</span>
-              <span class="api-path">/api/v1/wallhaven/search</span>
-              <div class="api-desc">Search photos on Wallhaven by keyword.</div>
             </div>
 
             <div class="api-endpoint-card" data-endpoint="/api/v1/livewalls" data-desc="Get paginated list of live wallpapers. Supports search, category, and sorting filters.">

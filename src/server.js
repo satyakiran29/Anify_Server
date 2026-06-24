@@ -12,8 +12,6 @@ import { initRingtoneDatabase } from './utils/ringtoneDb.js';
 import wallpaperRouter from './routes/wallpaperRoutes.js';
 import livewallRouter from './routes/livewallRoutes.js';
 import ringtoneRouter from './routes/ringtoneRoutes.js';
-import pexelsRouter from './routes/pexelsRoutes.js';
-import wallhavenRouter from './routes/wallhavenRoutes.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
 // Load environment variables
@@ -53,8 +51,6 @@ app.use(express.static('public'));
 app.use(`${API_PREFIX}/wallpapers`, wallpaperRouter);
 app.use(`${API_PREFIX}/livewalls`, livewallRouter);
 app.use(`${API_PREFIX}/ringtones`, ringtoneRouter);
-app.use(`${API_PREFIX}/pexels`, pexelsRouter);
-app.use(`${API_PREFIX}/wallhaven`, wallhavenRouter);
 
 // Handles undefined route requests
 app.all('*', notFoundHandler);
