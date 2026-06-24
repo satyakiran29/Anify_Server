@@ -41,6 +41,24 @@ Key capabilities include:
 
 ---
 
+## 🏗️ System Architecture
+
+```mermaid
+flowchart LR
+    Client[Client App] <-->|REST API| Server(Anify Server)
+    Admin[Admin Console] -->|Manage Content| Server
+    
+    Server <-->|Reads/Writes| Data[(JSON Data)]
+    Server <-->|Media Assets| Uploads[Local Uploads]
+    
+    Data --> Sync{Git Auto-Sync}
+    Uploads --> Sync
+    
+    Sync -->|Push| GitHub[GitHub Repo]
+```
+
+---
+
 ## ✨ Why the Project is Useful
 
 - **Zero-DB Simplicity**: Uses JSON flat-file databases ([wallpapers.json](file:///h:/Github/Anify_Server/wallpapers.json), [livewalls.json](file:///h:/Github/Anify_Server/livewalls.json), and [ringtones.json](file:///h:/Github/Anify_Server/ringtones.json)) initialized automatically upon launch. No complex databases (MySQL, MongoDB) are required.
