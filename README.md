@@ -161,6 +161,26 @@ npm test
 
 ## 🛠️ REST API Reference
 
+```mermaid
+flowchart TD
+    Client[Client Request] --> Auth{Protected Route?}
+    
+    Auth -->|Yes| CheckToken{Check Auth Token}
+    CheckToken -->|Invalid| 401[401 Unauthorized]
+    CheckToken -->|Valid| Router[API Router]
+    
+    Auth -->|No| Router
+    
+    Router -->|GET Request| ReadDB[Read JSON Cache]
+    ReadDB --> Response[JSON Response]
+    
+    Router -->|POST/PUT/DELETE| WriteOp[Write Operations]
+    WriteOp --> Multer[Process Uploads]
+    Multer --> UpdateDB[Update JSON Files]
+    UpdateDB --> GitSync[Trigger Git Auto-Sync]
+    GitSync --> Response
+```
+
 All requests follow the standardized format `/api/v1/{resource}`. Below is an overview of the key endpoints.
 
 ### Wallpaper Endpoints
@@ -283,6 +303,19 @@ The project is configured for seamless deployment on **Render** using the provid
 The blueprint automatically spins up:
 - A Web Service for the Express.js server (`anify-server`).
 - A Cron Job (`anify-keep-alive`) running every 13 minutes to ping the stats endpoint and prevent the web service from sleeping (Render spins down free services after 15 minutes of inactivity).
+
+```mermaid
+flowchart TD
+    Dev[Developer] -->|git push| GitHub(GitHub Repository)
+    
+    subgraph Render Platform
+        GitHub -->|Webhook Trigger| WebService[Anify Web Service]
+        WebService -->|Build| Install[npm install]
+        Install -->|Run| Start[npm start]
+        
+        CronJob[Keep-Alive Cron Job] -->|Ping every 13m| WebService
+    end
+```
 
 ---
 
