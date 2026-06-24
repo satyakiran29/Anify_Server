@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "name": "Universal Music v19",
+    "author": "Shivam Jha",
+    "authorUrl": "",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/Universal_music_v19_by_Shivam_Jha_Stable_build_.kwgt",
+    "thumbnail": "",
+    "copyright": "Free",
+    "category": "Music",
+    "id": "f935e8aab6f27d1ac22b5a3513552f7c"
+  },
+  {
+    "name": "Uploaded KWGT",
+    "author": "Anonymous",
+    "authorUrl": "",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/kwgt-1782306428316-59672208.kwgt",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/kwgt/kwgt-1782306429062-448777400.png",
+    "copyright": "Free",
+    "category": "General",
+    "id": "b71a405fd82843433bf7c81457f50334"
+  }
+]
