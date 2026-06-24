@@ -227,15 +227,15 @@ export const kwgtController = {
         }
 
         const uploadedThumb = req.files.thumbnail && req.files.thumbnail.length > 0 ? req.files.thumbnail[0] : null;
-        let thumbUrl = thumbnail || url;
+        let thumbUrl = thumbnail || "";
         if (uploadedThumb) {
-          const tPath = `/uploads/${uploadedThumb.filename}`;
+          const tPath = `/uploads/kwgt/${uploadedThumb.filename}`;
           thumbUrl = getRawGithubUrl(tPath) || tPath;
         }
 
         for (let i = 0; i < req.files.file.length; i++) {
           const file = req.files.file[i];
-          const relativePath = `/uploads/${file.filename}`;
+          const relativePath = `/uploads/kwgt/${file.filename}`;
           const fileUrl = getRawGithubUrl(relativePath) || relativePath;
 
           // Determine name:
@@ -252,7 +252,7 @@ export const kwgtController = {
             author: author || 'Anonymous',
             authorUrl: authorUrl || '',
             url: fileUrl,
-            thumbnail: thumbUrl || fileUrl,
+            thumbnail: thumbUrl,
             copyright: copyright || 'Free',
             category
           });
@@ -292,7 +292,7 @@ export const kwgtController = {
         author: author || 'Anonymous',
         authorUrl: authorUrl || '',
         url,
-        thumbnail: thumbnail || url,
+        thumbnail: thumbnail || "",
         copyright: copyright || 'Free',
         category
       });
@@ -332,7 +332,7 @@ export const kwgtController = {
       if (req.files) {
         if (req.files.file && req.files.file.length > 0) {
           const file = req.files.file[0];
-          const relativePath = `/uploads/${file.filename}`;
+          const relativePath = `/uploads/kwgt/${file.filename}`;
           const githubUrl = getRawGithubUrl(relativePath) || relativePath;
           updateData.url = githubUrl;
 
@@ -345,7 +345,7 @@ export const kwgtController = {
         }
         if (req.files.thumbnail && req.files.thumbnail.length > 0) {
           const thumb = req.files.thumbnail[0];
-          const relativePath = `/uploads/${thumb.filename}`;
+          const relativePath = `/uploads/kwgt/${thumb.filename}`;
           const githubUrl = getRawGithubUrl(relativePath) || relativePath;
           updateData.thumbnail = githubUrl;
 
