@@ -2608,5 +2608,65 @@
     "dimensions": "1080p",
     "copyright": "Free",
     "category": "Anime"
+  },
+  {
+    "id": "f1c61eabddd73f6766be185ad93acbf4",
+    "name": "DemonSlayer - 1",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666119275-593714375.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666119275-593714375.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
+  },
+  {
+    "id": "820bdcd174dc3aef2eeb8940c2e911e9",
+    "name": "DemonSlayer - 2",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666119770-36341012.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666119770-36341012.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
+  },
+  {
+    "id": "f515f4f2634bbd7a81054922c556f6d5",
+    "name": "DemonSlayer - 3",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666120097-793218295.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666120097-793218295.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
+  },
+  {
+    "id": "24385c3196cc3c07ef681e333b91dc08",
+    "name": "DemonSlayer - 4",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666120598-861934557.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666120598-861934557.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
+  },
+  {
+    "id": "9f29fb83dc5579bc55fd38173fb7c5cb",
+    "name": "DemonSlayer - 5",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666121132-119388346.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666121132-119388346.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
+  },
+  {
+    "id": "75f3e9d00de173c104e03102e0ada61c",
+    "name": "DemonSlayer - 6",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666121538-89494447.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666121538-89494447.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
   }
 ]
