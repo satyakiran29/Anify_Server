@@ -2488,5 +2488,65 @@
     "dimensions": "1080p",
     "copyright": "Free",
     "category": "General"
+  },
+  {
+    "id": "ea617985bcf65ddd4c18fb6e3ae2b306",
+    "name": "Bleach - 1",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784665640271-403788076.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784665640271-403788076.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
+  },
+  {
+    "id": "46e062a58495eef7e02c37c4effe545d",
+    "name": "Bleach - 2",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784665640364-463155710.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784665640364-463155710.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
+  },
+  {
+    "id": "e4732bc9bc8db33b9d037fa89ed97f00",
+    "name": "Bleach - 3",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784665640830-321086677.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784665640830-321086677.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
+  },
+  {
+    "id": "efd36ddd6d15c6c504aac14c16884cc4",
+    "name": "Bleach - 4",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784665641758-755595672.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784665641758-755595672.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
+  },
+  {
+    "id": "297bb84bf642698260dfbf4bf642bd6e",
+    "name": "Bleach - 5",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784665643999-615725167.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784665643999-615725167.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
+  },
+  {
+    "id": "eecab91d893eb04ba5503bcd0ba6e94a",
+    "name": "Bleach - 6",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784665644216-682727688.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784665644216-682727688.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
   }
 ]
