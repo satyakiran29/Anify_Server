@@ -8,5 +8,15 @@
     "dimensions": "1080x1920",
     "copyright": "Free to use",
     "category": "Test"
+  },
+  {
+    "id": "d8290fa6d9730dc63e0f4eab686ff835",
+    "name": "Naruto",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/livewall-1784666962552-329057357.mp4",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/livewall-1784666962552-329057357.mp4",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Anime"
   }
 ]
