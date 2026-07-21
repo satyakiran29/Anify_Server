@@ -2668,5 +2668,15 @@
     "dimensions": "1080p",
     "copyright": "Free",
     "category": "Anime"
+  },
+  {
+    "id": "52e77da687bdb12f57ccd5a4e60223ac",
+    "name": "Iceberg",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666342637-946896948.png",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666342637-946896948.png",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Abstract"
   }
 ]
