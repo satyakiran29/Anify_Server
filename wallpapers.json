@@ -2678,5 +2678,65 @@
     "dimensions": "1080p",
     "copyright": "Free",
     "category": "Abstract"
+  },
+  {
+    "id": "1ed580004d6271c35e5a7dcf982d6537",
+    "name": "Infinix GT 50 Pro - 1",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666771622-118811770.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666771622-118811770.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "bfe6994e6598e311d9ea846344a28ec9",
+    "name": "Infinix GT 50 Pro - 2",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666772296-705469724.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666772296-705469724.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "cc8179dfac403303b564878404d00a8e",
+    "name": "Infinix GT 50 Pro - 3",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666772652-734744083.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666772652-734744083.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "ed4dd443fc43e3c5ff0016580b565242",
+    "name": "Infinix GT 50 Pro - 4",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666772789-536620439.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666772789-536620439.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "75381f127c91d3c7b3ef6197bb80339f",
+    "name": "Infinix GT 50 Pro - 5",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666773089-31678944.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666773089-31678944.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "General"
+  },
+  {
+    "id": "e4e2a94ab592e0c86e7b01a60fe12b48",
+    "name": "Infinix GT 50 Pro - 6",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666773271-259219618.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784666773271-259219618.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "General"
   }
 ]
