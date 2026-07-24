@@ -2738,5 +2738,15 @@
     "dimensions": "1080p",
     "copyright": "Free",
     "category": "General"
+  },
+  {
+    "id": "48b7225e2b35649836a592b9741a058f",
+    "name": "Pure black wallpaper",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784874033416-733972273.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1784874033416-733972273.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "General"
   }
 ]
