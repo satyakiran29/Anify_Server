@@ -2748,5 +2748,15 @@
     "dimensions": "1080p",
     "copyright": "Free",
     "category": "General"
+  },
+  {
+    "id": "788f477c44b25eaa5da2e678ae0207c9",
+    "name": "Spiderman",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1785709791581-143785018.jpg",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1785709791581-143785018.jpg",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "General"
   }
 ]
