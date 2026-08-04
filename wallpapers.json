@@ -2858,5 +2858,35 @@
     "dimensions": "1080p",
     "copyright": "Free",
     "category": "General"
+  },
+  {
+    "id": "bae0783bb349d3058f711695b3f45aea",
+    "name": "Black-Panther - 1",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1785821396282-145183941.webp",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1785821396282-145183941.webp",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Mixed"
+  },
+  {
+    "id": "e3cb763c61e76d99a84557f1c599879d",
+    "name": "Black-Panther - 2",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1785821404552-65174844.webp",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1785821404552-65174844.webp",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Mixed"
+  },
+  {
+    "id": "27c949fd0e5322953461378fc8b81ce0",
+    "name": "Black-Panther - 3",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1785821405454-301314529.webp",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1785821405454-301314529.webp",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "Mixed"
   }
 ]
