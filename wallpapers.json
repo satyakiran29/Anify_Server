@@ -2848,5 +2848,15 @@
     "dimensions": "1080p",
     "copyright": "Free",
     "category": "General"
+  },
+  {
+    "id": "407771e48907672ba0ddf9e475591eac",
+    "name": "3D-Roadtrip",
+    "author": "Anify",
+    "url": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1785821197072-973613413.webp",
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1785821197072-973613413.webp",
+    "dimensions": "1080p",
+    "copyright": "Free",
+    "category": "General"
   }
 ]
