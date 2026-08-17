@@ -1,12 +1,70 @@
 [
   {
+    "id": "9e79a93ede966ef934110a1b447d5a17",
+    "name": "Neko Pack 120",
+    "identifier": "nekostickerpack120",
+    "telegramUrl": "https://t.me/addstickers/nekostickerpack120",
+    "author": "Neko Telegram",
+    "authorUrl": "https://t.me/addstickers/nekostickerpack120",
+    "category": "Anime",
+    "totalStickers": 48,
+    "animated": false,
+    "thumbnail": "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png&w=200",
+    "previews": [
+      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png&w=200",
+      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/133.png&w=200",
+      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png&w=200",
+      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png&w=200",
+      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png&w=200"
+    ],
+    "description": "Cute Neko Anime expressions and reactions for your daily WhatsApp chats.",
+    "tags": [
+      "neko",
+      "anime",
+      "cute",
+      "cat",
+      "waifu"
+    ],
+    "downloads": 12450,
+    "rating": 4.9
+  },
+  {
+    "id": "5f2bee5d453a21b89ec0d6443834b786",
+    "name": "Kang Robot Anime Pack",
+    "identifier": "kang_5852054126_by_Sticker_kang_robot",
+    "telegramUrl": "https://t.me/addstickers/kang_5852054126_by_Sticker_kang_robot",
+    "author": "Sticker Kang Robot",
+    "authorUrl": "https://t.me/Sticker_kang_robot",
+    "category": "Anime",
+    "totalStickers": 30,
+    "animated": false,
+    "thumbnail": "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png&w=200",
+    "previews": [
+      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png&w=200",
+      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/149.png&w=200",
+      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/384.png&w=200",
+      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/448.png&w=200",
+      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/249.png&w=200"
+    ],
+    "description": "Curated anime reaction pack kanged by Sticker Kang Robot.",
+    "tags": [
+      "anime",
+      "kang",
+      "reactions",
+      "robot",
+      "manga"
+    ],
+    "downloads": 8720,
+    "rating": 4.8
+  },
+  {
     "id": "d43efa25f756092c5dc07d95e8762612",
     "name": "cute奶龙",
     "identifier": "xiaonailoong",
     "telegramUrl": "https://t.me/addstickers/xiaonailoong",
     "author": "Anify",
     "authorUrl": "",
-    "category": "General",
+    "category": "Anime",
     "totalStickers": 100,
     "animated": true,
     "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/xiaonailoong/preview_0.webp",
@@ -32,7 +90,7 @@
     "telegramUrl": "https://t.me/addstickers/catsunicmass",
     "author": "Anify",
     "authorUrl": "",
-    "category": "Anime",
+    "category": "General",
     "totalStickers": 120,
     "animated": true,
     "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/catsunicmass/preview_0.webp",
@@ -45,6 +103,32 @@
       "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/catsunicmass/preview_5.webp",
       "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/catsunicmass/preview_6.webp",
       "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/catsunicmass/preview_7.webp"
+    ],
+    "description": "",
+    "tags": [],
+    "downloads": 0,
+    "rating": 5
+  },
+  {
+    "id": "24f5b64246b29028fb4f2e2f2939b830",
+    "name": "bleach",
+    "identifier": "Vhyx_by_AwAw0BOT",
+    "telegramUrl": "https://t.me/addstickers/Vhyx_by_AwAw0BOT",
+    "author": "Anify",
+    "authorUrl": "",
+    "category": "Anime",
+    "totalStickers": 54,
+    "animated": false,
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Vhyx_by_AwAw0BOT/preview_0.webp",
+    "previews": [
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Vhyx_by_AwAw0BOT/preview_0.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Vhyx_by_AwAw0BOT/preview_1.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Vhyx_by_AwAw0BOT/preview_2.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Vhyx_by_AwAw0BOT/preview_3.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Vhyx_by_AwAw0BOT/preview_4.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Vhyx_by_AwAw0BOT/preview_5.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Vhyx_by_AwAw0BOT/preview_6.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Vhyx_by_AwAw0BOT/preview_7.webp"
     ],
     "description": "",
     "tags": [],
