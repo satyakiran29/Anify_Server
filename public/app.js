@@ -1219,41 +1219,57 @@ function setupAdminTableActions(items, type = 'static') {
   editButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const id = btn.getAttribute('data-id');
-      const wp = items.find(w => w.id === id);
+      const wp = items.find(w => w.id === id || w.identifier === id);
       if (!wp) return;
 
       resetForm();
 
-      wpIdInput.value = wp.id;
-      wpNameInput.value = wp.name;
-      wpAuthorInput.value = wp.author;
+      wpIdInput.value = wp.id || id;
+      wpNameInput.value = wp.name || '';
+      wpAuthorInput.value = wp.author || '';
       if (wp.category) wpCategorySelect.value = wp.category;
       if (wp.dimensions) wpDimensionsInput.value = wp.dimensions;
       if (wp.copyright) wpCopyrightInput.value = wp.copyright;
       if (wp.duration) wpDurationInput.value = wp.duration;
+      if (wp.authorUrl && wpAuthorUrlInput) wpAuthorUrlInput.value = wp.authorUrl;
 
       wpTypeSelect.value = type;
 
-      // Check if URL is a local upload or a GitHub-hosted upload (not yet pushed = treat as local)
-      const isLocal = wp.url.startsWith('/uploads/') || 
-        (wp.url.includes('raw.githubusercontent.com') && wp.url.includes('/public/uploads/'));
-      // Derive a display filename regardless of URL format
-      const uploadFilename = wp.url.includes('/uploads/')
-        ? wp.url.split('/uploads/').pop()
-        : wp.url.split('/').pop();
-      
+      if (type === 'sticker') {
+        selectedStickerIdForEdit = wp.id || id;
+        if (wpTelegramUrl) wpTelegramUrl.value = wp.telegramUrl || wp.identifier || '';
+        if (wpStickerCount) wpStickerCount.value = wp.totalStickers || 30;
+        if (wpStickerAnimated) wpStickerAnimated.checked = Boolean(wp.animated);
+        if (wpStickerPreviews && Array.isArray(wp.previews)) {
+          wpStickerPreviews.value = wp.previews.join('\n');
+        }
+        formTitle.textContent = 'Edit Sticker Pack';
+        submitFormBtn.textContent = 'Update Details';
+        cancelEditBtn.style.display = 'block';
+        toggleFormFields();
+        document.querySelector('.form-card')?.scrollIntoView({ behavior: 'smooth' });
+        wpNameInput.focus();
+        return;
+      }
+
+      // Check if URL is local upload
+      const urlStr = wp.url || '';
+      const isLocal = urlStr.startsWith('/uploads/') || (urlStr.includes('raw.githubusercontent.com') && urlStr.includes('/public/uploads/'));
+      const uploadFilename = urlStr.includes('/uploads/') ? urlStr.split('/uploads/').pop() : urlStr.split('/').pop();
+
       if (type === 'kwgt') {
         selectedKwgtIdForEdit = id;
         if (isLocal) {
           document.querySelector('input[name="imageSource"][value="upload"]').checked = true;
-          kwgtSelectedName.textContent = `Currently using uploaded file: ${uploadFilename}`;
-          kwgtSelectedName.style.display = 'block';
+          if (typeof kwgtSelectedName !== 'undefined' && kwgtSelectedName) {
+            kwgtSelectedName.textContent = `Currently using uploaded file: ${uploadFilename}`;
+            kwgtSelectedName.style.display = 'block';
+          }
         } else {
           document.querySelector('input[name="imageSource"][value="url"]').checked = true;
-          wpKwgtUrlInput.value = wp.url;
-          wpKwgtThumbUrlInput.value = wp.thumbnail || '';
+          if (typeof wpKwgtUrlInput !== 'undefined') wpKwgtUrlInput.value = wp.url || '';
+          if (typeof wpKwgtThumbUrlInput !== 'undefined') wpKwgtThumbUrlInput.value = wp.thumbnail || '';
         }
-        if (wp.authorUrl) wpAuthorUrlInput.value = wp.authorUrl;
       } else if (type === 'static') {
         selectedWallpaperIdForEdit = id;
         if (isLocal) {
@@ -1262,7 +1278,7 @@ function setupAdminTableActions(items, type = 'static') {
           fileSelectedName.style.display = 'block';
         } else {
           document.querySelector('input[name="imageSource"][value="url"]').checked = true;
-          wpUrlInput.value = wp.url;
+          wpUrlInput.value = wp.url || '';
         }
       } else if (type === 'live') {
         selectedLiveWallpaperIdForEdit = id;
@@ -1277,10 +1293,10 @@ function setupAdminTableActions(items, type = 'static') {
           }
         } else {
           document.querySelector('input[name="imageSource"][value="url"]').checked = true;
-          wpLiveVideoUrlInput.value = wp.url;
+          wpLiveVideoUrlInput.value = wp.url || '';
           wpLiveThumbUrlInput.value = wp.thumbnail || '';
         }
-      } else { // 'ringtone'
+      } else if (type === 'ringtone') {
         selectedRingtoneIdForEdit = id;
         if (isLocal) {
           document.querySelector('input[name="imageSource"][value="upload"]').checked = true;
@@ -1288,19 +1304,16 @@ function setupAdminTableActions(items, type = 'static') {
           ringtoneSelectedName.style.display = 'block';
         } else {
           document.querySelector('input[name="imageSource"][value="url"]').checked = true;
-          wpRingtoneUrlInput.value = wp.url;
+          wpRingtoneUrlInput.value = wp.url || '';
         }
       }
 
-      // Sync inputs visibility
       toggleFormFields();
-
       formTitle.textContent = type === 'static' ? 'Edit Wallpaper' : (type === 'live' ? 'Edit Live Wallpaper' : (type === 'ringtone' ? 'Edit Ringtone' : 'Edit KWGT'));
       submitFormBtn.textContent = 'Update Details';
       cancelEditBtn.style.display = 'block';
       
-      // Scroll to form smoothly
-      document.querySelector('.form-card').scrollIntoView({ behavior: 'smooth' });
+      document.querySelector('.form-card')?.scrollIntoView({ behavior: 'smooth' });
       wpNameInput.focus();
     });
   });
@@ -1310,16 +1323,32 @@ function setupAdminTableActions(items, type = 'static') {
   deleteButtons.forEach(btn => {
     btn.addEventListener('click', async () => {
       const id = btn.getAttribute('data-id');
-      const wpName = btn.closest('tr').querySelector('td:nth-child(2) div:first-child').textContent;
-      
-      if (!confirm(`Are you absolutely sure you want to delete "${wpName}"?`)) {
+      const row = btn.closest('tr');
+      const itemName = row ? (row.querySelector('td:nth-child(2) div:first-child')?.textContent || id) : id;
+
+      if (!adminToken) {
+        showToast('Admin authorization required to delete.', 'error');
+        return;
+      }
+
+      if (!confirm(`Are you absolutely sure you want to delete "${itemName}"?`)) {
         return;
       }
 
       try {
-        const endpoint = type === 'static' 
-          ? `/api/v1/wallpapers/${id}` 
-          : (type === 'live' ? `/api/v1/livewalls/${id}` : (type === 'ringtone' ? `/api/v1/ringtones/${id}` : `/api/v1/kwgts/${id}`));
+        let endpoint = '';
+        if (type === 'static') {
+          endpoint = `/api/v1/wallpapers/${id}`;
+        } else if (type === 'live') {
+          endpoint = `/api/v1/livewalls/${id}`;
+        } else if (type === 'ringtone') {
+          endpoint = `/api/v1/ringtones/${id}`;
+        } else if (type === 'kwgt') {
+          endpoint = `/api/v1/kwgts/${id}`;
+        } else if (type === 'sticker') {
+          endpoint = `/api/v1/stickers/${id}`;
+        }
+
         const res = await fetch(endpoint, {
           method: 'DELETE',
           headers: {
@@ -1336,37 +1365,46 @@ function setupAdminTableActions(items, type = 'static') {
         }
 
         const data = await res.json();
-        
+
         if (res.ok && data.status === 'success') {
-          showToast(`"${wpName}" deleted successfully.`);
+          showToast(`"${itemName}" deleted successfully.`);
           loadStats();
-          loadCategories();
-          loadLiveCategories();
           if (type === 'static') {
             loadAdminWallpapers();
+            loadExplorerWallpapers();
+            loadCategories();
             if (selectedWallpaperIdForEdit === id) resetForm();
           } else if (type === 'live') {
             loadAdminLivewalls();
+            loadLiveExplorerWallpapers();
+            loadLiveCategories();
             if (selectedLiveWallpaperIdForEdit === id) resetForm();
           } else if (type === 'ringtone') {
             loadAdminRingtones();
+            loadRingtones();
             if (selectedRingtoneIdForEdit === id) resetForm();
-          } else {
+          } else if (type === 'kwgt') {
             loadAdminKwgts();
+            loadKwgts();
+            loadKwgtCategories();
             if (selectedKwgtIdForEdit === id) resetForm();
+          } else if (type === 'sticker') {
+            loadAdminStickers();
+            loadStickers();
+            loadStickerCategories();
+            if (selectedStickerIdForEdit === id) resetForm();
           }
         } else {
           showToast(data.message || 'Failed to delete.', 'error');
         }
       } catch (err) {
-        showToast('Connection error. Failed to delete.', 'error');
+        showToast('Connection error. Failed to delete: ' + err.message, 'error');
         console.error(err);
       }
     });
   });
 }
 
-// Setup Lightbox Modal event bindings
 function setupLightbox() {
   // Close triggers
   lightboxClose.addEventListener('click', closeLightbox);

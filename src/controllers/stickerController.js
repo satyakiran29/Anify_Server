@@ -2,39 +2,10 @@ import fs from 'fs';
 import path from 'path';
 import { stickerDb } from '../utils/stickerDb.js';
 import { triggerGitSync, getRawGithubUrl } from '../utils/gitSync.js';
+import { downloadAndConvertToWebp } from '../utils/stickerConverter.js';
 
 // Helper to normalize strings for matching
 const normalize = (str) => (str || '').toLowerCase().trim();
-
-/**
- * Downloads a file from a URL and saves it to public/stickers/{packSlug}/{filename}.
- * Returns the local / raw GitHub public path.
- */
-async function downloadAndSaveStickerFile(url, packSlug, filename) {
-  try {
-    if (!url || typeof url !== 'string') return '';
-    // If already a local sticker path, return as is
-    if (url.startsWith('/stickers/')) return getRawGithubUrl(url);
-
-    const dir = path.join(process.cwd(), 'public', 'stickers', packSlug);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-
-    const filePath = path.join(dir, filename);
-    const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
-    if (!res.ok) return url;
-
-    const buffer = Buffer.from(await res.arrayBuffer());
-    fs.writeFileSync(filePath, buffer);
-
-    const relativePath = `/stickers/${packSlug}/${filename}`;
-    return getRawGithubUrl(relativePath);
-  } catch (err) {
-    console.warn(`[StickerController] Failed to download preview from ${url}:`, err.message);
-    return url;
-  }
-}
 
 /**
  * Helper to fetch pack info and sticker count from Telegram
@@ -58,7 +29,8 @@ async function fetchTelegramSetInfo(packIdentifier, botToken) {
         telegramUrl: `https://t.me/addstickers/${cleanSlug}`,
         totalStickers: stickers.length,
         animated: Boolean(set.is_animated || set.is_video),
-        stickers
+        stickers,
+        thumbnail: set.thumbnail || set.thumb || null
       };
     }
   } catch (err) {
@@ -241,7 +213,7 @@ export const stickerController = {
   },
 
   /**
-   * Get general metrics for Sticker Store (including automatic total sticker count).
+   * Get general metrics for Sticker Store.
    */
   getStats(req, res, next) {
     try {
@@ -278,7 +250,7 @@ export const stickerController = {
   },
 
   /**
-   * Auto-fetch sticker pack metadata, preview URLs, and download preview files to public/stickers/{pack}
+   * Auto-fetch sticker pack metadata, preview URLs, and convert video .webm stickers to clean .webp
    */
   async autoFetchTelegram(req, res, next) {
     try {
@@ -311,19 +283,23 @@ export const stickerController = {
       const stickers = resultSet.stickers || [];
       const previews = [];
 
-      // Download and save preview stickers locally in public/stickers/{packName}/
+      // Download and convert previews to clean .webp files
       for (let i = 0; i < Math.min(8, stickers.length); i++) {
         const s = stickers[i];
         try {
-          const fileRes = await fetch(`https://api.telegram.org/bot${token}/getFile?file_id=${s.file_id}`, { signal: AbortSignal.timeout(5000) });
+          // If sticker has a static thumbnail file, prefer it for speed/quality
+          const fileId = (s.thumbnail?.file_id || s.thumb?.file_id) || s.file_id;
+          const fileRes = await fetch(`https://api.telegram.org/bot${token}/getFile?file_id=${fileId}`, { signal: AbortSignal.timeout(5000) });
           const fileData = await fileRes.json();
+
           if (fileData.ok && fileData.result?.file_path) {
             const rawFileUrl = `https://api.telegram.org/file/bot${token}/${fileData.result.file_path}`;
-            const ext = path.extname(fileData.result.file_path) || '.webp';
-            const savedUrl = await downloadAndSaveStickerFile(rawFileUrl, packName, `preview_${i}${ext}`);
-            previews.push(savedUrl || rawFileUrl);
+            const webpUrl = await downloadAndConvertToWebp(rawFileUrl, packName, `preview_${i}.webp`);
+            previews.push(webpUrl || rawFileUrl);
           }
-        } catch (_) {}
+        } catch (itemErr) {
+          console.warn(`[StickerController] Failed to process preview ${i} for ${packName}:`, itemErr.message);
+        }
       }
 
       const thumbnail = previews[0] || '';
@@ -334,7 +310,7 @@ export const stickerController = {
           name: resultSet.title || packName,
           identifier: packName,
           telegramUrl: `https://t.me/addstickers/${packName}`,
-          totalStickers: stickers.length, // Automatically counted from Telegram!
+          totalStickers: stickers.length,
           animated: Boolean(resultSet.is_animated || resultSet.is_video),
           thumbnail,
           previews
@@ -346,7 +322,7 @@ export const stickerController = {
   },
 
   /**
-   * Create/Add a new sticker pack with previews saved in public/stickers/{pack}
+   * Create/Add a new sticker pack with previews converted to .webp in public/stickers/{pack}
    */
   async createStickerPack(req, res, next) {
     try {
@@ -370,14 +346,13 @@ export const stickerController = {
         previewList = previews.split(/[\n,]/).map(s => s.trim()).filter(Boolean);
       }
 
-      // Automatically download & save previews to public/stickers/{cleanSlug}/ if remote
+      // Convert and save all previews to .webp
       const savedPreviews = [];
       for (let i = 0; i < previewList.length; i++) {
         const pUrl = previewList[i];
         if (pUrl.startsWith('http://') || pUrl.startsWith('https://')) {
-          const ext = path.extname(pUrl.split('?')[0]) || '.webp';
-          const localUrl = await downloadAndSaveStickerFile(pUrl, cleanSlug, `preview_${i}${ext}`);
-          savedPreviews.push(localUrl);
+          const webpUrl = await downloadAndConvertToWebp(pUrl, cleanSlug, `preview_${i}.webp`);
+          savedPreviews.push(webpUrl);
         } else {
           savedPreviews.push(pUrl);
         }
@@ -406,8 +381,7 @@ export const stickerController = {
 
       let finalThumb = (thumbnail || (savedPreviews[0] || '')).trim();
       if (finalThumb.startsWith('http://') || finalThumb.startsWith('https://')) {
-        const ext = path.extname(finalThumb.split('?')[0]) || '.webp';
-        finalThumb = await downloadAndSaveStickerFile(finalThumb, cleanSlug, `thumbnail${ext}`);
+        finalThumb = await downloadAndConvertToWebp(finalThumb, cleanSlug, `thumbnail.webp`);
       }
 
       const newPack = stickerDb.add({
@@ -468,9 +442,8 @@ export const stickerController = {
         for (let i = 0; i < updateData.previews.length; i++) {
           const pUrl = updateData.previews[i];
           if (pUrl.startsWith('http://') || pUrl.startsWith('https://')) {
-            const ext = path.extname(pUrl.split('?')[0]) || '.webp';
-            const localUrl = await downloadAndSaveStickerFile(pUrl, slug, `preview_${i}${ext}`);
-            savedPreviews.push(localUrl);
+            const webpUrl = await downloadAndConvertToWebp(pUrl, slug, `preview_${i}.webp`);
+            savedPreviews.push(webpUrl);
           } else {
             savedPreviews.push(pUrl);
           }
