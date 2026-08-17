@@ -934,5 +934,31 @@
     "tags": [],
     "downloads": 0,
     "rating": 5
+  },
+  {
+    "id": "3fc8e68dcd9cf85fffeb3f15351bdf8a",
+    "name": "Baldur | by @WBW_Stickers",
+    "identifier": "Baldur_god_of_war",
+    "telegramUrl": "https://t.me/addstickers/Baldur_god_of_war",
+    "author": "Anify",
+    "authorUrl": "",
+    "category": "Game",
+    "totalStickers": 30,
+    "animated": true,
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Baldur_god_of_war/preview_0.webp",
+    "previews": [
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Baldur_god_of_war/preview_0.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Baldur_god_of_war/preview_1.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Baldur_god_of_war/preview_2.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Baldur_god_of_war/preview_3.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Baldur_god_of_war/preview_4.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Baldur_god_of_war/preview_5.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Baldur_god_of_war/preview_6.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Baldur_god_of_war/preview_7.webp"
+    ],
+    "description": "",
+    "tags": [],
+    "downloads": 0,
+    "rating": 5
   }
 ]
