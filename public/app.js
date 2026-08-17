@@ -1078,8 +1078,8 @@ function resetForm() {
   // Sync field visibility
   toggleFormFields();
 
-  formTitle.textContent = 'Add Wallpaper';
-  submitFormBtn.textContent = 'Save Wallpaper';
+  // Title and button text updated dynamically via toggleFormFields
+  toggleFormFields();
   cancelEditBtn.style.display = 'none';
 }
 
@@ -1917,6 +1917,55 @@ function toggleFormFields() {
       wpKwgtFileInput.required = false;
       wpKwgtUrlInput.required = false;
     }
+  }
+
+  // Dynamic Name Label & Placeholder based on active type
+  const wpNameLabel = document.getElementById('wpNameLabel') || document.querySelector('label[for="wpName"]');
+  if (type === 'sticker') {
+    if (wpNameLabel) wpNameLabel.textContent = 'Sticker Pack Name *';
+    if (wpNameInput) wpNameInput.placeholder = 'e.g. Sousou No Frieren Anime';
+    if (wpAuthorInput) wpAuthorInput.placeholder = 'e.g. Frieren Beyond Journey';
+  } else if (type === 'kwgt') {
+    if (wpNameLabel) wpNameLabel.textContent = 'Widget Name *';
+    if (wpNameInput) wpNameInput.placeholder = 'e.g. Cyberpunk Clock Widget';
+    if (wpAuthorInput) wpAuthorInput.placeholder = 'e.g. Widget Creator';
+  } else if (type === 'ringtone') {
+    if (wpNameLabel) wpNameLabel.textContent = 'Ringtone Name *';
+    if (wpNameInput) wpNameInput.placeholder = 'e.g. Gurenge Opening Theme';
+    if (wpAuthorInput) wpAuthorInput.placeholder = 'e.g. Anime Artist';
+  } else if (type === 'live') {
+    if (wpNameLabel) wpNameLabel.textContent = 'Live Wallpaper Name *';
+    if (wpNameInput) wpNameInput.placeholder = 'e.g. Cyberpunk City Loop';
+    if (wpAuthorInput) wpAuthorInput.placeholder = 'e.g. Creator / Animator';
+  } else {
+    if (wpNameLabel) wpNameLabel.textContent = 'Wallpaper Name *';
+    if (wpNameInput) wpNameInput.placeholder = 'e.g. Kakashi Naruto 1';
+    if (wpAuthorInput) wpAuthorInput.placeholder = 'e.g. Anify';
+  }
+
+  // Update Form Heading & Button Text dynamically based on active resource type
+  let isEditMode = false;
+  if (type === 'static') isEditMode = !!selectedWallpaperIdForEdit;
+  else if (type === 'live') isEditMode = !!selectedLiveWallpaperIdForEdit;
+  else if (type === 'ringtone') isEditMode = !!selectedRingtoneIdForEdit;
+  else if (type === 'kwgt') isEditMode = !!selectedKwgtIdForEdit;
+  else if (type === 'sticker') isEditMode = !!selectedStickerIdForEdit;
+
+  if (type === 'sticker') {
+    formTitle.textContent = isEditMode ? 'Edit Sticker Pack' : 'Add Sticker Pack';
+    submitFormBtn.textContent = isEditMode ? 'Update Sticker Pack' : 'Save Sticker Pack';
+  } else if (type === 'live') {
+    formTitle.textContent = isEditMode ? 'Edit Live Wallpaper' : 'Add Live Wallpaper';
+    submitFormBtn.textContent = isEditMode ? 'Update Live Wallpaper' : 'Save Live Wallpaper';
+  } else if (type === 'ringtone') {
+    formTitle.textContent = isEditMode ? 'Edit Ringtone' : 'Add Ringtone';
+    submitFormBtn.textContent = isEditMode ? 'Update Ringtone' : 'Save Ringtone';
+  } else if (type === 'kwgt') {
+    formTitle.textContent = isEditMode ? 'Edit KWGT' : 'Add KWGT';
+    submitFormBtn.textContent = isEditMode ? 'Update KWGT' : 'Save KWGT';
+  } else {
+    formTitle.textContent = isEditMode ? 'Edit Wallpaper' : 'Add Wallpaper';
+    submitFormBtn.textContent = isEditMode ? 'Update Wallpaper' : 'Save Wallpaper';
   }
 }
 
