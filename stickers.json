@@ -82,5 +82,31 @@
     "tags": [],
     "downloads": 0,
     "rating": 5
+  },
+  {
+    "id": "15d4479745c65c1532d09deea36d6c09",
+    "name": "Cats 👉 @fixfox",
+    "identifier": "catsunicmass",
+    "telegramUrl": "https://t.me/addstickers/catsunicmass",
+    "author": "Anify",
+    "authorUrl": "",
+    "category": "Anime",
+    "totalStickers": 120,
+    "animated": true,
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/catsunicmass/preview_0.webp",
+    "previews": [
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/catsunicmass/preview_0.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/catsunicmass/preview_1.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/catsunicmass/preview_2.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/catsunicmass/preview_3.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/catsunicmass/preview_4.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/catsunicmass/preview_5.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/catsunicmass/preview_6.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/catsunicmass/preview_7.webp"
+    ],
+    "description": "",
+    "tags": [],
+    "downloads": 0,
+    "rating": 5
   }
 ]
