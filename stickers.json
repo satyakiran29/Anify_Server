@@ -180,5 +180,31 @@
     "tags": [],
     "downloads": 0,
     "rating": 5
+  },
+  {
+    "id": "fd8daf44d17e7f0d61ee286b62054b7f",
+    "name": "PAckNotFound",
+    "identifier": "kang_5095279909_by_Sticker_kang_robot",
+    "telegramUrl": "https://t.me/addstickers/kang_5095279909_by_Sticker_kang_robot",
+    "author": "Anify",
+    "authorUrl": "",
+    "category": "Anime",
+    "totalStickers": 120,
+    "animated": false,
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/kang_5095279909_by_Sticker_kang_robot/preview_0.webp",
+    "previews": [
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/kang_5095279909_by_Sticker_kang_robot/preview_0.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/kang_5095279909_by_Sticker_kang_robot/preview_1.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/kang_5095279909_by_Sticker_kang_robot/preview_2.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/kang_5095279909_by_Sticker_kang_robot/preview_3.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/kang_5095279909_by_Sticker_kang_robot/preview_4.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/kang_5095279909_by_Sticker_kang_robot/preview_5.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/kang_5095279909_by_Sticker_kang_robot/preview_6.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/kang_5095279909_by_Sticker_kang_robot/preview_7.webp"
+    ],
+    "description": "",
+    "tags": [],
+    "downloads": 0,
+    "rating": 5
   }
 ]
