@@ -76,5 +76,31 @@
     "tags": [],
     "downloads": 0,
     "rating": 5
+  },
+  {
+    "id": "1b7743e0880ea810eb84078a5f2f00b7",
+    "name": "Leon S. Kennedy | @Toji_sama",
+    "identifier": "LeonKennedy0",
+    "telegramUrl": "https://t.me/addstickers/LeonKennedy0",
+    "author": "Anify",
+    "authorUrl": "",
+    "category": "Top Choice",
+    "totalStickers": 90,
+    "animated": false,
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/LeonKennedy0/preview_0.webp",
+    "previews": [
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/LeonKennedy0/preview_0.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/LeonKennedy0/preview_1.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/LeonKennedy0/preview_2.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/LeonKennedy0/preview_3.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/LeonKennedy0/preview_4.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/LeonKennedy0/preview_5.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/LeonKennedy0/preview_6.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/LeonKennedy0/preview_7.webp"
+    ],
+    "description": "",
+    "tags": [],
+    "downloads": 0,
+    "rating": 5
   }
 ]
