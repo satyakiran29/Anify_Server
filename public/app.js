@@ -745,22 +745,17 @@ function setupAdminPanel() {
   wallpaperForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    const type = wpTypeSelect.value; // 'static', 'live', or 'ringtone'
+    const type = wpTypeSelect.value; // 'static', 'live', 'ringtone', 'kwgt', or 'sticker'
     const name = wpNameInput.value.trim();
     const author = wpAuthorInput.value.trim();
-    const authorUrl = wpAuthorUrlInput.value.trim();
+    const authorUrl = wpAuthorUrlInput ? wpAuthorUrlInput.value.trim() : '';
     const category = wpCategorySelect.value;
     const dimensions = wpDimensionsInput.value.trim();
     const copyright = wpCopyrightInput.value.trim();
     const duration = wpDurationInput.value.trim();
-    const source = document.querySelector('input[name="imageSource"]:checked').value;
+    const sourceRadio = document.querySelector('input[name="imageSource"]:checked');
+    const source = sourceRadio ? sourceRadio.value : 'upload';
     
-    // Construct FormData to handle binary uploads
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('author', author);
-    if (authorUrl) formData.append('authorUrl', authorUrl);
-
     let isEditMode = false;
     if (type === 'static') {
       isEditMode = !!selectedWallpaperIdForEdit;
@@ -768,141 +763,10 @@ function setupAdminPanel() {
       isEditMode = !!selectedLiveWallpaperIdForEdit;
     } else if (type === 'ringtone') {
       isEditMode = !!selectedRingtoneIdForEdit;
-    } else {
+    } else if (type === 'kwgt') {
       isEditMode = !!selectedKwgtIdForEdit;
-    }
-
-    if (type === 'static') {
-      formData.append('category', category);
-      formData.append('dimensions', dimensions);
-      formData.append('copyright', copyright);
-
-      if (source === 'upload') {
-        if (wpFileInput.files.length > 0) {
-          for (let i = 0; i < wpFileInput.files.length; i++) {
-            formData.append('image', wpFileInput.files[i]);
-          }
-        } else if (!isEditMode) {
-          showToast('Please select an image file to upload.', 'error');
-          return;
-        }
-      } else {
-        const url = wpUrlInput.value.trim();
-        if (!url) {
-          showToast('Please provide a remote image URL.', 'error');
-          return;
-        }
-        formData.append('url', url);
-        formData.append('thumbnail', url);
-      }
-    } else if (type === 'live') {
-      formData.append('category', category);
-      formData.append('dimensions', dimensions);
-      formData.append('copyright', copyright);
-
-      if (source === 'upload') {
-        if (wpLiveVideoFileInput.files.length > 0) {
-          formData.append('video', wpLiveVideoFileInput.files[0]);
-        } else if (!isEditMode) {
-          showToast('Please select a video file to upload.', 'error');
-          return;
-        }
-        if (wpLiveThumbFileInput.files.length > 0) {
-          formData.append('thumbnail', wpLiveThumbFileInput.files[0]);
-        }
-      } else {
-        const videoUrl = wpLiveVideoUrlInput.value.trim();
-        const thumbUrl = wpLiveThumbUrlInput.value.trim();
-        if (!videoUrl) {
-          showToast('Please provide a remote video URL.', 'error');
-          return;
-        }
-        formData.append('url', videoUrl);
-        if (thumbUrl) {
-          formData.append('thumbnail', thumbUrl);
-        } else {
-          formData.append('thumbnail', videoUrl);
-        }
-      }
-    } else if (type === 'ringtone') { // 'ringtone'
-      formData.append('duration', duration);
-
-      if (source === 'upload') {
-        if (wpRingtoneFileInput.files.length > 0) {
-          for (let i = 0; i < wpRingtoneFileInput.files.length; i++) {
-            formData.append('audio', wpRingtoneFileInput.files[i]);
-          }
-        } else if (!isEditMode) {
-          showToast('Please select an audio file to upload.', 'error');
-          return;
-        }
-      } else {
-        const audioUrl = wpRingtoneUrlInput.value.trim();
-        if (!audioUrl) {
-          showToast('Please provide a remote audio URL.', 'error');
-          return;
-        }
-        formData.append('url', audioUrl);
-      }
     } else if (type === 'sticker') {
-    if (sourceLabel) sourceLabel.textContent = 'Sticker Source';
-    if (categoryGroup) categoryGroup.style.display = 'block';
-    if (dimensionsGroup) dimensionsGroup.style.display = 'none';
-    if (copyrightGroup) copyrightGroup.style.display = 'none';
-    if (ringtoneDurationGroup) ringtoneDurationGroup.style.display = 'none';
-    
-    const sTgGroup = document.getElementById('stickerTelegramGroup');
-    const sPrevGroup = document.getElementById('stickerPreviewsGroup');
-    const sMetaGroup = document.getElementById('stickerMetaGroup');
-    const imgSourceGrp = document.getElementById('imageSourceGroup');
-
-    if (sTgGroup) sTgGroup.style.display = 'block';
-    if (sPrevGroup) sPrevGroup.style.display = 'block';
-    if (sMetaGroup) sMetaGroup.style.display = 'block';
-    if (imgSourceGrp) imgSourceGrp.style.display = 'none';
-
-    fileUploadContainer.style.display = 'none';
-    remoteUrlContainer.style.display = 'none';
-    liveUploadContainer.style.display = 'none';
-    liveRemoteUrlContainer.style.display = 'none';
-    ringtoneUploadContainer.style.display = 'none';
-    ringtoneRemoteUrlContainer.style.display = 'none';
-    if (typeof kwgtUploadContainer !== 'undefined' && kwgtUploadContainer) kwgtUploadContainer.style.display = 'none';
-    if (typeof kwgtRemoteUrlContainer !== 'undefined' && kwgtRemoteUrlContainer) kwgtRemoteUrlContainer.style.display = 'none';
-    
-    wpCategorySelect.required = true;
-    wpDimensionsInput.required = false;
-    wpCopyrightInput.required = false;
-    wpDurationInput.required = false;
-    wpFileInput.required = false;
-    wpUrlInput.required = false;
-    if (wpTelegramUrl) wpTelegramUrl.required = true;
-  } else if (type === 'kwgt') {
-      formData.append('category', category);
-      formData.append('copyright', copyright);
-
-      if (source === 'upload') {
-        if (wpKwgtFileInput.files.length > 0) {
-          for (let i = 0; i < wpKwgtFileInput.files.length; i++) {
-            formData.append('file', wpKwgtFileInput.files[i]);
-          }
-        } else if (!isEditMode) {
-          showToast('Please select a kwgt file to upload.', 'error');
-          return;
-        }
-        if (wpKwgtThumbFileInput.files.length > 0) {
-          formData.append('thumbnail', wpKwgtThumbFileInput.files[0]);
-        }
-      } else {
-        const kwgtUrl = wpKwgtUrlInput.value.trim();
-        const thumbUrl = wpKwgtThumbUrlInput.value.trim();
-        if (!kwgtUrl) {
-          showToast('Please provide a remote file URL.', 'error');
-          return;
-        }
-        formData.append('url', kwgtUrl);
-        if (thumbUrl) formData.append('thumbnail', thumbUrl);
-      }
+      isEditMode = !!selectedStickerIdForEdit;
     }
 
     submitFormBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
@@ -910,28 +774,184 @@ function setupAdminPanel() {
 
     try {
       let res;
-      const headers = {
-        'Authorization': `Bearer ${adminToken}`
-      };
-      
-      let endpoint = '';
-      if (type === 'static') {
-        endpoint = isEditMode ? `/api/v1/wallpapers/${selectedWallpaperIdForEdit}` : '/api/v1/wallpapers';
-      } else if (type === 'live') {
-        endpoint = isEditMode ? `/api/v1/livewalls/${selectedLiveWallpaperIdForEdit}` : '/api/v1/livewalls';
-      } else if (type === 'ringtone') {
-        endpoint = isEditMode ? `/api/v1/ringtones/${selectedRingtoneIdForEdit}` : '/api/v1/ringtones';
+
+      if (type === 'sticker') {
+        const tgUrl = (wpTelegramUrl ? wpTelegramUrl.value : '').trim();
+        const previewsVal = (wpStickerPreviews ? wpStickerPreviews.value : '').trim();
+        let totalCount = parseInt(wpStickerCount ? wpStickerCount.value : '0', 10) || 0;
+        const isAnimated = Boolean(wpStickerAnimated && wpStickerAnimated.checked);
+
+        const previewList = previewsVal.split(/[\n,]/).map(s => s.trim()).filter(Boolean);
+
+        // Auto calculate sticker count if missing
+        if (totalCount <= 0 && previewList.length > 0) {
+          totalCount = previewList.length;
+        }
+
+        const payload = {
+          name,
+          identifier: tgUrl.replace(/^https?:\/\/t\.me\/addstickers\//i, '').replace(/\/.*$/, '') || name,
+          telegramUrl: tgUrl.startsWith('http') ? tgUrl : (tgUrl ? `https://t.me/addstickers/${tgUrl}` : ''),
+          author: author || 'Anonymous',
+          authorUrl: authorUrl || '',
+          category: category || 'Anime',
+          totalStickers: totalCount,
+          animated: isAnimated,
+          thumbnail: previewList[0] || '',
+          previews: previewList
+        };
+
+        const endpoint = isEditMode ? `/api/v1/stickers/${selectedStickerIdForEdit}` : '/api/v1/stickers';
+        const method = isEditMode ? 'PUT' : 'POST';
+
+        res = await fetch(endpoint, {
+          method,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${adminToken}`
+          },
+          body: JSON.stringify(payload)
+        });
       } else {
-        endpoint = isEditMode ? `/api/v1/kwgts/${selectedKwgtIdForEdit}` : '/api/v1/kwgts';
+        // Construct FormData for binary uploads
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('author', author);
+        if (authorUrl) formData.append('authorUrl', authorUrl);
+
+        if (type === 'static') {
+          formData.append('category', category);
+          formData.append('dimensions', dimensions);
+          formData.append('copyright', copyright);
+
+          if (source === 'upload') {
+            if (wpFileInput.files.length > 0) {
+              for (let i = 0; i < wpFileInput.files.length; i++) {
+                formData.append('image', wpFileInput.files[i]);
+              }
+            } else if (!isEditMode) {
+              showToast('Please select an image file to upload.', 'error');
+              submitFormBtn.textContent = 'Save Wallpaper';
+              submitFormBtn.disabled = false;
+              return;
+            }
+          } else {
+            const url = wpUrlInput.value.trim();
+            if (!url) {
+              showToast('Please provide a remote image URL.', 'error');
+              submitFormBtn.textContent = 'Save Wallpaper';
+              submitFormBtn.disabled = false;
+              return;
+            }
+            formData.append('url', url);
+            formData.append('thumbnail', url);
+          }
+        } else if (type === 'live') {
+          formData.append('category', category);
+          formData.append('dimensions', dimensions);
+          formData.append('copyright', copyright);
+
+          if (source === 'upload') {
+            if (wpLiveVideoFileInput.files.length > 0) {
+              formData.append('video', wpLiveVideoFileInput.files[0]);
+            } else if (!isEditMode) {
+              showToast('Please select a video file to upload.', 'error');
+              submitFormBtn.textContent = 'Save Live Wallpaper';
+              submitFormBtn.disabled = false;
+              return;
+            }
+            if (wpLiveThumbFileInput.files.length > 0) {
+              formData.append('thumbnail', wpLiveThumbFileInput.files[0]);
+            }
+          } else {
+            const videoUrl = wpLiveVideoUrlInput.value.trim();
+            const thumbUrl = wpLiveThumbUrlInput.value.trim();
+            if (!videoUrl) {
+              showToast('Please provide a remote video URL.', 'error');
+              submitFormBtn.textContent = 'Save Live Wallpaper';
+              submitFormBtn.disabled = false;
+              return;
+            }
+            formData.append('url', videoUrl);
+            formData.append('thumbnail', thumbUrl || videoUrl);
+          }
+        } else if (type === 'ringtone') {
+          formData.append('duration', duration);
+
+          if (source === 'upload') {
+            if (wpRingtoneFileInput.files.length > 0) {
+              for (let i = 0; i < wpRingtoneFileInput.files.length; i++) {
+                formData.append('audio', wpRingtoneFileInput.files[i]);
+              }
+            } else if (!isEditMode) {
+              showToast('Please select an audio file to upload.', 'error');
+              submitFormBtn.textContent = 'Save Ringtone';
+              submitFormBtn.disabled = false;
+              return;
+            }
+          } else {
+            const audioUrl = wpRingtoneUrlInput.value.trim();
+            if (!audioUrl) {
+              showToast('Please provide a remote audio URL.', 'error');
+              submitFormBtn.textContent = 'Save Ringtone';
+              submitFormBtn.disabled = false;
+              return;
+            }
+            formData.append('url', audioUrl);
+          }
+        } else if (type === 'kwgt') {
+          formData.append('category', category);
+          formData.append('copyright', copyright);
+
+          if (source === 'upload') {
+            if (wpKwgtFileInput.files.length > 0) {
+              for (let i = 0; i < wpKwgtFileInput.files.length; i++) {
+                formData.append('file', wpKwgtFileInput.files[i]);
+              }
+            } else if (!isEditMode) {
+              showToast('Please select a kwgt file to upload.', 'error');
+              submitFormBtn.textContent = 'Save KWGT';
+              submitFormBtn.disabled = false;
+              return;
+            }
+            if (wpKwgtThumbFileInput.files.length > 0) {
+              formData.append('thumbnail', wpKwgtThumbFileInput.files[0]);
+            }
+          } else {
+            const kwgtUrl = wpKwgtUrlInput.value.trim();
+            const thumbUrl = wpKwgtThumbUrlInput.value.trim();
+            if (!kwgtUrl) {
+              showToast('Please provide a remote file URL.', 'error');
+              submitFormBtn.textContent = 'Save KWGT';
+              submitFormBtn.disabled = false;
+              return;
+            }
+            formData.append('url', kwgtUrl);
+            if (thumbUrl) formData.append('thumbnail', thumbUrl);
+          }
+        }
+
+        let endpoint = '';
+        if (type === 'static') {
+          endpoint = isEditMode ? `/api/v1/wallpapers/${selectedWallpaperIdForEdit}` : '/api/v1/wallpapers';
+        } else if (type === 'live') {
+          endpoint = isEditMode ? `/api/v1/livewalls/${selectedLiveWallpaperIdForEdit}` : '/api/v1/livewalls';
+        } else if (type === 'ringtone') {
+          endpoint = isEditMode ? `/api/v1/ringtones/${selectedRingtoneIdForEdit}` : '/api/v1/ringtones';
+        } else if (type === 'kwgt') {
+          endpoint = isEditMode ? `/api/v1/kwgts/${selectedKwgtIdForEdit}` : '/api/v1/kwgts';
+        }
+
+        const method = isEditMode ? 'PUT' : 'POST';
+
+        res = await fetch(endpoint, {
+          method,
+          headers: {
+            'Authorization': `Bearer ${adminToken}`
+          },
+          body: formData
+        });
       }
-
-      const method = isEditMode ? 'PUT' : 'POST';
-
-      res = await fetch(endpoint, {
-        method,
-        headers,
-        body: formData
-      });
 
       if (res.status === 401) {
         adminToken = null;
@@ -947,33 +967,34 @@ function setupAdminPanel() {
         showToast(data.message || 'Saved successfully!');
         resetForm();
         loadStats();
-        loadCategories();
-        loadLiveCategories();
         if (type === 'static') {
-          currentAdminTableMode = 'static';
-          syncAdminTableToggleUI();
-          loadAdminWallpapers();
+          loadCategories();
+          loadExplorerWallpapers();
+          if (currentAdminTableMode === 'static') loadAdminWallpapers();
         } else if (type === 'live') {
-          currentAdminTableMode = 'live';
-          syncAdminTableToggleUI();
-          loadAdminLivewalls();
+          loadLiveCategories();
+          loadLiveExplorerWallpapers();
+          if (currentAdminTableMode === 'live') loadAdminLivewalls();
         } else if (type === 'ringtone') {
-          currentAdminTableMode = 'ringtone';
-          syncAdminTableToggleUI();
-          loadAdminRingtones();
-        } else {
-          currentAdminTableMode = 'kwgt';
-          syncAdminTableToggleUI();
-          loadAdminKwgts();
+          loadRingtones();
+          if (currentAdminTableMode === 'ringtone') loadAdminRingtones();
+        } else if (type === 'kwgt') {
+          loadKwgtCategories();
+          loadKwgts();
+          if (currentAdminTableMode === 'kwgt') loadAdminKwgts();
+        } else if (type === 'sticker') {
+          loadStickerCategories();
+          loadStickers();
+          if (currentAdminTableMode === 'sticker') loadAdminStickers();
         }
       } else {
         showToast(data.message || 'Failed to save.', 'error');
       }
     } catch (err) {
-      showToast('Connection error. Failed to save.', 'error');
+      showToast('Connection error. Failed to save: ' + err.message, 'error');
       console.error(err);
     } finally {
-      submitFormBtn.textContent = 'Save Wallpaper';
+      submitFormBtn.textContent = 'Save';
       submitFormBtn.disabled = false;
     }
   });
@@ -1655,7 +1676,7 @@ function toggleFormFields() {
   const type = wpTypeSelect.value; // 'static', 'live', or 'ringtone'
   const source = document.querySelector('input[name="imageSource"]:checked').value; // 'upload' or 'url'
 
-  const sourceLabel = document.getElementById('imageSourceGroup').querySelector('label');
+  const sourceLabel = document.getElementById('imageSourceGroup') ? document.getElementById('imageSourceGroup').querySelector('label') : null;
   
   // Show/Hide category, dimensions, copyright, duration
   const categoryGroup = wpCategorySelect.closest('.form-group');
@@ -1898,28 +1919,58 @@ function setupAdminTableToggles() {
   }
 }
 
+const adminTableHeading = document.getElementById('adminTableHeading');
+const thCol1 = document.getElementById('thCol1');
+const thCol2 = document.getElementById('thCol2');
+const thCol3 = document.getElementById('thCol3');
+const thCol4 = document.getElementById('thCol4');
+const thCol5 = document.getElementById('thCol5');
+
 function syncAdminTableToggleUI() {
-  if (!adminTableToggleStatic || !adminTableToggleLive || !adminTableToggleRingtone || !adminTableToggleKwgt) return;
+  const allToggles = [
+    { btn: adminTableToggleStatic, mode: 'static' },
+    { btn: adminTableToggleLive, mode: 'live' },
+    { btn: adminTableToggleRingtone, mode: 'ringtone' },
+    { btn: adminTableToggleKwgt, mode: 'kwgt' },
+    { btn: adminTableToggleSticker, mode: 'sticker' }
+  ];
+
+  allToggles.forEach(t => {
+    if (t.btn) {
+      t.btn.className = (currentAdminTableMode === t.mode) ? 'btn btn-primary' : 'btn btn-outline';
+    }
+  });
+
   if (currentAdminTableMode === 'static') {
-    adminTableToggleStatic.className = 'btn btn-primary';
-    adminTableToggleLive.className = 'btn btn-outline';
-    adminTableToggleRingtone.className = 'btn btn-outline';
-    adminTableToggleKwgt.className = 'btn btn-outline';
+    if (adminTableHeading) adminTableHeading.textContent = 'Manage Static Wallpapers';
+    if (thCol1) thCol1.textContent = 'Preview';
+    if (thCol2) thCol2.textContent = 'Wallpaper Title';
+    if (thCol3) thCol3.textContent = 'Category';
+    if (thCol4) thCol4.textContent = 'Author';
   } else if (currentAdminTableMode === 'live') {
-    adminTableToggleStatic.className = 'btn btn-outline';
-    adminTableToggleLive.className = 'btn btn-primary';
-    adminTableToggleRingtone.className = 'btn btn-outline';
-    adminTableToggleKwgt.className = 'btn btn-outline';
+    if (adminTableHeading) adminTableHeading.textContent = 'Manage Live Wallpapers';
+    if (thCol1) thCol1.textContent = 'Preview';
+    if (thCol2) thCol2.textContent = 'Video Title';
+    if (thCol3) thCol3.textContent = 'Category';
+    if (thCol4) thCol4.textContent = 'Author';
   } else if (currentAdminTableMode === 'ringtone') {
-    adminTableToggleStatic.className = 'btn btn-outline';
-    adminTableToggleLive.className = 'btn btn-outline';
-    adminTableToggleRingtone.className = 'btn btn-primary';
-    adminTableToggleKwgt.className = 'btn btn-outline';
-  } else {
-    adminTableToggleStatic.className = 'btn btn-outline';
-    adminTableToggleLive.className = 'btn btn-outline';
-    adminTableToggleRingtone.className = 'btn btn-outline';
-    adminTableToggleKwgt.className = 'btn btn-primary';
+    if (adminTableHeading) adminTableHeading.textContent = 'Manage Ringtones';
+    if (thCol1) thCol1.textContent = 'Audio';
+    if (thCol2) thCol2.textContent = 'Ringtone Title';
+    if (thCol3) thCol3.textContent = 'Duration';
+    if (thCol4) thCol4.textContent = 'Author';
+  } else if (currentAdminTableMode === 'kwgt') {
+    if (adminTableHeading) adminTableHeading.textContent = 'Manage KWGTs';
+    if (thCol1) thCol1.textContent = 'Preview';
+    if (thCol2) thCol2.textContent = 'Widget Title';
+    if (thCol3) thCol3.textContent = 'Category';
+    if (thCol4) thCol4.textContent = 'Author';
+  } else if (currentAdminTableMode === 'sticker') {
+    if (adminTableHeading) adminTableHeading.textContent = 'Manage Sticker Packs';
+    if (thCol1) thCol1.textContent = 'Preview';
+    if (thCol2) thCol2.textContent = 'Sticker Pack Title';
+    if (thCol3) thCol3.textContent = 'Category';
+    if (thCol4) thCol4.textContent = 'Type & Count';
   }
 }
 
@@ -2236,6 +2287,8 @@ async function loadAdminRingtones() {
 
 // Load List of Stickers for Admin Panel
 async function loadAdminStickers() {
+  currentAdminTableMode = 'sticker';
+  syncAdminTableToggleUI();
   try {
     adminTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center"><i class="fa-solid fa-spinner fa-spin"></i> Loading Stickers...</td></tr>';
     adminListCount.textContent = 'Loading...';
