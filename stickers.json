@@ -102,5 +102,31 @@
     "tags": [],
     "downloads": 0,
     "rating": 5
+  },
+  {
+    "id": "d44b7528faaa45d224a3a7afdcbf4a3f",
+    "name": "Sousou No Frieren | @Toji_sama",
+    "identifier": "SousouNoFrierenAnime",
+    "telegramUrl": "https://t.me/addstickers/SousouNoFrierenAnime",
+    "author": "Anify",
+    "authorUrl": "",
+    "category": "Anime",
+    "totalStickers": 120,
+    "animated": false,
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/SousouNoFrierenAnime/preview_0.webp",
+    "previews": [
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/SousouNoFrierenAnime/preview_0.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/SousouNoFrierenAnime/preview_1.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/SousouNoFrierenAnime/preview_2.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/SousouNoFrierenAnime/preview_3.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/SousouNoFrierenAnime/preview_4.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/SousouNoFrierenAnime/preview_5.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/SousouNoFrierenAnime/preview_6.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/SousouNoFrierenAnime/preview_7.webp"
+    ],
+    "description": "",
+    "tags": [],
+    "downloads": 0,
+    "rating": 5
   }
 ]
