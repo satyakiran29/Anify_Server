@@ -245,6 +245,9 @@ function setupTabs() {
         stopRingtoneAudio();
       }
 
+      // Smooth scroll active tab button into view on mobile
+      btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+
       // Special triggers on tab focus
       if (tabName === 'admin') {
         toggleAdminViewState();
@@ -256,6 +259,8 @@ function setupTabs() {
         loadRingtones();
       } else if (tabName === 'kwgt-explorer') {
         loadKwgts();
+      } else if (tabName === 'sticker-explorer') {
+        loadStickers();
       }
     });
   });
