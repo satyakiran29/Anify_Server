@@ -1,8 +1,71 @@
+import fs from 'fs';
+import path from 'path';
 import { stickerDb } from '../utils/stickerDb.js';
-import { triggerGitSync } from '../utils/gitSync.js';
+import { triggerGitSync, getRawGithubUrl } from '../utils/gitSync.js';
 
 // Helper to normalize strings for matching
 const normalize = (str) => (str || '').toLowerCase().trim();
+
+/**
+ * Downloads a file from a URL and saves it to public/stickers/{packSlug}/{filename}.
+ * Returns the local / raw GitHub public path.
+ */
+async function downloadAndSaveStickerFile(url, packSlug, filename) {
+  try {
+    if (!url || typeof url !== 'string') return '';
+    // If already a local sticker path, return as is
+    if (url.startsWith('/stickers/')) return getRawGithubUrl(url);
+
+    const dir = path.join(process.cwd(), 'public', 'stickers', packSlug);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+
+    const filePath = path.join(dir, filename);
+    const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
+    if (!res.ok) return url;
+
+    const buffer = Buffer.from(await res.arrayBuffer());
+    fs.writeFileSync(filePath, buffer);
+
+    const relativePath = `/stickers/${packSlug}/${filename}`;
+    return getRawGithubUrl(relativePath);
+  } catch (err) {
+    console.warn(`[StickerController] Failed to download preview from ${url}:`, err.message);
+    return url;
+  }
+}
+
+/**
+ * Helper to fetch pack info and sticker count from Telegram
+ */
+async function fetchTelegramSetInfo(packIdentifier, botToken) {
+  try {
+    const token = (botToken || process.env.TELEGRAM_BOT_TOKEN || '8882853635:AAErWEKyhb5ESo8ffWrHiO5-udSnnMwUTBk').trim();
+    const cleanSlug = packIdentifier.replace(/^(?:https?:\/\/)?t\.me\/addstickers\//i, '').replace(/\/.*$/, '').trim();
+    
+    const tgUrl = `https://api.telegram.org/bot${token}/getStickerSet?name=${encodeURIComponent(cleanSlug)}`;
+    const tgRes = await fetch(tgUrl, { signal: AbortSignal.timeout(6000) });
+    const tgData = await tgRes.json();
+
+    if (tgData.ok && tgData.result) {
+      const set = tgData.result;
+      const stickers = set.stickers || [];
+      return {
+        ok: true,
+        title: set.title || cleanSlug,
+        identifier: cleanSlug,
+        telegramUrl: `https://t.me/addstickers/${cleanSlug}`,
+        totalStickers: stickers.length,
+        animated: Boolean(set.is_animated || set.is_video),
+        stickers
+      };
+    }
+  } catch (err) {
+    console.warn(`[StickerController] Telegram fetch failed for ${packIdentifier}:`, err.message);
+  }
+  return { ok: false };
+}
 
 export const stickerController = {
   /**
@@ -178,7 +241,7 @@ export const stickerController = {
   },
 
   /**
-   * Get general metrics for Sticker Store.
+   * Get general metrics for Sticker Store (including automatic total sticker count).
    */
   getStats(req, res, next) {
     try {
@@ -186,11 +249,13 @@ export const stickerController = {
       const categories = new Set();
       const authors = new Set();
       let totalDownloads = 0;
+      let totalIndividualStickers = 0;
 
       items.forEach(pack => {
         if (pack.category) categories.add(pack.category);
         if (pack.author) authors.add(pack.author);
         totalDownloads += (pack.downloads || 0);
+        totalIndividualStickers += (parseInt(pack.totalStickers, 10) || (pack.previews ? pack.previews.length : 30));
       });
 
       res.status(200).json({
@@ -198,6 +263,8 @@ export const stickerController = {
         data: {
           stats: {
             totalStickers: items.length,
+            totalPacks: items.length,
+            totalIndividualStickers,
             totalCategories: categories.size,
             totalAuthors: authors.size,
             totalDownloads,
@@ -211,7 +278,7 @@ export const stickerController = {
   },
 
   /**
-   * Auto-fetch sticker pack metadata and previews from Telegram
+   * Auto-fetch sticker pack metadata, preview URLs, and download preview files to public/stickers/{pack}
    */
   async autoFetchTelegram(req, res, next) {
     try {
@@ -230,7 +297,7 @@ export const stickerController = {
       const packName = match ? match[1] : trimmed.split('/').pop().trim();
 
       const tgUrl = `https://api.telegram.org/bot${token}/getStickerSet?name=${encodeURIComponent(packName)}`;
-      const tgRes = await fetch(tgUrl);
+      const tgRes = await fetch(tgUrl, { signal: AbortSignal.timeout(8000) });
       const tgData = await tgRes.json();
 
       if (!tgData.ok || !tgData.result) {
@@ -244,13 +311,17 @@ export const stickerController = {
       const stickers = resultSet.stickers || [];
       const previews = [];
 
-      for (let i = 0; i < Math.min(6, stickers.length); i++) {
+      // Download and save preview stickers locally in public/stickers/{packName}/
+      for (let i = 0; i < Math.min(8, stickers.length); i++) {
         const s = stickers[i];
         try {
-          const fileRes = await fetch(`https://api.telegram.org/bot${token}/getFile?file_id=${s.file_id}`);
+          const fileRes = await fetch(`https://api.telegram.org/bot${token}/getFile?file_id=${s.file_id}`, { signal: AbortSignal.timeout(5000) });
           const fileData = await fileRes.json();
           if (fileData.ok && fileData.result?.file_path) {
-            previews.push(`https://api.telegram.org/file/bot${token}/${fileData.result.file_path}`);
+            const rawFileUrl = `https://api.telegram.org/file/bot${token}/${fileData.result.file_path}`;
+            const ext = path.extname(fileData.result.file_path) || '.webp';
+            const savedUrl = await downloadAndSaveStickerFile(rawFileUrl, packName, `preview_${i}${ext}`);
+            previews.push(savedUrl || rawFileUrl);
           }
         } catch (_) {}
       }
@@ -263,7 +334,7 @@ export const stickerController = {
           name: resultSet.title || packName,
           identifier: packName,
           telegramUrl: `https://t.me/addstickers/${packName}`,
-          totalStickers: stickers.length,
+          totalStickers: stickers.length, // Automatically counted from Telegram!
           animated: Boolean(resultSet.is_animated || resultSet.is_video),
           thumbnail,
           previews
@@ -275,25 +346,54 @@ export const stickerController = {
   },
 
   /**
-   * Create/Add a new sticker pack.
+   * Create/Add a new sticker pack with previews saved in public/stickers/{pack}
    */
-  createStickerPack(req, res, next) {
+  async createStickerPack(req, res, next) {
     try {
-      const { name, identifier, telegramUrl, author, authorUrl, category, totalStickers, animated, thumbnail, previews, description, tags } = req.body;
+      const { name, identifier, telegramUrl, author, authorUrl, category, animated, thumbnail, previews, description, tags } = req.body;
+      let totalStickers = parseInt(req.body.totalStickers, 10) || 0;
 
-      if (!name || !identifier) {
+      if (!name) {
         return res.status(400).json({
           status: 'fail',
-          message: 'Sticker pack name and identifier are required.'
+          message: 'Sticker pack name is required.'
         });
       }
+
+      const cleanSlug = (identifier || telegramUrl || name).replace(/^(?:https?:\/\/)?t\.me\/addstickers\//i, '').replace(/\/.*$/, '').trim();
 
       // Convert previews string/array
       let previewList = [];
       if (Array.isArray(previews)) {
-        previewList = previews;
+        previewList = previews.filter(Boolean);
       } else if (typeof previews === 'string' && previews.trim()) {
         previewList = previews.split(/[\n,]/).map(s => s.trim()).filter(Boolean);
+      }
+
+      // Automatically download & save previews to public/stickers/{cleanSlug}/ if remote
+      const savedPreviews = [];
+      for (let i = 0; i < previewList.length; i++) {
+        const pUrl = previewList[i];
+        if (pUrl.startsWith('http://') || pUrl.startsWith('https://')) {
+          const ext = path.extname(pUrl.split('?')[0]) || '.webp';
+          const localUrl = await downloadAndSaveStickerFile(pUrl, cleanSlug, `preview_${i}${ext}`);
+          savedPreviews.push(localUrl);
+        } else {
+          savedPreviews.push(pUrl);
+        }
+      }
+
+      // Automatically calculate sticker count if missing
+      if (totalStickers <= 0) {
+        if (cleanSlug) {
+          const tgInfo = await fetchTelegramSetInfo(cleanSlug);
+          if (tgInfo.ok && tgInfo.totalStickers > 0) {
+            totalStickers = tgInfo.totalStickers;
+          }
+        }
+        if (totalStickers <= 0) {
+          totalStickers = savedPreviews.length > 0 ? savedPreviews.length : 30;
+        }
       }
 
       // Convert tags string/array
@@ -304,18 +404,24 @@ export const stickerController = {
         tagList = tags.split(',').map(s => s.trim()).filter(Boolean);
       }
 
+      let finalThumb = (thumbnail || (savedPreviews[0] || '')).trim();
+      if (finalThumb.startsWith('http://') || finalThumb.startsWith('https://')) {
+        const ext = path.extname(finalThumb.split('?')[0]) || '.webp';
+        finalThumb = await downloadAndSaveStickerFile(finalThumb, cleanSlug, `thumbnail${ext}`);
+      }
+
       const newPack = stickerDb.add({
-        name,
-        identifier,
-        telegramUrl: telegramUrl || `https://t.me/addstickers/${identifier}`,
-        author: author || 'Anonymous',
-        authorUrl: authorUrl || '',
-        category: category || 'General',
-        totalStickers: parseInt(totalStickers, 10) || (previewList.length > 0 ? previewList.length : 30),
+        name: name.trim(),
+        identifier: cleanSlug || name.trim(),
+        telegramUrl: telegramUrl || (cleanSlug ? `https://t.me/addstickers/${cleanSlug}` : ''),
+        author: (author || 'Anonymous').trim(),
+        authorUrl: (authorUrl || '').trim(),
+        category: (category || 'General').trim(),
+        totalStickers,
         animated: Boolean(animated),
-        thumbnail: thumbnail || (previewList[0] || ''),
-        previews: previewList,
-        description: description || '',
+        thumbnail: finalThumb,
+        previews: savedPreviews,
+        description: (description || '').trim(),
         tags: tagList,
         downloads: 0,
         rating: 5.0
@@ -338,7 +444,7 @@ export const stickerController = {
   /**
    * Update an existing sticker pack by ID or slug.
    */
-  updateStickerPack(req, res, next) {
+  async updateStickerPack(req, res, next) {
     try {
       const { id } = req.params;
       const existing = stickerDb.getById(id);
@@ -351,11 +457,44 @@ export const stickerController = {
       }
 
       const updateData = { ...req.body };
+      const slug = updateData.identifier || existing.identifier || existing.id;
+
       if (typeof updateData.previews === 'string') {
         updateData.previews = updateData.previews.split(/[\n,]/).map(s => s.trim()).filter(Boolean);
       }
+
+      if (Array.isArray(updateData.previews)) {
+        const savedPreviews = [];
+        for (let i = 0; i < updateData.previews.length; i++) {
+          const pUrl = updateData.previews[i];
+          if (pUrl.startsWith('http://') || pUrl.startsWith('https://')) {
+            const ext = path.extname(pUrl.split('?')[0]) || '.webp';
+            const localUrl = await downloadAndSaveStickerFile(pUrl, slug, `preview_${i}${ext}`);
+            savedPreviews.push(localUrl);
+          } else {
+            savedPreviews.push(pUrl);
+          }
+        }
+        updateData.previews = savedPreviews;
+      }
+
       if (typeof updateData.tags === 'string') {
         updateData.tags = updateData.tags.split(',').map(s => s.trim()).filter(Boolean);
+      }
+
+      // Auto calculate count if 0 or missing
+      if (!updateData.totalStickers || parseInt(updateData.totalStickers, 10) <= 0) {
+        if (slug) {
+          const tgInfo = await fetchTelegramSetInfo(slug);
+          if (tgInfo.ok && tgInfo.totalStickers > 0) {
+            updateData.totalStickers = tgInfo.totalStickers;
+          }
+        }
+        if (!updateData.totalStickers) {
+          updateData.totalStickers = updateData.previews ? updateData.previews.length : existing.totalStickers;
+        }
+      } else {
+        updateData.totalStickers = parseInt(updateData.totalStickers, 10);
       }
 
       const updated = stickerDb.update(id, updateData);
@@ -375,11 +514,12 @@ export const stickerController = {
   },
 
   /**
-   * Delete a sticker pack by ID or slug.
+   * Delete a sticker pack and clean up public/stickers/{pack} directory.
    */
   deleteStickerPack(req, res, next) {
     try {
       const { id } = req.params;
+      const existing = stickerDb.getById(id);
       const success = stickerDb.delete(id);
 
       if (!success) {
@@ -387,6 +527,19 @@ export const stickerController = {
           status: 'fail',
           message: `Sticker pack with ID/slug '${id}' not found.`
         });
+      }
+
+      // Delete folder public/stickers/{packSlug}
+      if (existing) {
+        const slug = existing.identifier || existing.id;
+        const packDir = path.join(process.cwd(), 'public', 'stickers', slug);
+        if (fs.existsSync(packDir)) {
+          try {
+            fs.rmSync(packDir, { recursive: true, force: true });
+          } catch (err) {
+            console.warn(`[StickerController] Could not remove sticker dir ${packDir}:`, err.message);
+          }
+        }
       }
 
       triggerGitSync(`Admin: Deleted sticker pack - ${id}`);

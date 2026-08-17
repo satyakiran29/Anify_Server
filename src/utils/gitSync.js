@@ -84,7 +84,7 @@ export async function triggerGitSync(commitMessage) {
     await execPromise('git reset FETCH_HEAD');
 
     // Stage database JSON files and uploads directory
-    await execPromise('git add wallpapers.json livewalls.json ringtones.json kwgts.json public/uploads');
+    await execPromise('git add wallpapers.json livewalls.json ringtones.json kwgts.json stickers.json public/uploads public/stickers');
 
     // Check if there are staged changes to commit
     const { stdout: statusOut } = await execPromise('git diff --name-only --cached');
