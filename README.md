@@ -1,14 +1,13 @@
 # Anify Server
 
 [![Google Play](https://img.shields.io/badge/Google_Play-Anify-414141?logo=google-play&logoColor=white)](https://play.google.com/store/apps/details?id=com.skdev.anify)
-[![Website](https://img.shields.io/badge/Website-anify.psatyakiran.in-blue?logo=google-chrome&logoColor=white)](https://anify.psatyakiran.in/)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D%2018.0.0-blue.svg)](https://nodejs.org/)
 [![Express.js Framework](https://img.shields.io/badge/framework-Express%20v4-green.svg)](https://expressjs.com/)
 [![License](https://img.shields.io/badge/license-MIT-purple.svg)](LICENSE)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](#)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/satyakiran29/Anify_Server/pulls)
 
-**Anify Server** is a high-performance REST API backend and interactive administration console built to power Android personalization applications — notably the official **[Anify Android App on Google Play](https://play.google.com/store/apps/details?id=com.skdev.anify)** and the **[Anify Web Experience](https://anify.psatyakiran.in/)**. It serves curated static wallpapers, live (video) wallpapers, audio ringtones, KWGT widget presets, and Telegram sticker packs with zero-database overhead using high-speed JSON flat-file storage, automated media conversion, self-healing caches, and continuous Git synchronization.
+**Anify Server** is a high-performance REST API backend and interactive administration console built to power Android personalization applications — notably the official **[Anify Android App on Google Play](https://play.google.com/store/apps/details?id=com.skdev.anify)**. It serves curated static wallpapers, live (video) wallpapers, audio ringtones, KWGT widget presets, and Telegram sticker packs with zero-database overhead using high-speed JSON flat-file storage, automated media conversion, self-healing caches, and continuous Git synchronization.
 
 ---
 
@@ -549,7 +548,6 @@ For bugs, questions, or feature requests, please open an issue in the [GitHub Is
 <div align="center">
   <p>
     <a href="https://play.google.com/store/apps/details?id=com.skdev.anify"><b>📱 Download on Google Play</b></a> &nbsp;•&nbsp;
-    <a href="https://anify.psatyakiran.in/"><b>🌐 Visit Official Website</b></a> &nbsp;•&nbsp;
     <a href="https://github.com/satyakiran29/Anify_Server"><b>⭐ Star on GitHub</b></a>
   </p>
   <sub>Built with ❤️ by <a href="https://github.com/satyakiran29">Satyakiran</a> to power seamless mobile personalization.</sub>
