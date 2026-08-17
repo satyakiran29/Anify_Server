@@ -63,6 +63,9 @@
     <button class="tab-btn" data-tab="kwgt-explorer">
       <i class="fa-solid fa-shapes"></i> <span>KWGTs</span>
     </button>
+    <button class="tab-btn" data-tab="sticker-explorer">
+      <i class="fa-solid fa-face-smile"></i> <span>Stickers</span>
+    </button>
     <button class="tab-btn" data-tab="console">
       <i class="fa-solid fa-terminal"></i> <span>API Console</span>
     </button>
@@ -209,6 +212,40 @@
       <!-- KWGT Pagination -->
       <div class="pagination-container" id="kwgtPaginationContainer">
         <!-- Injected dynamically -->
+      </div>
+    </section>
+
+    
+    <!-- STICKER EXPLORER TAB -->
+    <section id="sticker-explorer" class="tab-content">
+      <div class="filter-bar">
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="stickerSearchInput" placeholder="Search by pack name, identifier, or tag...">
+        </div>
+        <div class="filter-selects">
+          <select id="stickerCategoryFilter" class="select-custom">
+            <option value="">All Categories</option>
+          </select>
+          <select id="stickerSortFilter" class="select-custom">
+            <option value="">Default Order</option>
+            <option value="name">Alphabetical (Name)</option>
+            <option value="category">Alphabetical (Category)</option>
+            <option value="downloads">Most Popular</option>
+          </select>
+          <select id="stickerLimitFilter" class="select-custom">
+            <option value="12">12 per page</option>
+            <option value="24">24 per page</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="wallpaper-grid" id="stickerGrid">
+        <!-- Sticker cards injected dynamically -->
+      </div>
+
+      <div class="pagination-controls" id="stickerPaginationControls">
+        <!-- Pagination injected dynamically -->
       </div>
     </section>
 
@@ -415,6 +452,7 @@
                 <option value="live">Live Wallpaper (Video)</option>
                 <option value="ringtone">Ringtone (Audio)</option>
                 <option value="kwgt">KWGT (Widget)</option>
+                <option value="sticker">Sticker Pack (Telegram/WhatsApp)</option>
               </select>
             </div>
             
@@ -466,6 +504,37 @@
             <div class="form-group" id="ringtoneDurationGroup" style="display: none;">
               <label for="wpDuration">Duration (mm:ss) *</label>
               <input type="text" id="wpDuration" placeholder="e.g. 0:30, 0:01" value="0:30">
+            </div>
+
+            
+            <!-- Sticker pack fields (hidden by default) -->
+            <div class="form-group" id="stickerTelegramGroup" style="display: none;">
+              <label for="wpTelegramUrl">Telegram Pack Link or Slug *</label>
+              <div style="display: flex; gap: 8px;">
+                <input type="text" id="wpTelegramUrl" placeholder="e.g. https://t.me/addstickers/SousouNoFrierenAnime or SousouNoFrierenAnime">
+                <button type="button" class="btn btn-outline" id="autoFetchStickerBtn" style="white-space: nowrap; font-size: 0.82rem;">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Fetch
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group" id="stickerPreviewsGroup" style="display: none;">
+              <label for="wpStickerPreviews">Sticker Preview Image URLs (Comma or Newline separated)</label>
+              <textarea id="wpStickerPreviews" rows="3" placeholder="https://example.com/sticker1.webp&#10;https://example.com/sticker2.webp" style="width: 100%; padding: 10px; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 8px; font-family: monospace; font-size: 0.85rem;"></textarea>
+            </div>
+
+            <div class="form-group" id="stickerMetaGroup" style="display: none;">
+              <div style="display: flex; gap: 15px; align-items: center;">
+                <div style="flex: 1;">
+                  <label for="wpStickerCount">Total Stickers</label>
+                  <input type="number" id="wpStickerCount" placeholder="30" value="30">
+                </div>
+                <div style="flex: 1; padding-top: 20px;">
+                  <label style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer; text-transform: none;">
+                    <input type="checkbox" id="wpStickerAnimated" style="width: auto;"> 🎬 Animated Pack
+                  </label>
+                </div>
+              </div>
             </div>
 
             <!-- Upload Type Toggle -->
@@ -600,6 +669,7 @@
             <button class="btn btn-outline" id="adminTableToggleLive" style="padding: 6px 12px; font-size: 0.85rem;" type="button"><i class="fa-solid fa-film"></i> Live Wallpapers</button>
             <button class="btn btn-outline" id="adminTableToggleRingtone" style="padding: 6px 12px; font-size: 0.85rem;" type="button"><i class="fa-solid fa-music"></i> Ringtones</button>
             <button class="btn btn-outline" id="adminTableToggleKwgt" style="padding: 6px 12px; font-size: 0.85rem;" type="button"><i class="fa-solid fa-shapes"></i> KWGTs</button>
+            <button class="btn btn-outline" id="adminTableToggleSticker" style="padding: 6px 12px; font-size: 0.85rem;" type="button"><i class="fa-solid fa-face-smile"></i> Sticker Packs</button>
           </div>
           <div class="table-responsive admin-table-container">
             <table>

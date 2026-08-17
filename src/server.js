@@ -10,10 +10,12 @@ import { initDatabase } from './utils/db.js';
 import { initLiveDatabase } from './utils/liveDb.js';
 import { initRingtoneDatabase } from './utils/ringtoneDb.js';
 import { initKwgtDatabase } from './utils/kwgtDb.js';
+import { initStickerDatabase } from './utils/stickerDb.js';
 import wallpaperRouter from './routes/wallpaperRoutes.js';
 import livewallRouter from './routes/livewallRoutes.js';
 import ringtoneRouter from './routes/ringtoneRoutes.js';
 import kwgtRouter from './routes/kwgtRoutes.js';
+import stickerRouter from './routes/stickerRoutes.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
 // Load environment variables
@@ -23,11 +25,12 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Initialize database
+// Initialize databases
 initDatabase();
 initLiveDatabase();
 initRingtoneDatabase();
 initKwgtDatabase();
+initStickerDatabase();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -55,6 +58,7 @@ app.use(`${API_PREFIX}/wallpapers`, wallpaperRouter);
 app.use(`${API_PREFIX}/livewalls`, livewallRouter);
 app.use(`${API_PREFIX}/ringtones`, ringtoneRouter);
 app.use(`${API_PREFIX}/kwgts`, kwgtRouter);
+app.use(`${API_PREFIX}/stickers`, stickerRouter);
 
 // Handles undefined route requests
 app.all('*', notFoundHandler);
@@ -69,6 +73,7 @@ app.listen(PORT, () => {
   console.log(` Port: ${PORT}`);
   console.log(` Environment: ${process.env.NODE_ENV || 'production'}`);
   console.log(` API Endpoint: http://localhost:${PORT}${API_PREFIX}/wallpapers`);
+  console.log(` Stickers API: http://localhost:${PORT}${API_PREFIX}/stickers`);
   console.log(` Explorer Dashboard: http://localhost:${PORT}`);
   console.log(`===================================================`);
 

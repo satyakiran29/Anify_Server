@@ -151,6 +151,7 @@ const adminTableToggleStatic = document.getElementById('adminTableToggleStatic')
 const adminTableToggleLive = document.getElementById('adminTableToggleLive');
 const adminTableToggleRingtone = document.getElementById('adminTableToggleRingtone');
 const adminTableToggleKwgt = document.getElementById('adminTableToggleKwgt');
+const adminTableToggleSticker = document.getElementById('adminTableToggleSticker');
 
 // Auth elements
 const adminLoginCard = document.getElementById('adminLoginCard');
@@ -843,7 +844,40 @@ function setupAdminPanel() {
         }
         formData.append('url', audioUrl);
       }
-    } else if (type === 'kwgt') {
+    } else if (type === 'sticker') {
+    if (sourceLabel) sourceLabel.textContent = 'Sticker Source';
+    if (categoryGroup) categoryGroup.style.display = 'block';
+    if (dimensionsGroup) dimensionsGroup.style.display = 'none';
+    if (copyrightGroup) copyrightGroup.style.display = 'none';
+    if (ringtoneDurationGroup) ringtoneDurationGroup.style.display = 'none';
+    
+    const sTgGroup = document.getElementById('stickerTelegramGroup');
+    const sPrevGroup = document.getElementById('stickerPreviewsGroup');
+    const sMetaGroup = document.getElementById('stickerMetaGroup');
+    const imgSourceGrp = document.getElementById('imageSourceGroup');
+
+    if (sTgGroup) sTgGroup.style.display = 'block';
+    if (sPrevGroup) sPrevGroup.style.display = 'block';
+    if (sMetaGroup) sMetaGroup.style.display = 'block';
+    if (imgSourceGrp) imgSourceGrp.style.display = 'none';
+
+    fileUploadContainer.style.display = 'none';
+    remoteUrlContainer.style.display = 'none';
+    liveUploadContainer.style.display = 'none';
+    liveRemoteUrlContainer.style.display = 'none';
+    ringtoneUploadContainer.style.display = 'none';
+    ringtoneRemoteUrlContainer.style.display = 'none';
+    if (typeof kwgtUploadContainer !== 'undefined' && kwgtUploadContainer) kwgtUploadContainer.style.display = 'none';
+    if (typeof kwgtRemoteUrlContainer !== 'undefined' && kwgtRemoteUrlContainer) kwgtRemoteUrlContainer.style.display = 'none';
+    
+    wpCategorySelect.required = true;
+    wpDimensionsInput.required = false;
+    wpCopyrightInput.required = false;
+    wpDurationInput.required = false;
+    wpFileInput.required = false;
+    wpUrlInput.required = false;
+    if (wpTelegramUrl) wpTelegramUrl.required = true;
+  } else if (type === 'kwgt') {
       formData.append('category', category);
       formData.append('copyright', copyright);
 
@@ -1670,6 +1704,39 @@ function toggleFormFields() {
     wpLiveVideoUrlInput.required = false;
     wpKwgtFileInput.required = false;
     wpKwgtUrlInput.required = false;
+  } else if (type === 'sticker') {
+    if (sourceLabel) sourceLabel.textContent = 'Sticker Source';
+    if (categoryGroup) categoryGroup.style.display = 'block';
+    if (dimensionsGroup) dimensionsGroup.style.display = 'none';
+    if (copyrightGroup) copyrightGroup.style.display = 'none';
+    if (ringtoneDurationGroup) ringtoneDurationGroup.style.display = 'none';
+    
+    const sTgGroup = document.getElementById('stickerTelegramGroup');
+    const sPrevGroup = document.getElementById('stickerPreviewsGroup');
+    const sMetaGroup = document.getElementById('stickerMetaGroup');
+    const imgSourceGrp = document.getElementById('imageSourceGroup');
+
+    if (sTgGroup) sTgGroup.style.display = 'block';
+    if (sPrevGroup) sPrevGroup.style.display = 'block';
+    if (sMetaGroup) sMetaGroup.style.display = 'block';
+    if (imgSourceGrp) imgSourceGrp.style.display = 'none';
+
+    fileUploadContainer.style.display = 'none';
+    remoteUrlContainer.style.display = 'none';
+    liveUploadContainer.style.display = 'none';
+    liveRemoteUrlContainer.style.display = 'none';
+    ringtoneUploadContainer.style.display = 'none';
+    ringtoneRemoteUrlContainer.style.display = 'none';
+    if (typeof kwgtUploadContainer !== 'undefined' && kwgtUploadContainer) kwgtUploadContainer.style.display = 'none';
+    if (typeof kwgtRemoteUrlContainer !== 'undefined' && kwgtRemoteUrlContainer) kwgtRemoteUrlContainer.style.display = 'none';
+    
+    wpCategorySelect.required = true;
+    wpDimensionsInput.required = false;
+    wpCopyrightInput.required = false;
+    wpDurationInput.required = false;
+    wpFileInput.required = false;
+    wpUrlInput.required = false;
+    if (wpTelegramUrl) wpTelegramUrl.required = true;
   } else if (type === 'kwgt') {
     if (sourceLabel) sourceLabel.textContent = 'File Source';
     
@@ -1821,6 +1888,14 @@ function setupAdminTableToggles() {
     syncAdminTableToggleUI();
     loadAdminKwgts();
   });
+
+  if (adminTableToggleSticker) {
+    adminTableToggleSticker.addEventListener('click', () => {
+      currentAdminTableMode = 'sticker';
+      syncAdminTableToggleUI();
+      loadAdminStickers();
+    });
+  }
 }
 
 function syncAdminTableToggleUI() {
@@ -2158,6 +2233,72 @@ async function loadAdminRingtones() {
 // KWGT UTILITIES & INTERACTIVE UI
 // ----------------------------------------------------
 
+
+// Load List of Stickers for Admin Panel
+async function loadAdminStickers() {
+  try {
+    adminTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center"><i class="fa-solid fa-spinner fa-spin"></i> Loading Stickers...</td></tr>';
+    adminListCount.textContent = 'Loading...';
+
+    const res = await fetch('/api/v1/stickers?limit=0');
+    const data = await res.json();
+
+    if (data.status === 'success') {
+      const stickers = data.data.stickers;
+      adminSearchInput.value = '';
+      adminListCount.textContent = `${stickers.length} Stickers Total`;
+
+      if (stickers.length === 0) {
+        adminTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center">No sticker packs found in database.</td></tr>';
+        return;
+      }
+
+      adminTableBody.innerHTML = '';
+      stickers.forEach(pack => {
+        const row = document.createElement('tr');
+        const thumbUrl = pack.thumbnail || (pack.previews && pack.previews[0]) || '';
+
+        row.innerHTML = `
+          <td>
+            <div style="width: 44px; height: 44px; border-radius: 10px; overflow: hidden; background: rgba(0,242,254,0.08); display: flex; align-items: center; justify-content: center;">
+              ${thumbUrl ? `<img src="${thumbUrl}" alt="${pack.name}" style="width: 100%; height: 100%; object-fit: contain;" onerror="this.style.display='none'">` : '<i class="fa-solid fa-face-smile" style="color: var(--accent-cyan);"></i>'}
+            </div>
+          </td>
+          <td>
+            <div style="font-weight: 700; color: var(--text-primary); font-size: 0.92rem;">${pack.name}</div>
+            <div style="font-size: 0.75rem; color: var(--text-secondary); font-family: monospace;">Slug: ${pack.identifier || pack.id}</div>
+          </td>
+          <td>
+            <span class="category-badge">${pack.category || 'General'}</span>
+          </td>
+          <td>
+            <div style="font-size: 0.85rem; color: var(--text-secondary);">${pack.animated ? '🎬 Animated' : '⚡ Static'}</div>
+            <div style="font-size: 0.75rem; color: var(--accent-cyan);"><i class="fa-solid fa-layer-group"></i> ${pack.totalStickers || 30} stickers</div>
+          </td>
+          <td>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-outline edit-btn" style="padding: 6px 12px; font-size: 0.8rem;" data-id="${pack.id}">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button class="btn btn-danger delete-btn" style="padding: 6px 12px; font-size: 0.8rem;" data-id="${pack.id}" title="Admin Delete">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        `;
+        adminTableBody.appendChild(row);
+      });
+
+      setupAdminTableActions(stickers, 'sticker');
+    }
+  } catch (err) {
+    adminTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--danger)">Error loading sticker database.</td></tr>';
+    adminListCount.textContent = 'Connection Error';
+    console.error(err);
+  }
+}
+
+
 async function loadAdminKwgts() {
   try {
     adminTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center"><i class="fa-solid fa-spinner fa-spin"></i> Loading KWGTs...</td></tr>';
@@ -2380,3 +2521,312 @@ function renderKwgtPagination(pagination) {
   });
   kwgtPaginationContainer.appendChild(nextBtn);
 }
+
+
+// =========================================================================
+// 8. STICKER STORE & EXPLORER MODULE
+// =========================================================================
+
+let currentStickerPage = 1;
+let currentStickerLimit = 12;
+let currentStickerSearch = '';
+let currentStickerCategory = '';
+let currentStickerSort = '';
+let selectedStickerIdForEdit = null;
+
+// Sticker DOM elements
+const stickerSearchInput = document.getElementById('stickerSearchInput');
+const stickerCategoryFilter = document.getElementById('stickerCategoryFilter');
+const stickerSortFilter = document.getElementById('stickerSortFilter');
+const stickerLimitFilter = document.getElementById('stickerLimitFilter');
+const stickerGrid = document.getElementById('stickerGrid');
+const stickerPaginationControls = document.getElementById('stickerPaginationControls');
+
+const stickerTelegramGroup = document.getElementById('stickerTelegramGroup');
+const wpTelegramUrl = document.getElementById('wpTelegramUrl');
+const autoFetchStickerBtn = document.getElementById('autoFetchStickerBtn');
+const stickerPreviewsGroup = document.getElementById('stickerPreviewsGroup');
+const wpStickerPreviews = document.getElementById('wpStickerPreviews');
+const stickerMetaGroup = document.getElementById('stickerMetaGroup');
+const wpStickerCount = document.getElementById('wpStickerCount');
+const wpStickerAnimated = document.getElementById('wpStickerAnimated');
+
+// Auto-fetch metadata from Telegram
+if (autoFetchStickerBtn) {
+  autoFetchStickerBtn.addEventListener('click', async () => {
+    const inputVal = (wpTelegramUrl ? wpTelegramUrl.value : '').trim();
+    if (!inputVal) {
+      showToast('Please enter a Telegram pack link or slug first.', 'error');
+      return;
+    }
+
+    autoFetchStickerBtn.disabled = true;
+    autoFetchStickerBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Fetching...';
+
+    try {
+      const res = await fetch('/api/v1/stickers/auto-fetch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ packNameOrUrl: inputVal })
+      });
+      const data = await res.json();
+
+      if (data.status === 'success' && data.data) {
+        const item = data.data;
+        if (wpNameInput) wpNameInput.value = item.name || '';
+        if (wpTelegramUrl) wpTelegramUrl.value = item.telegramUrl || item.identifier || '';
+        if (wpStickerCount) wpStickerCount.value = item.totalStickers || 30;
+        if (wpStickerAnimated) wpStickerAnimated.checked = Boolean(item.animated);
+        if (wpStickerPreviews && Array.isArray(item.previews)) {
+          wpStickerPreviews.value = item.previews.join('\n');
+        }
+        showToast('Successfully fetched sticker pack details from Telegram!', 'success');
+      } else {
+        showToast(data.message || 'Failed to fetch pack from Telegram.', 'error');
+      }
+    } catch (err) {
+      showToast('Error connecting to Telegram fetch service: ' + err.message, 'error');
+    } finally {
+      autoFetchStickerBtn.disabled = false;
+      autoFetchStickerBtn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Fetch';
+    }
+  });
+}
+
+// Load Sticker categories
+async function loadStickerCategories() {
+  if (!stickerCategoryFilter) return;
+  try {
+    const res = await fetch('/api/v1/stickers/categories');
+    const json = await res.json();
+    if (json.status === 'success' && json.data?.categories) {
+      const currentVal = stickerCategoryFilter.value;
+      stickerCategoryFilter.innerHTML = '<option value="">All Categories</option>';
+      json.data.categories.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat.name;
+        opt.textContent = `${cat.name} (${cat.count})`;
+        stickerCategoryFilter.appendChild(opt);
+      });
+      stickerCategoryFilter.value = currentVal;
+    }
+  } catch (err) {
+    console.error('Failed to load sticker categories:', err);
+  }
+}
+
+// Load Sticker packs
+async function loadStickers() {
+  if (!stickerGrid) return;
+  stickerGrid.innerHTML = '<div class="loading-state" style="grid-column: 1/-1; text-align: center; padding: 40px;"><i class="fa-solid fa-spinner fa-spin fa-2x" style="color: var(--accent-cyan);"></i><p style="margin-top: 10px; color: var(--text-secondary);">Loading sticker packs...</p></div>';
+
+  try {
+    const params = new URLSearchParams({
+      page: currentStickerPage,
+      limit: currentStickerLimit
+    });
+    if (currentStickerSearch) params.append('search', currentStickerSearch);
+    if (currentStickerCategory) params.append('category', currentStickerCategory);
+    if (currentStickerSort) params.append('sort', currentStickerSort);
+
+    const res = await fetch(`/api/v1/stickers?${params.toString()}`);
+    const json = await res.json();
+
+    if (json.status === 'success' && json.data?.stickers) {
+      renderStickers(json.data.stickers);
+      if (json.pagination && stickerPaginationControls) {
+        renderStickerPagination(json.pagination);
+      }
+    } else {
+      stickerGrid.innerHTML = '<div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 40px;"><p>No sticker packs found.</p></div>';
+    }
+  } catch (err) {
+    stickerGrid.innerHTML = `<div class="error-state" style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--danger);"><p>Error loading stickers: ${err.message}</p></div>`;
+  }
+}
+
+function renderStickers(stickers) {
+  if (!stickerGrid) return;
+  stickerGrid.innerHTML = '';
+
+  if (stickers.length === 0) {
+    stickerGrid.innerHTML = '<div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 40px;"><p>No sticker packs found matching your criteria.</p></div>';
+    return;
+  }
+
+  stickers.forEach(pack => {
+    const card = document.createElement('div');
+    card.className = 'wallpaper-card';
+    card.style.display = 'flex';
+    card.style.flexDirection = 'column';
+    card.style.padding = '14px';
+    card.style.borderRadius = '16px';
+    card.style.background = 'var(--bg-card)';
+    card.style.border = '1px solid var(--border-color)';
+
+    const previews = Array.isArray(pack.previews) ? pack.previews : [];
+    const thumbUrl = pack.thumbnail || previews[0] || '';
+
+    // Generate preview thumbnails HTML
+    let previewsHtml = '';
+    if (previews.length > 0) {
+      previewsHtml = `<div style="display: flex; gap: 6px; margin: 10px 0; overflow-x: auto; padding-bottom: 4px;">
+        ${previews.slice(0, 4).map(p => `
+          <img src="${p}" alt="Preview" style="width: 48px; height: 48px; border-radius: 8px; object-fit: contain; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);" loading="lazy" onerror="this.style.display='none'">
+        `).join('')}
+      </div>`;
+    }
+
+    card.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(0,242,254,0.1); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0;">
+          ${thumbUrl ? `<img src="${thumbUrl}" alt="${pack.name}" style="width:100%; height:100%; object-fit: contain;" onerror="this.style.display='none'">` : '<i class="fa-solid fa-face-smile" style="color: var(--accent-cyan); font-size: 1.4rem;"></i>'}
+        </div>
+        <div style="flex: 1; min-width: 0;">
+          <h4 style="margin: 0; font-size: 1rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${pack.name}</h4>
+          <p style="margin: 2px 0 0 0; font-size: 0.78rem; color: var(--text-secondary);">by ${pack.author || 'Anonymous'}</p>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 6px; align-items: center; margin-top: 8px; flex-wrap: wrap;">
+        <span class="category-badge" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 6px; background: rgba(138,75,243,0.15); color: var(--accent-purple); font-weight: 600;">${pack.category || 'Anime'}</span>
+        <span style="font-size: 0.72rem; padding: 2px 8px; border-radius: 6px; background: rgba(255,255,255,0.08); color: var(--text-secondary);">${pack.animated ? '🎬 Animated' : '⚡ Static'}</span>
+        <span style="font-size: 0.72rem; color: var(--text-secondary);"><i class="fa-solid fa-layer-group"></i> ${pack.totalStickers || 30}</span>
+      </div>
+
+      ${previewsHtml}
+
+      <div style="display: flex; gap: 8px; margin-top: auto; padding-top: 10px; align-items: center;">
+        <a href="${pack.telegramUrl}" target="_blank" class="btn btn-outline" style="flex: 1; text-align: center; font-size: 0.78rem; padding: 6px 10px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+          <i class="fa-brands fa-telegram"></i> Telegram
+        </a>
+        ${adminToken ? `
+          <button class="btn btn-danger delete-sticker-explorer-btn" data-id="${pack.id}" data-name="${pack.name}" style="padding: 6px 10px; font-size: 0.78rem;" title="Admin Delete">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        ` : ''}
+      </div>
+    `;
+
+    stickerGrid.appendChild(card);
+  });
+
+  // Attach Admin Delete button listeners in Explorer View
+  const explorerDeleteBtns = stickerGrid.querySelectorAll('.delete-sticker-explorer-btn');
+  explorerDeleteBtns.forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const id = btn.getAttribute('data-id');
+      const name = btn.getAttribute('data-name');
+
+      if (!adminToken) {
+        showToast('Admin login required to delete sticker packs.', 'error');
+        return;
+      }
+
+      if (!confirm(`Are you sure you want to delete sticker pack "${name}"? (Admin action)`)) {
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/v1/stickers/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${adminToken}`
+          }
+        });
+
+        if (res.status === 401) {
+          showToast('Session expired. Please log in again as admin.', 'error');
+          return;
+        }
+
+        const data = await res.json();
+        if (data.status === 'success') {
+          showToast(`Sticker pack "${name}" deleted successfully.`, 'success');
+          loadStickers();
+          loadStickerCategories();
+          loadStats();
+          if (currentAdminTableMode === 'sticker') loadAdminStickers();
+        } else {
+          showToast(data.message || 'Failed to delete sticker pack.', 'error');
+        }
+      } catch (err) {
+        showToast('Error deleting sticker pack: ' + err.message, 'error');
+      }
+    });
+  });
+
+}
+
+function renderStickerPagination(pagination) {
+  if (!stickerPaginationControls) return;
+  stickerPaginationControls.innerHTML = '';
+  if (pagination.pages <= 1) return;
+
+  const prevBtn = document.createElement('button');
+  prevBtn.className = 'btn btn-outline';
+  prevBtn.innerHTML = '<i class="fa-solid fa-angle-left"></i>';
+  prevBtn.disabled = pagination.page === 1;
+  prevBtn.addEventListener('click', () => {
+    currentStickerPage = pagination.page - 1;
+    loadStickers();
+  });
+  stickerPaginationControls.appendChild(prevBtn);
+
+  const pageInfo = document.createElement('span');
+  pageInfo.className = 'page-info';
+  pageInfo.textContent = `Page ${pagination.page} of ${pagination.pages}`;
+  stickerPaginationControls.appendChild(pageInfo);
+
+  const nextBtn = document.createElement('button');
+  nextBtn.className = 'btn btn-outline';
+  nextBtn.innerHTML = '<i class="fa-solid fa-angle-right"></i>';
+  nextBtn.disabled = pagination.page === pagination.pages;
+  nextBtn.addEventListener('click', () => {
+    currentStickerPage = pagination.page + 1;
+    loadStickers();
+  });
+  stickerPaginationControls.appendChild(nextBtn);
+}
+
+// Attach Sticker Explorer Filter Listeners
+if (stickerSearchInput) {
+  let debounceTimeout;
+  stickerSearchInput.addEventListener('input', () => {
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => {
+      currentStickerSearch = stickerSearchInput.value.trim();
+      currentStickerPage = 1;
+      loadStickers();
+    }, 300);
+  });
+}
+
+if (stickerCategoryFilter) {
+  stickerCategoryFilter.addEventListener('change', () => {
+    currentStickerCategory = stickerCategoryFilter.value;
+    currentStickerPage = 1;
+    loadStickers();
+  });
+}
+
+if (stickerSortFilter) {
+  stickerSortFilter.addEventListener('change', () => {
+    currentStickerSort = stickerSortFilter.value;
+    currentStickerPage = 1;
+    loadStickers();
+  });
+}
+
+if (stickerLimitFilter) {
+  stickerLimitFilter.addEventListener('change', () => {
+    currentStickerLimit = parseInt(stickerLimitFilter.value, 10);
+    currentStickerPage = 1;
+    loadStickers();
+  });
+}
+
+// Initial fetch for sticker explorer
+loadStickerCategories();
+loadStickers();
