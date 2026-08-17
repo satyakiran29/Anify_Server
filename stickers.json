@@ -1,34 +1,5 @@
 [
   {
-    "id": "5f2bee5d453a21b89ec0d6443834b786",
-    "name": "Kang Robot Anime Pack",
-    "identifier": "kang_5852054126_by_Sticker_kang_robot",
-    "telegramUrl": "https://t.me/addstickers/kang_5852054126_by_Sticker_kang_robot",
-    "author": "Sticker Kang Robot",
-    "authorUrl": "https://t.me/Sticker_kang_robot",
-    "category": "Anime",
-    "totalStickers": 30,
-    "animated": false,
-    "thumbnail": "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png&w=200",
-    "previews": [
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png&w=200",
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/149.png&w=200",
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/384.png&w=200",
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/448.png&w=200",
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/249.png&w=200"
-    ],
-    "description": "Curated anime reaction pack kanged by Sticker Kang Robot.",
-    "tags": [
-      "anime",
-      "kang",
-      "reactions",
-      "robot",
-      "manga"
-    ],
-    "downloads": 8720,
-    "rating": 4.8
-  },
-  {
     "id": "d43efa25f756092c5dc07d95e8762612",
     "name": "cute奶龙",
     "identifier": "xiaonailoong",
