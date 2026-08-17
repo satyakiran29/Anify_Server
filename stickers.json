@@ -89,33 +89,6 @@
     "rating": 5
   },
   {
-    "id": "d31cc5d30d884962cf24dc086bab26c4",
-    "name": "Anime Waifus Extended",
-    "identifier": "animewaifus",
-    "telegramUrl": "https://t.me/addstickers/animewaifus",
-    "author": "Anime Studio",
-    "authorUrl": "https://t.me/addstickers/animewaifus",
-    "category": "Anime",
-    "totalStickers": 35,
-    "animated": false,
-    "thumbnail": "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/39.png&w=200",
-    "previews": [
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/39.png&w=200",
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/40.png&w=200",
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/35.png&w=200",
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/36.png&w=200"
-    ],
-    "description": "Top popular anime waifu expressions for chat.",
-    "tags": [
-      "waifu",
-      "anime",
-      "cute",
-      "girls"
-    ],
-    "downloads": 24100,
-    "rating": 4.9
-  },
-  {
     "id": "d43efa25f756092c5dc07d95e8762612",
     "name": "cute奶龙",
     "identifier": "xiaonailoong",
