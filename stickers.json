@@ -143,60 +143,6 @@
     "rating": 4.9
   },
   {
-    "id": "8becd900fb48b3cc959f20a7dccffb7a",
-    "name": "Genshin Impact Chibi",
-    "identifier": "genshinpack",
-    "telegramUrl": "https://t.me/addstickers/genshinpack",
-    "author": "Teyvat Stickers",
-    "authorUrl": "https://t.me/addstickers/genshinpack",
-    "category": "Gaming",
-    "totalStickers": 45,
-    "animated": false,
-    "thumbnail": "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/778.png&w=200",
-    "previews": [
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/778.png&w=200",
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/700.png&w=200",
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/470.png&w=200"
-    ],
-    "description": "Chibi Genshin Impact emotes for WhatsApp chats.",
-    "tags": [
-      "genshin",
-      "gaming",
-      "chibi",
-      "anime",
-      "paimon"
-    ],
-    "downloads": 19800,
-    "rating": 4.8
-  },
-  {
-    "id": "f9ff42fe548a62004474973bc0dd82db",
-    "name": "Jujutsu Kaisen Memes & Emotes",
-    "identifier": "jjk_stickers",
-    "telegramUrl": "https://t.me/addstickers/jjk_stickers",
-    "author": "JJK Sorcerers",
-    "authorUrl": "https://t.me/addstickers/jjk_stickers",
-    "category": "Anime",
-    "totalStickers": 32,
-    "animated": false,
-    "thumbnail": "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/94.png&w=200",
-    "previews": [
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/94.png&w=200",
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/93.png&w=200",
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/92.png&w=200"
-    ],
-    "description": "Gojo, Sukuna, Megumi, and Itadori stickers & reactions.",
-    "tags": [
-      "jjk",
-      "jujutsu kaisen",
-      "gojo",
-      "sukuna",
-      "anime"
-    ],
-    "downloads": 27400,
-    "rating": 4.9
-  },
-  {
     "id": "d43efa25f756092c5dc07d95e8762612",
     "name": "cute奶龙",
     "identifier": "xiaonailoong",
