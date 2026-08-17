@@ -195,5 +195,31 @@
     ],
     "downloads": 27400,
     "rating": 4.9
+  },
+  {
+    "id": "d43efa25f756092c5dc07d95e8762612",
+    "name": "cute奶龙",
+    "identifier": "xiaonailoong",
+    "telegramUrl": "https://t.me/addstickers/xiaonailoong",
+    "author": "Anify",
+    "authorUrl": "",
+    "category": "Anime",
+    "totalStickers": 100,
+    "animated": true,
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/xiaonailoong/preview_0.webp",
+    "previews": [
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/xiaonailoong/preview_0.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/xiaonailoong/preview_1.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/xiaonailoong/preview_2.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/xiaonailoong/preview_3.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/xiaonailoong/preview_4.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/xiaonailoong/preview_5.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/xiaonailoong/preview_6.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/xiaonailoong/preview_7.webp"
+    ],
+    "description": "",
+    "tags": [],
+    "downloads": 0,
+    "rating": 5
   }
 ]
