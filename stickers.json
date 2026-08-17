@@ -1,34 +1,5 @@
 [
   {
-    "id": "9e79a93ede966ef934110a1b447d5a17",
-    "name": "Neko Pack 120",
-    "identifier": "nekostickerpack120",
-    "telegramUrl": "https://t.me/addstickers/nekostickerpack120",
-    "author": "Neko Telegram",
-    "authorUrl": "https://t.me/addstickers/nekostickerpack120",
-    "category": "Anime",
-    "totalStickers": 48,
-    "animated": false,
-    "thumbnail": "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png&w=200",
-    "previews": [
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png&w=200",
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/133.png&w=200",
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png&w=200",
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png&w=200",
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png&w=200"
-    ],
-    "description": "Cute Neko Anime expressions and reactions for your daily WhatsApp chats.",
-    "tags": [
-      "neko",
-      "anime",
-      "cute",
-      "cat",
-      "waifu"
-    ],
-    "downloads": 12450,
-    "rating": 4.9
-  },
-  {
     "id": "5f2bee5d453a21b89ec0d6443834b786",
     "name": "Kang Robot Anime Pack",
     "identifier": "kang_5852054126_by_Sticker_kang_robot",
