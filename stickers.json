@@ -116,33 +116,6 @@
     "rating": 4.9
   },
   {
-    "id": "72239f2fbe82d964a537a69edf49c1ee",
-    "name": "Cat Memes Supreme",
-    "identifier": "catmemes",
-    "telegramUrl": "https://t.me/addstickers/catmemes",
-    "author": "Meme Cats Collective",
-    "authorUrl": "https://t.me/addstickers/catmemes",
-    "category": "Memes",
-    "totalStickers": 30,
-    "animated": false,
-    "thumbnail": "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/52.png&w=200",
-    "previews": [
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/52.png&w=200",
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/53.png&w=200",
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/300.png&w=200",
-      "https://images.weserv.nl/?url=raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/301.png&w=200"
-    ],
-    "description": "Hilarious cat memes, cursed cats, and goofy felines.",
-    "tags": [
-      "cats",
-      "memes",
-      "funny",
-      "animals"
-    ],
-    "downloads": 31200,
-    "rating": 4.9
-  },
-  {
     "id": "d43efa25f756092c5dc07d95e8762612",
     "name": "cute奶龙",
     "identifier": "xiaonailoong",
