@@ -50,5 +50,31 @@
     "tags": [],
     "downloads": 0,
     "rating": 5
+  },
+  {
+    "id": "00a8f9f0d94abad7fd15259abf0ded55",
+    "name": "Re:Zero | @Toji_sama",
+    "identifier": "ReZeroMood",
+    "telegramUrl": "https://t.me/addstickers/ReZeroMood",
+    "author": "Anify",
+    "authorUrl": "",
+    "category": "Anime",
+    "totalStickers": 120,
+    "animated": false,
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/ReZeroMood/preview_0.webp",
+    "previews": [
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/ReZeroMood/preview_0.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/ReZeroMood/preview_1.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/ReZeroMood/preview_2.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/ReZeroMood/preview_3.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/ReZeroMood/preview_4.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/ReZeroMood/preview_5.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/ReZeroMood/preview_6.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/ReZeroMood/preview_7.webp"
+    ],
+    "description": "",
+    "tags": [],
+    "downloads": 0,
+    "rating": 5
   }
 ]
