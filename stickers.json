@@ -934,5 +934,31 @@
     "tags": [],
     "downloads": 0,
     "rating": 5
+  },
+  {
+    "id": "19eacb847a8813d54163617f20a22c38",
+    "name": "Catot",
+    "identifier": "Kittytiont",
+    "telegramUrl": "https://t.me/addstickers/Kittytiont",
+    "author": "Anify",
+    "authorUrl": "",
+    "category": "General",
+    "totalStickers": 120,
+    "animated": true,
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Kittytiont/preview_0.webp",
+    "previews": [
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Kittytiont/preview_0.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Kittytiont/preview_1.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Kittytiont/preview_2.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Kittytiont/preview_3.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Kittytiont/preview_4.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Kittytiont/preview_5.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Kittytiont/preview_6.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Kittytiont/preview_7.webp"
+    ],
+    "description": "",
+    "tags": [],
+    "downloads": 0,
+    "rating": 5
   }
 ]
