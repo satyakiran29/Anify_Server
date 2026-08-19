@@ -275,6 +275,8 @@ function setupTabs() {
         loadKwgts();
       } else if (tabName === 'sticker-explorer') {
         loadStickers();
+      } else if (tabName === 'banner-explorer') {
+        loadBanners();
       }
     });
   });
@@ -584,8 +586,12 @@ function toggleAdminViewState() {
       loadAdminLivewalls();
     } else if (currentAdminTableMode === 'ringtone') {
       loadAdminRingtones();
-    } else {
+    } else if (currentAdminTableMode === 'kwgt') {
       loadAdminKwgts();
+    } else if (currentAdminTableMode === 'sticker') {
+      loadAdminStickers();
+    } else if (currentAdminTableMode === 'banner') {
+      loadAdminBanners();
     }
   } else {
     adminLoginCard.style.display = 'block';
@@ -1126,6 +1132,13 @@ function resetForm() {
   selectedLiveWallpaperIdForEdit = null;
   selectedRingtoneIdForEdit = null;
   selectedKwgtIdForEdit = null;
+  selectedBannerIdForEdit = null;
+  if (typeof wpBannerSubtitle !== 'undefined' && wpBannerSubtitle) wpBannerSubtitle.value = '';
+  if (typeof wpBannerTag !== 'undefined' && wpBannerTag) wpBannerTag.value = '🔥 FEATURED';
+  if (typeof wpBannerOrder !== 'undefined' && wpBannerOrder) wpBannerOrder.value = '1';
+  if (typeof wpBannerActionType !== 'undefined' && wpBannerActionType) wpBannerActionType.value = 'wallpapers';
+  if (typeof wpBannerActionValue !== 'undefined' && wpBannerActionValue) wpBannerActionValue.value = '';
+  if (typeof wpBannerActive !== 'undefined' && wpBannerActive) wpBannerActive.checked = true;
   wpIdInput.value = '';
   wpNameInput.value = '';
   wpNameInput.required = true;
@@ -3208,6 +3221,16 @@ function renderBanners(banners) {
       </div>
     `;
 
+    card.style.cursor = 'pointer';
+    card.setAttribute('title', 'Click to edit banner in Admin Panel');
+    card.addEventListener('click', () => {
+      editBanner(b);
+      const adminTabBtn = document.querySelector('.tab-btn[data-tab="admin"]');
+      if (adminTabBtn) {
+        adminTabBtn.click();
+        showToast(`Editing banner: ${b.title}`, 'info');
+      }
+    });
     bannerGrid.appendChild(card);
   });
 }
@@ -3347,6 +3370,11 @@ function renderAdminBanners(banners) {
 
 function editBanner(b) {
   selectedBannerIdForEdit = b.id;
+  selectedWallpaperIdForEdit = null;
+  selectedLiveWallpaperIdForEdit = null;
+  selectedRingtoneIdForEdit = null;
+  selectedKwgtIdForEdit = null;
+  selectedStickerIdForEdit = null;
   wpTypeSelect.value = 'banner';
   wpNameInput.value = b.title || '';
   if (wpBannerSubtitle) wpBannerSubtitle.value = b.subtitle || '';
@@ -3368,6 +3396,11 @@ function editBanner(b) {
   cancelEditBtn.style.display = 'inline-block';
 
   // Scroll to form
+  const adminTabBtn = document.querySelector('.tab-btn[data-tab="admin"]');
+  if (adminTabBtn && !adminTabBtn.classList.contains('active')) {
+    adminTabBtn.click();
+  }
+
   const adminFormCard = document.querySelector('.form-card');
   if (adminFormCard) adminFormCard.scrollIntoView({ behavior: 'smooth' });
 }
