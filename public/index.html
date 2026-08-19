@@ -69,7 +69,10 @@
       <button class="tab-btn" data-tab="kwgt-explorer">
         <i class="fa-solid fa-shapes"></i> <span>KWGTs</span>
       </button>
-      <button class="tab-btn" data-tab="sticker-explorer">
+              <button class="tab-btn" data-tab="banner-explorer">
+          <i class="fa-solid fa-rectangle-ad"></i> <span>Banners</span>
+        </button>
+        <button class="tab-btn" data-tab="sticker-explorer">
         <i class="fa-solid fa-face-smile"></i> <span>Stickers</span>
       </button>
       <button class="tab-btn" data-tab="console">
@@ -256,7 +259,24 @@
       </div>
     </section>
 
-    <!-- API CONSOLE TAB -->
+          <!-- BANNER EXPLORER TAB -->
+      <section id="banner-explorer" class="tab-content">
+        <div class="filter-bar" style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0;"><i class="fa-solid fa-rectangle-ad" style="color: var(--accent-cyan);"></i> Active Home Banners</h2>
+            <span class="badge" style="background: rgba(0, 240, 255, 0.15); color: var(--accent-cyan); border: 1px solid rgba(0, 240, 255, 0.3); font-size: 0.8rem; padding: 4px 10px; border-radius: 20px;" id="bannerActiveCount">Loading...</span>
+          </div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary);">
+            Dynamic hero showcases served live to Anify Android Home screen
+          </div>
+        </div>
+
+        <div class="banner-grid" id="bannerGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; margin-top: 20px;">
+          <!-- Banner cards injected dynamically -->
+        </div>
+      </section>
+
+      <!-- API CONSOLE TAB -->
     <section id="console" class="tab-content">
       <div class="api-grid">
         <!-- Sidebar endpoints list -->
@@ -460,6 +480,7 @@
                 <option value="ringtone">Ringtone (Audio)</option>
                 <option value="kwgt">KWGT (Widget)</option>
                 <option value="sticker">Sticker Pack (Telegram/WhatsApp)</option>
+                  <option value="banner">Home Banner (Showcase)</option>
               </select>
             </div>
             
@@ -653,6 +674,73 @@
               <input type="url" id="wpRingtoneUrl" placeholder="https://example.com/audio.mp3">
             </div>
 
+                        <!-- Banner Specific Fields -->
+            <div id="bannerSpecificGroup" style="display: none;">
+              <div class="form-group">
+                <label for="wpBannerSubtitle">Banner Subtitle / Description *</label>
+                <input type="text" id="wpBannerSubtitle" placeholder="e.g. Explore 50+ fresh AMOLED setups & themes">
+              </div>
+
+              <div style="display: flex; gap: 15px;">
+                <div class="form-group" style="flex: 1;">
+                  <label for="wpBannerTag">Badge Tag</label>
+                  <input type="text" id="wpBannerTag" placeholder="e.g. 🔥 FEATURED, ✨ NEW, ⚡ PRO" value="🔥 FEATURED">
+                </div>
+                <div class="form-group" style="flex: 1;">
+                  <label for="wpBannerOrder">Display Order Priority</label>
+                  <input type="number" id="wpBannerOrder" placeholder="1" value="1">
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 15px;">
+                <div class="form-group" style="flex: 1;">
+                  <label for="wpBannerActionType">Target Feature / Action *</label>
+                  <select id="wpBannerActionType" class="select-custom">
+                    <option value="wallpapers">🖼️ Wallpapers Screen</option>
+                    <option value="live_wallpapers">🎬 Live Wallpapers Screen</option>
+                    <option value="kwgt">📐 KWGT Widgets Screen</option>
+                    <option value="widgets">⚡ Built-in Widgets Screen</option>
+                    <option value="stickers">😄 Stickers Studio Screen</option>
+                    <option value="creative_lab">🧪 Creative Lab</option>
+                    <option value="life_calendar">📅 Life Calendar</option>
+                    <option value="auto_changer">🔄 Wallpaper Auto-Changer</option>
+                    <option value="blockit">🔒 BlockIt Focus Lock</option>
+                    <option value="routine_reminders">⏰ Routine Reminders</option>
+                    <option value="donate">💖 Support / Donate Dialog</option>
+                    <option value="url">🌐 External Web URL</option>
+                  </select>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                  <label for="wpBannerActionValue">Action Value / URL (Optional)</label>
+                  <input type="text" id="wpBannerActionValue" placeholder="e.g. https://... or category">
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-top: 5px;">
+                <label style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer; text-transform: none;">
+                  <input type="checkbox" id="wpBannerActive" checked style="width: auto;">
+                  <span>✅ Active / Visible on Home Screen</span>
+                </label>
+              </div>
+
+              <!-- Live Mobile Mockup Preview -->
+              <div class="form-group" style="margin-top: 20px;">
+                <label style="display: flex; align-items: center; gap: 8px; color: var(--accent-cyan); font-weight: 600; font-size: 0.85rem;">
+                  <i class="fa-solid fa-mobile-screen-button"></i> Live App Card Preview
+                </label>
+                <div class="banner-mockup-card" id="bannerLivePreviewCard">
+                  <div class="banner-mockup-bg" id="bannerMockupBg"></div>
+                  <div class="banner-mockup-scrim"></div>
+                  <div class="banner-mockup-content">
+                    <div class="banner-mockup-badge" id="bannerMockupBadge">🔥 FEATURED</div>
+                    <div class="banner-mockup-title" id="bannerMockupTitle">Banner Title</div>
+                    <div class="banner-mockup-subtitle" id="bannerMockupSubtitle">Banner Subtitle will appear here</div>
+                    <div class="banner-mockup-chip"><i class="fa-solid fa-arrow-right"></i> Explore</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div class="form-actions">
               <button type="submit" class="btn btn-primary" id="submitFormBtn">Save Wallpaper</button>
             </div>
@@ -676,6 +764,7 @@
             <button class="btn btn-outline" id="adminTableToggleLive" style="padding: 6px 12px; font-size: 0.85rem;" type="button"><i class="fa-solid fa-film"></i> Live Wallpapers</button>
             <button class="btn btn-outline" id="adminTableToggleRingtone" style="padding: 6px 12px; font-size: 0.85rem;" type="button"><i class="fa-solid fa-music"></i> Ringtones</button>
             <button class="btn btn-outline" id="adminTableToggleKwgt" style="padding: 6px 12px; font-size: 0.85rem;" type="button"><i class="fa-solid fa-shapes"></i> KWGTs</button>
+            <button class="btn btn-outline" id="adminTableToggleBanner" style="padding: 6px 12px; font-size: 0.85rem;" type="button"><i class="fa-solid fa-rectangle-ad"></i> Banners</button>
             <button class="btn btn-outline" id="adminTableToggleSticker" style="padding: 6px 12px; font-size: 0.85rem;" type="button"><i class="fa-solid fa-face-smile"></i> Sticker Packs</button>
           </div>
           <div class="table-responsive admin-table-container">

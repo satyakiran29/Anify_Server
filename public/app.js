@@ -1,3 +1,15 @@
+
+// Helper to escape HTML and prevent XSS
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 // State management
 let currentPage = 1;
 let currentLimit = 12;
@@ -35,6 +47,8 @@ let currentKwgtSearch = '';
 let currentKwgtCategory = '';
 let currentKwgtSort = '';
 let selectedKwgtIdForEdit = null;
+let selectedBannerIdForEdit = null;
+let selectedStickerIdForEdit = null;
 
 let currentAdminTableMode = 'static'; // 'static', 'live', 'ringtone', or 'kwgt'
 let currentActiveTerminalEndpoint = null;
@@ -770,7 +784,77 @@ function setupAdminPanel() {
       isEditMode = !!selectedRingtoneIdForEdit;
     } else if (type === 'kwgt') {
       isEditMode = !!selectedKwgtIdForEdit;
-    } else if (type === 'sticker') {
+    } else if (type === 'banner') {
+        const title = wpNameInput.value.trim();
+        const subtitle = (wpBannerSubtitle ? wpBannerSubtitle.value : '').trim();
+        const tag = (wpBannerTag ? wpBannerTag.value : '🔥 FEATURED').trim();
+        const order = parseInt(wpBannerOrder ? wpBannerOrder.value : '1', 10) || 1;
+        const actionType = (wpBannerActionType ? wpBannerActionType.value : 'wallpapers').trim();
+        const actionValue = (wpBannerActionValue ? wpBannerActionValue.value : '').trim();
+        const active = Boolean(wpBannerActive ? wpBannerActive.checked : true);
+
+        const isEditMode = !!selectedBannerIdForEdit;
+        const url = isEditMode ? `/api/v1/banners/${selectedBannerIdForEdit}` : '/api/v1/banners';
+        const method = isEditMode ? 'PUT' : 'POST';
+        let bannerRes;
+
+        if (source === 'upload') {
+          const formData = new FormData();
+          formData.append('title', title);
+          formData.append('subtitle', subtitle);
+          formData.append('tag', tag);
+          formData.append('order', order);
+          formData.append('actionType', actionType);
+          formData.append('actionValue', actionValue);
+          formData.append('active', active);
+          if (wpFileInput && wpFileInput.files && wpFileInput.files[0]) {
+            formData.append('image', wpFileInput.files[0]);
+          } else if (!isEditMode) {
+            showToast('Please select a banner image file to upload.', 'error');
+            submitFormBtn.disabled = false;
+            submitFormBtn.innerHTML = 'Save Banner';
+            return;
+          }
+
+          bannerRes = await fetch(url, {
+            method,
+            headers: { 'Authorization': `Bearer ${adminToken}` },
+            body: formData
+          });
+        } else {
+          const imageUrl = wpUrlInput ? wpUrlInput.value.trim() : '';
+          if (!imageUrl && !isEditMode) {
+            showToast('Please enter an image URL.', 'error');
+            submitFormBtn.disabled = false;
+            submitFormBtn.innerHTML = 'Save Banner';
+            return;
+          }
+
+          bannerRes = await fetch(url, {
+            method,
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${adminToken}`
+            },
+            body: JSON.stringify({
+              title, subtitle, tag, order, actionType, actionValue, active, imageUrl
+            })
+          });
+        }
+
+        const bannerJson = await bannerRes.json();
+        if (bannerJson.status === 'success') {
+          showToast(isEditMode ? 'Banner updated successfully!' : 'Banner created successfully!', 'success');
+          resetForm();
+          loadAdminBanners();
+          loadBanners();
+        } else {
+          showToast('Failed to save banner: ' + (bannerJson.message || 'Unknown error'), 'error');
+        }
+        submitFormBtn.disabled = false;
+        submitFormBtn.innerHTML = 'Save Banner';
+        return;
+      } else if (type === 'sticker') {
       isEditMode = !!selectedStickerIdForEdit;
     }
 
@@ -1716,8 +1800,49 @@ function setupDragAndDrop(area, input) {
 
 // Form Field Toggler
 function toggleFormFields() {
-  const type = wpTypeSelect.value; // 'static', 'live', or 'ringtone'
-  const source = document.querySelector('input[name="imageSource"]:checked').value; // 'upload' or 'url'
+  const type = wpTypeSelect.value;
+  const bannerGroup = document.getElementById('bannerSpecificGroup');
+  const authorGroup = document.getElementById('wpAuthor') ? document.getElementById('wpAuthor').closest('.form-group') : null;
+  const authorUrlGroup = document.getElementById('wpAuthorUrl') ? document.getElementById('wpAuthorUrl').closest('.form-group') : null;
+
+  if (type === 'banner') {
+    if (bannerGroup) bannerGroup.style.display = 'block';
+    const sourceLabel = document.getElementById('imageSourceGroup') ? document.getElementById('imageSourceGroup').querySelector('label') : null;
+    if (sourceLabel) sourceLabel.textContent = 'Banner Image Source';
+
+    const source = document.querySelector('input[name="imageSource"]:checked').value;
+    if (source === 'upload') {
+      fileUploadContainer.style.display = 'block';
+      remoteUrlContainer.style.display = 'none';
+    } else {
+      fileUploadContainer.style.display = 'none';
+      remoteUrlContainer.style.display = 'block';
+    }
+
+    if (authorGroup) authorGroup.style.display = 'none';
+    if (authorUrlGroup) authorUrlGroup.style.display = 'none';
+    if (wpCategorySelect && wpCategorySelect.closest('.form-group')) wpCategorySelect.closest('.form-group').style.display = 'none';
+    if (wpDimensionsInput && wpDimensionsInput.closest('.form-group')) wpDimensionsInput.closest('.form-group').style.display = 'none';
+    if (wpCopyrightInput && wpCopyrightInput.closest('.form-group')) wpCopyrightInput.closest('.form-group').style.display = 'none';
+    if (typeof ringtoneDurationGroup !== 'undefined' && ringtoneDurationGroup) ringtoneDurationGroup.style.display = 'none';
+    if (typeof kwgtUploadContainer !== 'undefined' && kwgtUploadContainer) kwgtUploadContainer.style.display = 'none';
+    if (typeof kwgtRemoteUrlContainer !== 'undefined' && kwgtRemoteUrlContainer) kwgtRemoteUrlContainer.style.display = 'none';
+    if (typeof liveUploadContainer !== 'undefined' && liveUploadContainer) liveUploadContainer.style.display = 'none';
+    if (typeof liveRemoteUrlContainer !== 'undefined' && liveRemoteUrlContainer) liveRemoteUrlContainer.style.display = 'none';
+    if (typeof ringtoneUploadContainer !== 'undefined' && ringtoneUploadContainer) ringtoneUploadContainer.style.display = 'none';
+    if (typeof ringtoneRemoteUrlContainer !== 'undefined' && ringtoneRemoteUrlContainer) ringtoneRemoteUrlContainer.style.display = 'none';
+    if (typeof stickerMetaGroup !== 'undefined' && stickerMetaGroup) stickerMetaGroup.style.display = 'none';
+    if (typeof stickerPreviewsGroup !== 'undefined' && stickerPreviewsGroup) stickerPreviewsGroup.style.display = 'none';
+    if (typeof stickerTelegramGroup !== 'undefined' && stickerTelegramGroup) stickerTelegramGroup.style.display = 'none';
+
+    if (wpNameLabel) wpNameLabel.textContent = 'Banner Title *';
+    submitFormBtn.textContent = selectedBannerIdForEdit ? 'Update Banner' : 'Save Banner';
+    if (typeof updateBannerLivePreview === 'function') updateBannerLivePreview();
+    return;
+  } else {
+    if (bannerGroup) bannerGroup.style.display = 'none';
+    if (authorGroup) authorGroup.style.display = 'block';
+  }
 
   const sourceLabel = document.getElementById('imageSourceGroup') ? document.getElementById('imageSourceGroup').querySelector('label') : null;
   
@@ -2024,7 +2149,8 @@ function syncAdminTableToggleUI() {
     { btn: adminTableToggleLive, mode: 'live' },
     { btn: adminTableToggleRingtone, mode: 'ringtone' },
     { btn: adminTableToggleKwgt, mode: 'kwgt' },
-    { btn: adminTableToggleSticker, mode: 'sticker' }
+    { btn: adminTableToggleSticker, mode: 'sticker' },
+    { btn: adminTableToggleBanner, mode: 'banner' }
   ];
 
   allToggles.forEach(t => {
@@ -2677,7 +2803,6 @@ let currentStickerLimit = 12;
 let currentStickerSearch = '';
 let currentStickerCategory = '';
 let currentStickerSort = '';
-let selectedStickerIdForEdit = null;
 
 // Sticker DOM elements
 const stickerSearchInput = document.getElementById('stickerSearchInput');
@@ -2975,3 +3100,283 @@ if (stickerLimitFilter) {
 // Initial fetch for sticker explorer
 loadStickerCategories();
 loadStickers();
+
+
+// ==========================================
+// BANNER MANAGEMENT & LIVE PREVIEW
+// ==========================================
+const bannerGrid = document.getElementById('bannerGrid');
+const bannerActiveCount = document.getElementById('bannerActiveCount');
+const bannerSpecificGroup = document.getElementById('bannerSpecificGroup');
+const wpBannerSubtitle = document.getElementById('wpBannerSubtitle');
+const wpBannerTag = document.getElementById('wpBannerTag');
+const wpBannerOrder = document.getElementById('wpBannerOrder');
+const wpBannerActionType = document.getElementById('wpBannerActionType');
+const wpBannerActionValue = document.getElementById('wpBannerActionValue');
+const wpBannerActive = document.getElementById('wpBannerActive');
+const adminTableToggleBanner = document.getElementById('adminTableToggleBanner');
+
+const bannerMockupBg = document.getElementById('bannerMockupBg');
+const bannerMockupBadge = document.getElementById('bannerMockupBadge');
+const bannerMockupTitle = document.getElementById('bannerMockupTitle');
+const bannerMockupSubtitle = document.getElementById('bannerMockupSubtitle');
+
+function updateBannerLivePreview() {
+  if (!bannerMockupTitle) return;
+  const title = (wpNameInput.value || 'Banner Title').trim();
+  const subtitle = (wpBannerSubtitle ? wpBannerSubtitle.value : 'Banner Subtitle will appear here').trim() || 'Banner Subtitle will appear here';
+  const tag = (wpBannerTag ? wpBannerTag.value : '🔥 FEATURED').trim() || '🔥 FEATURED';
+  const sourceRadio = document.querySelector('input[name="imageSource"]:checked');
+  const source = sourceRadio ? sourceRadio.value : 'upload';
+
+  bannerMockupTitle.textContent = title;
+  bannerMockupSubtitle.textContent = subtitle;
+  bannerMockupBadge.textContent = tag;
+
+  if (source === 'url' && wpUrlInput && wpUrlInput.value.trim()) {
+    bannerMockupBg.style.backgroundImage = `url("${wpUrlInput.value.trim()}")`;
+  } else if (source === 'upload' && wpFileInput && wpFileInput.files && wpFileInput.files[0]) {
+    const file = wpFileInput.files[0];
+    const objUrl = URL.createObjectURL(file);
+    bannerMockupBg.style.backgroundImage = `url("${objUrl}")`;
+  } else {
+    bannerMockupBg.style.backgroundImage = 'linear-gradient(135deg, #1e124a 0%, #0d284a 100%)';
+  }
+}
+
+// Attach live preview listeners
+if (wpNameInput) wpNameInput.addEventListener('input', () => { if (wpTypeSelect.value === 'banner') updateBannerLivePreview(); });
+if (wpBannerSubtitle) wpBannerSubtitle.addEventListener('input', updateBannerLivePreview);
+if (wpBannerTag) wpBannerTag.addEventListener('input', updateBannerLivePreview);
+if (wpUrlInput) wpUrlInput.addEventListener('input', () => { if (wpTypeSelect.value === 'banner') updateBannerLivePreview(); });
+if (wpFileInput) wpFileInput.addEventListener('change', () => { if (wpTypeSelect.value === 'banner') updateBannerLivePreview(); });
+
+async function loadBanners() {
+  if (!bannerGrid) return;
+  bannerGrid.innerHTML = '<div class="loading-state" style="grid-column: 1/-1; text-align: center; padding: 40px;"><i class="fa-solid fa-spinner fa-spin fa-2x" style="color: var(--accent-cyan);"></i><p style="margin-top: 10px; color: var(--text-secondary);">Loading dynamic banners...</p></div>';
+
+  try {
+    const res = await fetch('/api/v1/banners?all=true');
+    const json = await res.json();
+
+    if (json.status === 'success' && Array.isArray(json.data?.banners)) {
+      renderBanners(json.data.banners);
+      if (bannerActiveCount) {
+        const activeNum = json.data.banners.filter(b => b.active !== false).length;
+        bannerActiveCount.textContent = `${activeNum} Active / ${json.data.banners.length} Total`;
+      }
+    } else {
+      bannerGrid.innerHTML = '<div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 40px;"><p>No banners configured.</p></div>';
+    }
+  } catch (err) {
+    bannerGrid.innerHTML = `<div class="error-state" style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--danger);"><p>Error loading banners: ${err.message}</p></div>`;
+  }
+}
+
+function renderBanners(banners) {
+  if (!bannerGrid) return;
+  bannerGrid.innerHTML = '';
+
+  if (banners.length === 0) {
+    bannerGrid.innerHTML = '<div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 40px;"><p>No banners created yet. Add one in the Admin tab!</p></div>';
+    return;
+  }
+
+  banners.forEach(b => {
+    const card = document.createElement('div');
+    card.className = 'banner-card';
+
+    const bgUrl = b.imageUrl || '';
+    const isActive = b.active !== false;
+
+    card.innerHTML = `
+      <div class="banner-card-bg" style="background-image: url('${bgUrl}');"></div>
+      <div class="banner-card-scrim"></div>
+      <div class="banner-card-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <span class="banner-card-badge">${escapeHtml(b.tag || 'FEATURED')}</span>
+          <span style="font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; font-weight: 600; background: ${isActive ? 'rgba(0, 255, 136, 0.2)' : 'rgba(255, 68, 68, 0.2)'}; color: ${isActive ? '#00ff88' : '#ff4444'};">
+            ${isActive ? '● ACTIVE' : '○ INACTIVE'}
+          </span>
+        </div>
+        <h3 class="banner-card-title">${escapeHtml(b.title || 'Untitled Banner')}</h3>
+        <p class="banner-card-subtitle">${escapeHtml(b.subtitle || '')}</p>
+        <div class="banner-card-footer">
+          <span class="banner-card-chip"><i class="fa-solid fa-bolt"></i> Action: ${escapeHtml(b.actionType || 'none')}</span>
+          <span class="banner-card-order">Order #${b.order || 1}</span>
+        </div>
+      </div>
+    `;
+
+    bannerGrid.appendChild(card);
+  });
+}
+
+async function loadAdminBanners() {
+  if (!adminTableBody) return;
+  adminTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 30px;"><i class="fa-solid fa-spinner fa-spin"></i> Loading banners...</td></tr>';
+
+  try {
+    const res = await fetch('/api/v1/banners?all=true');
+    const json = await res.json();
+
+    if (json.status === 'success' && Array.isArray(json.data?.banners)) {
+      renderAdminBanners(json.data.banners);
+      if (adminListCount) adminListCount.textContent = `${json.data.banners.length} Banners`;
+    } else {
+      adminTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 30px;">No banners found.</td></tr>';
+    }
+  } catch (err) {
+    adminTableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--danger); padding: 30px;">Error: ${err.message}</td></tr>`;
+  }
+}
+
+function renderAdminBanners(banners) {
+  if (!adminTableBody) return;
+  adminTableBody.innerHTML = '';
+
+  if (banners.length === 0) {
+    adminTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 30px;">No banners created yet.</td></tr>';
+    return;
+  }
+
+  // Update table header for banners
+  const thead = adminTableBody.closest('table').querySelector('thead');
+  if (thead) {
+    thead.innerHTML = `
+      <tr>
+        <th style="width: 100px;">Preview</th>
+        <th>Title & Subtitle</th>
+        <th>Tag</th>
+        <th>Action Target</th>
+        <th>Order</th>
+        <th>Status</th>
+        <th style="text-align: right;">Actions</th>
+      </tr>
+    `;
+  }
+
+  banners.forEach(b => {
+    const tr = document.createElement('tr');
+    const isActive = b.active !== false;
+
+    tr.innerHTML = `
+      <td>
+        <img src="${b.imageUrl}" alt="Banner" style="width: 90px; height: 50px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+      </td>
+      <td>
+        <div style="font-weight: 700; color: #fff;">${escapeHtml(b.title)}</div>
+        <div style="font-size: 0.8rem; color: var(--text-secondary); max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(b.subtitle || '')}</div>
+      </td>
+      <td>
+        <span class="badge" style="background: rgba(0, 240, 255, 0.15); color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(b.tag || 'FEATURED')}</span>
+      </td>
+      <td>
+        <span style="font-family: monospace; font-size: 0.82rem; color: #e0e0e0;"><i class="fa-solid fa-arrow-up-right-from-square"></i> ${escapeHtml(b.actionType || 'none')}</span>
+      </td>
+      <td>
+        <span style="font-weight: 600;">#${b.order || 1}</span>
+      </td>
+      <td>
+        <button class="btn btn-outline toggle-banner-active-btn" data-id="${b.id}" data-active="${isActive}" style="padding: 3px 8px; font-size: 0.75rem; color: ${isActive ? '#00ff88' : '#ff5555'}; border-color: ${isActive ? 'rgba(0,255,136,0.3)' : 'rgba(255,85,85,0.3)'};">
+          ${isActive ? 'Active' : 'Hidden'}
+        </button>
+      </td>
+      <td style="text-align: right; white-space: nowrap;">
+        <button class="btn btn-outline edit-banner-btn" data-id="${b.id}" style="padding: 5px 10px; font-size: 0.8rem; margin-right: 5px;" title="Edit Banner">
+          <i class="fa-solid fa-pen-to-square"></i>
+        </button>
+        <button class="btn btn-outline delete-banner-btn" data-id="${b.id}" data-title="${escapeHtml(b.title)}" style="padding: 5px 10px; font-size: 0.8rem; color: var(--danger); border-color: rgba(255,68,68,0.3);" title="Delete Banner">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </td>
+    `;
+
+    // Edit button listener
+    tr.querySelector('.edit-banner-btn').addEventListener('click', () => {
+      editBanner(b);
+    });
+
+    // Delete button listener
+    tr.querySelector('.delete-banner-btn').addEventListener('click', async () => {
+      if (!confirm(`Are you sure you want to delete banner "${b.title}"?`)) return;
+      try {
+        const delRes = await fetch(`/api/v1/banners/${b.id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${adminToken}` }
+        });
+        const delJson = await delRes.json();
+        if (delJson.status === 'success') {
+          showToast('Banner deleted successfully!', 'success');
+          loadAdminBanners();
+          loadBanners();
+        } else {
+          showToast('Failed to delete banner: ' + (delJson.message || 'Unknown error'), 'error');
+        }
+      } catch (err) {
+        showToast('Error deleting banner: ' + err.message, 'error');
+      }
+    });
+
+    // Toggle active status listener
+    tr.querySelector('.toggle-banner-active-btn').addEventListener('click', async () => {
+      try {
+        const newStatus = !isActive;
+        const patchRes = await fetch(`/api/v1/banners/${b.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${adminToken}`
+          },
+          body: JSON.stringify({ active: newStatus })
+        });
+        const patchJson = await patchRes.json();
+        if (patchJson.status === 'success') {
+          showToast(`Banner marked as ${newStatus ? 'Active' : 'Hidden'}`, 'success');
+          loadAdminBanners();
+          loadBanners();
+        }
+      } catch (err) {
+        showToast('Error updating banner status: ' + err.message, 'error');
+      }
+    });
+
+    adminTableBody.appendChild(tr);
+  });
+}
+
+function editBanner(b) {
+  selectedBannerIdForEdit = b.id;
+  wpTypeSelect.value = 'banner';
+  wpNameInput.value = b.title || '';
+  if (wpBannerSubtitle) wpBannerSubtitle.value = b.subtitle || '';
+  if (wpBannerTag) wpBannerTag.value = b.tag || '🔥 FEATURED';
+  if (wpBannerOrder) wpBannerOrder.value = b.order || 1;
+  if (wpBannerActionType) wpBannerActionType.value = b.actionType || 'wallpapers';
+  if (wpBannerActionValue) wpBannerActionValue.value = b.actionValue || '';
+  if (wpBannerActive) wpBannerActive.checked = b.active !== false;
+
+  // Set remote URL if not uploaded
+  document.querySelector('input[name="imageSource"][value="url"]').checked = true;
+  if (wpUrlInput) wpUrlInput.value = b.imageUrl || '';
+
+  toggleFormFields();
+  updateBannerLivePreview();
+
+  formTitle.textContent = `Edit Banner: ${b.title}`;
+  submitFormBtn.innerHTML = '<i class="fa-solid fa-save"></i> Update Banner';
+  cancelEditBtn.style.display = 'inline-block';
+
+  // Scroll to form
+  const adminFormCard = document.querySelector('.form-card');
+  if (adminFormCard) adminFormCard.scrollIntoView({ behavior: 'smooth' });
+}
+
+if (adminTableToggleBanner) {
+  adminTableToggleBanner.addEventListener('click', () => {
+    switchAdminTableMode('banner');
+  });
+}
+
+// Initial banner fetch
+loadBanners();

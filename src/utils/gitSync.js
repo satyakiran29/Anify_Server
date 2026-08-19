@@ -1,4 +1,4 @@
-import { exec } from 'child_process';
+﻿import { exec } from 'child_process';
 import util from 'util';
 
 const execPromise = util.promisify(exec);
@@ -17,7 +17,7 @@ export function getRawGithubUrl(relativePath) {
   const repo = process.env.GITHUB_REPO;
   const branch = process.env.GITHUB_BRANCH || 'main';
   if (!repo || !relativePath) return relativePath;
-  // relativePath is like "/uploads/foo.jpg" → stored at public/uploads/foo.jpg in the repo
+  // relativePath is like "/uploads/foo.jpg" -> stored at public/uploads/foo.jpg in the repo
   const repoPath = `public${relativePath}`;
   return `https://raw.githubusercontent.com/${repo}/${branch}/${repoPath}`;
 }
@@ -84,7 +84,7 @@ export async function triggerGitSync(commitMessage) {
     await execPromise('git reset FETCH_HEAD');
 
     // Stage database JSON files and uploads directory
-    await execPromise('git add wallpapers.json livewalls.json ringtones.json kwgts.json stickers.json public/uploads public/stickers');
+    await execPromise('git add wallpapers.json livewalls.json ringtones.json kwgts.json stickers.json banners.json public/uploads public/stickers');
 
     // Check if there are staged changes to commit
     const { stdout: statusOut } = await execPromise('git diff --name-only --cached');

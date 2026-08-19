@@ -1,0 +1,50 @@
+[
+  {
+    "id": "b1-creative-lab",
+    "title": "Creative Lab",
+    "subtitle": "Experiment & personalize your device with custom tools",
+    "imageUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80",
+    "tag": "🔥 FEATURED",
+    "actionType": "creative_lab",
+    "actionValue": "",
+    "active": true,
+    "order": 1,
+    "createdAt": "2026-08-19T08:47:47.478Z"
+  },
+  {
+    "id": "b2-amoled-walls",
+    "title": "AMOLED Wallpapers",
+    "subtitle": "Deep blacks & vibrant 4K aesthetic collections",
+    "imageUrl": "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1200&q=80",
+    "tag": "✨ 290+ WALLPAPERS",
+    "actionType": "wallpapers",
+    "actionValue": "",
+    "active": true,
+    "order": 2,
+    "createdAt": "2026-08-19T08:47:47.479Z"
+  },
+  {
+    "id": "b3-stickers-studio",
+    "title": "Sticker Studio",
+    "subtitle": "Convert Telegram & custom packs for WhatsApp in seconds",
+    "imageUrl": "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1200&q=80",
+    "tag": "⚡ STICKERS",
+    "actionType": "stickers",
+    "actionValue": "",
+    "active": true,
+    "order": 3,
+    "createdAt": "2026-08-19T08:47:47.479Z"
+  },
+  {
+    "id": "b4-kwgt-setups",
+    "title": "KWGT Setups",
+    "subtitle": "Clean minimalist Android home screen widgets & presets",
+    "imageUrl": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80",
+    "tag": "🎨 KWGT",
+    "actionType": "kwgt",
+    "actionValue": "",
+    "active": true,
+    "order": 4,
+    "createdAt": "2026-08-19T08:47:47.479Z"
+  }
+]
