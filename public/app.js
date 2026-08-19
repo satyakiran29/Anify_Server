@@ -3405,11 +3405,5 @@ function editBanner(b) {
   if (adminFormCard) adminFormCard.scrollIntoView({ behavior: 'smooth' });
 }
 
-if (adminTableToggleBanner) {
-  adminTableToggleBanner.addEventListener('click', () => {
-    switchAdminTableMode('banner');
-  });
-}
-
 // Initial banner fetch
 loadBanners();
