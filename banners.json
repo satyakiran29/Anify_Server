@@ -13,12 +13,12 @@
   },
   {
     "id": "b2-amoled-walls",
-    "title": "AMOLED Wallpapers",
-    "subtitle": "Deep blacks & vibrant 4K aesthetic collections",
+    "title": "testing",
+    "subtitle": "testing",
     "imageUrl": "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1200&q=80",
-    "tag": "✨ 290+ WALLPAPERS",
-    "actionType": "wallpapers",
-    "actionValue": "",
+    "tag": "update",
+    "actionType": "url",
+    "actionValue": "https://anify.psatyakiran.in/",
     "active": true,
     "order": 2,
     "createdAt": "2026-08-19T08:47:47.479Z"
