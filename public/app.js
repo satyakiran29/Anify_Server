@@ -124,6 +124,21 @@ const adminTableBody = document.getElementById('adminTableBody');
 const adminListCount = document.getElementById('adminListCount');
 const adminSearchInput = document.getElementById('adminSearchInput');
 
+// Banner Admin DOM
+const bannerGrid = document.getElementById('bannerGrid');
+const bannerActiveCount = document.getElementById('bannerActiveCount');
+const bannerSpecificGroup = document.getElementById('bannerSpecificGroup');
+const wpBannerSubtitle = document.getElementById('wpBannerSubtitle');
+const wpBannerTag = document.getElementById('wpBannerTag');
+const wpBannerOrder = document.getElementById('wpBannerOrder');
+const wpBannerActionType = document.getElementById('wpBannerActionType');
+const wpBannerActionValue = document.getElementById('wpBannerActionValue');
+const wpBannerActive = document.getElementById('wpBannerActive');
+const bannerMockupBg = document.getElementById('bannerMockupBg');
+const bannerMockupBadge = document.getElementById('bannerMockupBadge');
+const bannerMockupTitle = document.getElementById('bannerMockupTitle');
+const bannerMockupSubtitle = document.getElementById('bannerMockupSubtitle');
+
 // Live Admin DOM
 const liveUploadContainer = document.getElementById('liveUploadContainer');
 const wpLiveVideoFileInput = document.getElementById('wpLiveVideoFile');
@@ -804,6 +819,9 @@ function setupAdminPanel() {
         const method = isEditMode ? 'PUT' : 'POST';
         let bannerRes;
 
+        submitFormBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+        submitFormBtn.disabled = true;
+
         if (source === 'upload') {
           const formData = new FormData();
           formData.append('title', title);
@@ -818,7 +836,7 @@ function setupAdminPanel() {
           } else if (!isEditMode) {
             showToast('Please select a banner image file to upload.', 'error');
             submitFormBtn.disabled = false;
-            submitFormBtn.innerHTML = 'Save Banner';
+            submitFormBtn.innerHTML = isEditMode ? '<i class="fa-solid fa-save"></i> Update Banner' : '<i class="fa-solid fa-cloud-arrow-up"></i> Save Banner';
             return;
           }
 
@@ -832,8 +850,15 @@ function setupAdminPanel() {
           if (!imageUrl && !isEditMode) {
             showToast('Please enter an image URL.', 'error');
             submitFormBtn.disabled = false;
-            submitFormBtn.innerHTML = 'Save Banner';
+            submitFormBtn.innerHTML = isEditMode ? '<i class="fa-solid fa-save"></i> Update Banner' : '<i class="fa-solid fa-cloud-arrow-up"></i> Save Banner';
             return;
+          }
+
+          const payload = {
+            title, subtitle, tag, order, actionType, actionValue, active
+          };
+          if (imageUrl) {
+            payload.imageUrl = imageUrl;
           }
 
           bannerRes = await fetch(url, {
@@ -842,9 +867,7 @@ function setupAdminPanel() {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${adminToken}`
             },
-            body: JSON.stringify({
-              title, subtitle, tag, order, actionType, actionValue, active, imageUrl
-            })
+            body: JSON.stringify(payload)
           });
         }
 
@@ -858,7 +881,7 @@ function setupAdminPanel() {
           showToast('Failed to save banner: ' + (bannerJson.message || 'Unknown error'), 'error');
         }
         submitFormBtn.disabled = false;
-        submitFormBtn.innerHTML = 'Save Banner';
+        submitFormBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Save to Anify';
         return;
       } else if (type === 'sticker') {
       isEditMode = !!selectedStickerIdForEdit;
@@ -3119,21 +3142,7 @@ loadStickers();
 // ==========================================
 // BANNER MANAGEMENT & LIVE PREVIEW
 // ==========================================
-const bannerGrid = document.getElementById('bannerGrid');
-const bannerActiveCount = document.getElementById('bannerActiveCount');
-const bannerSpecificGroup = document.getElementById('bannerSpecificGroup');
-const wpBannerSubtitle = document.getElementById('wpBannerSubtitle');
-const wpBannerTag = document.getElementById('wpBannerTag');
-const wpBannerOrder = document.getElementById('wpBannerOrder');
-const wpBannerActionType = document.getElementById('wpBannerActionType');
-const wpBannerActionValue = document.getElementById('wpBannerActionValue');
-const wpBannerActive = document.getElementById('wpBannerActive');
-const adminTableToggleBanner = document.getElementById('adminTableToggleBanner');
-
-const bannerMockupBg = document.getElementById('bannerMockupBg');
-const bannerMockupBadge = document.getElementById('bannerMockupBadge');
-const bannerMockupTitle = document.getElementById('bannerMockupTitle');
-const bannerMockupSubtitle = document.getElementById('bannerMockupSubtitle');
+// Banner DOM elements declared at top of file
 
 function updateBannerLivePreview() {
   if (!bannerMockupTitle) return;

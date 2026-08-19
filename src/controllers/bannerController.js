@@ -128,6 +128,9 @@ export const bannerController = {
       if (updateData.url && !updateData.imageUrl) {
         updateData.imageUrl = updateData.url;
       }
+      if (updateData.imageUrl !== undefined && typeof updateData.imageUrl === 'string' && !updateData.imageUrl.trim()) {
+        delete updateData.imageUrl;
+      }
 
       // Check if a new image file was uploaded
       if (req.file) {
