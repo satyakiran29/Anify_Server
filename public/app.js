@@ -1814,6 +1814,7 @@ function setupDragAndDrop(area, input) {
 // Form Field Toggler
 function toggleFormFields() {
   const type = wpTypeSelect.value;
+  const wpNameLabel = document.getElementById('wpNameLabel') || document.querySelector('label[for="wpName"]');
   const bannerGroup = document.getElementById('bannerSpecificGroup');
   const authorGroup = document.getElementById('wpAuthor') ? document.getElementById('wpAuthor').closest('.form-group') : null;
   const authorUrlGroup = document.getElementById('wpAuthorUrl') ? document.getElementById('wpAuthorUrl').closest('.form-group') : null;
@@ -2063,7 +2064,7 @@ function toggleFormFields() {
   }
 
   // Dynamic Name Label & Placeholder based on active type
-  const wpNameLabel = document.getElementById('wpNameLabel') || document.querySelector('label[for="wpName"]');
+  // wpNameLabel declared at top of toggleFormFields
   if (type === 'sticker') {
     if (wpNameLabel) wpNameLabel.textContent = 'Sticker Pack Name *';
     if (wpNameInput) wpNameInput.placeholder = 'e.g. Sousou No Frieren Anime';
