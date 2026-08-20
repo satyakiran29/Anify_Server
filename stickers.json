@@ -960,5 +960,31 @@
     "tags": [],
     "downloads": 0,
     "rating": 5
+  },
+  {
+    "id": "4b3b143f2fd1fbeede4eaa33eeecbb4e",
+    "name": "ShadowLord pack :: @fStikBot",
+    "identifier": "SelectWhiteOx_by_fStikBot",
+    "telegramUrl": "https://t.me/addstickers/SelectWhiteOx_by_fStikBot",
+    "author": "Anify",
+    "authorUrl": "",
+    "category": "General",
+    "totalStickers": 50,
+    "animated": false,
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/SelectWhiteOx_by_fStikBot/preview_0.webp",
+    "previews": [
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/SelectWhiteOx_by_fStikBot/preview_0.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/SelectWhiteOx_by_fStikBot/preview_1.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/SelectWhiteOx_by_fStikBot/preview_2.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/SelectWhiteOx_by_fStikBot/preview_3.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/SelectWhiteOx_by_fStikBot/preview_4.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/SelectWhiteOx_by_fStikBot/preview_5.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/SelectWhiteOx_by_fStikBot/preview_6.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/SelectWhiteOx_by_fStikBot/preview_7.webp"
+    ],
+    "description": "",
+    "tags": [],
+    "downloads": 0,
+    "rating": 5
   }
 ]
