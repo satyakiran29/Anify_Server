@@ -43,7 +43,7 @@
     "tag": "🎨 KWGT",
     "actionType": "kwgt",
     "actionValue": "",
-    "active": true,
+    "active": false,
     "order": 4,
     "createdAt": "2026-08-19T08:47:47.479Z"
   }
