@@ -32,7 +32,7 @@
     "actionType": "stickers",
     "actionValue": "",
     "active": true,
-    "order": 3,
+    "order": 1,
     "createdAt": "2026-08-19T08:47:47.479Z"
   },
   {
@@ -43,7 +43,7 @@
     "tag": "🎨 KWGT",
     "actionType": "kwgt",
     "actionValue": "",
-    "active": false,
+    "active": true,
     "order": 4,
     "createdAt": "2026-08-19T08:47:47.479Z"
   }
