@@ -1102,5 +1102,31 @@
     ],
     "downloads": 0,
     "rating": 5
+  },
+  {
+    "id": "f0ed35d59f4ac32d039e44df14db99c0",
+    "name": "Meow meow @Nekostickerss",
+    "identifier": "Meowmeownekostickerss",
+    "telegramUrl": "https://t.me/addstickers/Meowmeownekostickerss",
+    "author": "Anify",
+    "authorUrl": "",
+    "category": "General",
+    "totalStickers": 90,
+    "animated": false,
+    "thumbnail": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Meowmeownekostickerss/preview_0.webp",
+    "previews": [
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Meowmeownekostickerss/preview_0.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Meowmeownekostickerss/preview_1.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Meowmeownekostickerss/preview_2.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Meowmeownekostickerss/preview_3.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Meowmeownekostickerss/preview_4.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Meowmeownekostickerss/preview_5.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Meowmeownekostickerss/preview_6.webp",
+      "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/stickers/Meowmeownekostickerss/preview_7.webp"
+    ],
+    "description": "",
+    "tags": [],
+    "downloads": 0,
+    "rating": 5
   }
 ]
