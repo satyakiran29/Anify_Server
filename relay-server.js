@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Anify Connect - Standalone Cloud Relay Server
  * 
  * Facilitates zero-latency communication between Anify Android app and PC Companion
@@ -39,8 +39,10 @@ initRelayServer(server);
 server.listen(PORT, () => {
     console.log('========================================================');
     console.log('       ✨ ANIFY CLOUD RELAY SERVER IS ONLINE ✨         ');
-    console.log('========================================================');
-    console.log(` 🌐 HTTP & WebSocket Server running on port ${PORT}`);
-    console.log(` 🚀 Ready to route remote control packets globally`);
+    console.log( 🌐 HTTP & WebSocket Server running on port );
+    console.log( 🚀 Ready to route remote control packets globally);
+    console.log( 📱 App Website:  https://anify.psatyakiran.in/);
+    console.log( ✨ SKDev Apps:   https://skdev.psatyakiran.in/);
+    console.log( 👨‍💻 Portfolio:    https://psatyakiran.in/);
     console.log('========================================================\n');
 });
