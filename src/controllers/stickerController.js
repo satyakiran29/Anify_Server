@@ -14,7 +14,7 @@ async function fetchTelegramSetInfo(packIdentifier, botToken) {
   try {
     const token = (botToken || process.env.TELEGRAM_BOT_TOKEN || '8882853635:AAErWEKyhb5ESo8ffWrHiO5-udSnnMwUTBk').trim();
     const cleanSlug = packIdentifier.replace(/^(?:https?:\/\/)?t\.me\/addstickers\//i, '').replace(/\/.*$/, '').trim();
-    
+
     const tgUrl = `https://api.telegram.org/bot${token}/getStickerSet?name=${encodeURIComponent(cleanSlug)}`;
     const tgRes = await fetch(tgUrl, { signal: AbortSignal.timeout(6000) });
     const tgData = await tgRes.json();
