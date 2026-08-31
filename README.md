@@ -1,21 +1,30 @@
-# Anify Server
+# Anify Server & Cloud Relay
 
-[![Google Play](https://img.shields.io/badge/Google_Play-Anify-414141?logo=google-play&logoColor=white)](https://play.google.com/store/apps/details?id=com.skdev.anify)
-[![Node.js Version](https://img.shields.io/badge/node-%3E%3D%2018.0.0-blue.svg)](https://nodejs.org/)
-[![Express.js Framework](https://img.shields.io/badge/framework-Express%20v4-green.svg)](https://expressjs.com/)
-[![License](https://img.shields.io/badge/license-MIT-purple.svg)](LICENSE)
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](#)
+<div align="center">
+
+[![Google Play](https://img.shields.io/badge/Google_Play-Anify%20App-414141?logo=google-play&logoColor=white)](https://play.google.com/store/apps/details?id=com.skdev.anify)
+[![Official Website](https://img.shields.io/badge/Website-anify.psatyakiran.in-8a4bf3?logo=google-chrome&logoColor=white)](https://anify.psatyakiran.in/)
+[![SKDev Hub](https://img.shields.io/badge/Developer-SKDev%20Apps-00f2fe?logo=android&logoColor=black)](https://skdev.psatyakiran.in/)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D%2018.0.0-339933.svg?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Express.js Framework](https://img.shields.io/badge/framework-Express%20v4-lightgrey.svg?logo=express&logoColor=black)](https://expressjs.com/)
+[![WebSocket](https://img.shields.io/badge/WebSocket-ws%20v8.18-orange.svg?logo=websocket&logoColor=white)](https://github.com/websockets/ws)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/satyakiran29/Anify_Server/pulls)
 
-**Anify Server** is a high-performance REST API backend and interactive administration console built to power Android personalization applications — notably the official **[Anify Android App on Google Play](https://play.google.com/store/apps/details?id=com.skdev.anify)**. It serves curated static wallpapers, live (video) wallpapers, audio ringtones, KWGT widget presets, and Telegram sticker packs with zero-database overhead using high-speed JSON flat-file storage, automated media conversion, self-healing caches, and continuous Git synchronization.
+<p align="center">
+  <b>High-performance REST API backend, interactive admin console, and global WebSocket Cloud Relay engine powering the official <a href="https://play.google.com/store/apps/details?id=com.skdev.anify">Anify Android Personalization App</a> and PC Companion.</b>
+</p>
+
+</div>
 
 ---
 
 ## 📖 Table of Contents
 
-- [🔍 What the Project Does](#-what-the-project-does)
+- [🔍 Overview & Purpose](#-overview--purpose)
 - [🏗️ System Architecture](#️-system-architecture)
 - [✨ Key Features & Capabilities](#-key-features--capabilities)
+- [🌐 Anify Connect — WebSocket Cloud Relay](#-anify-connect--websocket-cloud-relay)
 - [🚀 Getting Started](#-getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
@@ -23,32 +32,39 @@
   - [Running the Server](#running-the-server)
   - [Running Tests](#running-tests)
 - [🛠️ REST API Reference](#️-rest-api-reference)
-  - [Authentication](#authentication)
+  - [Authentication & Health Endpoints](#authentication--health-endpoints)
+  - [Banner Endpoints (`/api/v1/banners`)](#banner-endpoints)
   - [Wallpaper Endpoints (`/api/v1/wallpapers`)](#wallpaper-endpoints)
   - [Live Wallpaper Endpoints (`/api/v1/livewalls`)](#live-wallpaper-endpoints)
   - [Ringtone Endpoints (`/api/v1/ringtones`)](#ringtone-endpoints)
   - [KWGT Widget Endpoints (`/api/v1/kwgts`)](#kwgt-widget-endpoints)
   - [Sticker Pack Endpoints (`/api/v1/stickers`)](#sticker-pack-endpoints)
-- [🔄 Git Auto-Sync & Storage Engine](#-git-auto-sync--storage-engine)
-- [🎭 Telegram Integration & WebP Media Engine](#-telegram-integration--webp-media-engine)
-- [⏱️ Keep-Alive & Self-Healing Architecture](#️-keep-alive--self-healing-architecture)
+  - [Cloud Relay Endpoints (`/api/v1/relay`)](#cloud-relay-endpoints)
+- [🔄 Git Auto-Sync & Ephemeral Cloud Persistence](#-git-auto-sync--ephemeral-cloud-persistence)
+- [🎭 Telegram Ingestion & WebP Media Pipeline](#-telegram-ingestion--webp-media-pipeline)
+- [⏱️ Keep-Alive & Self-Healing Engine](#️-keep-alive--self-healing-engine)
 - [📂 Project Directory Structure](#-project-directory-structure)
-- [🚀 Deployment](#-deployment)
-- [🤝 Contributing & Support](#-contributing--support)
+- [🚀 Deployment on Render & Cloud Platforms](#-deployment-on-render--cloud-platforms)
+- [🤝 Contributing & Community](#-contributing--community)
 
 ---
 
-## 🔍 What the Project Does
+## 🔍 Overview & Purpose
 
-The Anify Server functions as a unified content distribution engine and browser-based management portal. It delivers fast JSON payloads with full support for searching, filtering, category grouping, sorting, pagination, and random item selection across 5 personalization categories:
+**Anify Server** is a unified content distribution engine, administration console, and low-latency cloud signaling relay built to power mobile personalization and device interoperability.
 
+### The server delivers 6 core content modules:
 1. 🖼️ **Static Wallpapers**: Ultra-HD wallpaper images with automatic dimension resolution and metadata extraction.
 2. 🎬 **Live Wallpapers**: Video wallpapers (MP4/WebM) paired with instant thumbnail previews.
 3. 🎵 **Audio Ringtones**: High-bitrate audio clips (MP3/WAV/AAC) with duration metrics.
 4. 📱 **KWGT Widgets**: KWGT preset archive files (`.kwgt`) with bundled preview imagery.
 5. 🎭 **Sticker Packs**: Telegram sticker pack catalog with automated metadata ingestion and WebM-to-WebP conversion.
+6. 🎯 **Interactive Banners**: Home screen carousel banners with configurable call-to-actions, category shortcuts, custom URLs, and prioritization.
 
-At the root address (`http://localhost:3000/`), the server provides an **Explorer & Admin Dashboard** equipped with real-time media previews, batch file uploading, resource management, and an interactive REST API testing suite.
+### In addition, it embeds **Anify Connect**:
+- ⚡ **Global Cloud Relay**: Real-time bidirectional WebSocket relay connecting Android mobile devices to PC companion software across cellular networks (4G/5G), NATs, and firewalls without requiring port forwarding.
+
+At the root URL (`http://localhost:3000/`), the server provides an **Explorer & Admin Dashboard** equipped with real-time media previews, audio players, video lightboxes, batch file uploading, resource management, and an interactive REST API testing suite.
 
 ---
 
@@ -56,62 +72,113 @@ At the root address (`http://localhost:3000/`), the server provides an **Explore
 
 ```mermaid
 flowchart TB
-    subgraph Clients
-        Mobile[Mobile Application / Client]
-        Admin[Admin Dashboard Browser]
+    subgraph Clients["Clients & Interfaces"]
+        Mobile["📱 Anify Android App"]
+        PC["💻 PC Companion App"]
+        Admin["🖥️ Admin Console Dashboard"]
     end
 
-    subgraph Server["Anify Server (Express v4)"]
-        Router[API Router: /api/v1]
-        Auth[Auth Middleware: SHA256 Token]
-        MediaEngine[Media Engine: ffmpeg-static & Multer]
-        AutoFetch[Telegram Ingestion Engine]
-        KeepAlive[Keep-Alive Ping Engine]
-        
-        subgraph Storage["Zero-DB Flat-File Engine"]
-            WDB[(wallpapers.json)]
-            LDB[(livewalls.json)]
-            RDB[(ringtones.json)]
-            KDB[(kwgts.json)]
-            SDB[(stickers.json)]
+    subgraph Server["Anify Unified Server (Express v4 & ws)"]
+        Router["REST Router: /api/v1"]
+        RelayWS["⚡ WebSocket Cloud Relay Engine<br/>(/ws?room=CODE)"]
+        AuthMid["Auth Middleware: SHA256 Token"]
+        MediaEngine["Media Engine: ffmpeg-static & Multer"]
+        AutoFetch["Telegram Ingestion Pipeline"]
+        KeepAlive["Keep-Alive Health Ping Engine"]
+
+        subgraph Storage["Zero-DB Flat-File Storage Engine"]
+            WDB[("wallpapers.json")]
+            LDB[("livewalls.json")]
+            RDB[("ringtones.json")]
+            KDB[("kwgts.json")]
+            SDB[("stickers.json")]
+            BDB[("banners.json")]
         end
-        
-        Uploads[Local Storage: public/uploads & public/stickers]
+
+        LocalAssets["Local Disk Assets<br/>(public/uploads & public/stickers)"]
     end
 
-    subgraph Remote["Cloud / Remote Infrastructure"]
-        GitHub[(GitHub Repository)]
-        CDN[Raw GitHub CDN]
-        TelegramAPI[Telegram Bot API]
+    subgraph External["External Cloud & Services"]
+        GitHub[("GitHub Repository (Auto-Sync)")]
+        CDN["Raw GitHub CDN (raw.githubusercontent.com)"]
+        TelegramAPI["Telegram Bot API"]
     end
 
-    Mobile <-->|REST API Requests| Router
-    Admin <-->|Manage Content & Uploads| Router
-    Router --> Auth
-    Auth --> MediaEngine
+    Mobile <-->|"REST API Requests (/api/v1/*)"| Router
+    Mobile <-->|"WebSocket Signaling & Control"| RelayWS
+    PC <-->|"WebSocket Host Registration & Telemetry"| RelayWS
+    Admin <-->|"Manage Assets & Uploads"| Router
+
+    Router --> AuthMid
+    AuthMid --> MediaEngine
     MediaEngine --> Storage
-    MediaEngine --> Uploads
-    AutoFetch <-->|Fetch Metadata & Stickers| TelegramAPI
-    
-    Storage --> SyncEngine{Git Auto-Sync}
-    Uploads --> SyncEngine
-    SyncEngine -->|Fetch, Reset & Push| GitHub
-    GitHub -.->|Delivers Static Assets| CDN
-    KeepAlive -.->|Periodic Health Check| Router
+    MediaEngine --> LocalAssets
+    AutoFetch <-->|"Query Sticker Metadata & Files"| TelegramAPI
+
+    Storage --> SyncEngine{"Git Auto-Sync Engine"}
+    LocalAssets --> SyncEngine
+    SyncEngine -->|"Fetch, Reset & Push"| GitHub
+    GitHub -.->|"High-Speed Asset Delivery"| CDN
+    KeepAlive -.->|"Periodic Health Check"| Router
 ```
 
 ---
 
 ## ✨ Key Features & Capabilities
 
-- **Zero-DB Simplicity**: No SQL database or MongoDB setup required. Uses lightweight JSON databases ([wallpapers.json](file:///h:/Github/Anify_Server/wallpapers.json), [livewalls.json](file:///h:/Github/Anify_Server/livewalls.json), [ringtones.json](file:///h:/Github/Anify_Server/ringtones.json), [kwgts.json](file:///h:/Github/Anify_Server/kwgts.json), [stickers.json](file:///h:/Github/Anify_Server/stickers.json)) initialized and verified automatically on boot.
-- **Automated Telegram Sticker Ingestion**: Provide a Telegram sticker pack URL or slug, and the server fetches the title, sticker count, animation flags, and sticker preview assets automatically.
-- **WebM-to-WebP Frame Extraction**: Leverages `ffmpeg-static` to convert animated video stickers (`.webm`) and images into standardized `.webp` previews on the fly.
-- **Git Auto-Sync Persistence**: Solves ephemeral cloud filesystem constraints (e.g. Render, Railway, Heroku) by automatically staging, committing, and pushing updated JSON databases and newly uploaded media assets directly back to your GitHub repository.
-- **CDN Acceleration**: Converts uploaded media links into permanent `raw.githubusercontent.com` URLs for zero-cost, high-speed static asset distribution.
-- **Self-Healing Database Engine**: Deduplicates entries, fixes missing attributes, standardizes dimensions, and generates deterministic MD5 identifiers automatically on startup.
-- **Built-in Self-Ping / Keep-Alive**: Prevents free hosting instances from sleeping by dispatching self-pings at regular intervals.
-- **Interactive Administration Dashboard**: Built-in glassmorphic web dashboard with media audio players, video lightboxes, category browsers, drag-and-drop file uploaders, and live API exploration tools.
+- **Zero-DB Simplicity**: No SQL database or MongoDB setup required. Uses lightweight JSON databases ([wallpapers.json](file:///h:/Github/Anify_Server/wallpapers.json), [livewalls.json](file:///h:/Github/Anify_Server/livewalls.json), [ringtones.json](file:///h:/Github/Anify_Server/ringtones.json), [kwgts.json](file:///h:/Github/Anify_Server/kwgts.json), [stickers.json](file:///h:/Github/Anify_Server/stickers.json), [banners.json](file:///h:/Github/Anify_Server/banners.json)) initialized and verified automatically on boot.
+- **Global WebSocket Cloud Relay (`Anify Connect`)**: Built-in room-based WebSocket signaling server allowing mobile apps to pair with host PCs for zero-latency remote control, input forwarding, telemetry, and power actions across cellular networks and firewalls.
+- **Dynamic Home Banners**: Full CRUD support for interactive carousel banners with customizable tags (`FEATURED`, `HOT`, `COMMUNITY`), click actions (`url`, `stickers`, `kwgt`, `creative_lab`), display ordering, and visibility toggles.
+- **Automated Telegram Sticker Ingestion**: Provide any Telegram sticker pack link or slug (e.g., `https://t.me/addstickers/nekostickerpack120`), and the server automatically fetches sticker count, metadata, animated status, and converts media previews.
+- **WebM-to-WebP Frame Extraction**: Leverages `ffmpeg-static` to convert animated video stickers (`.webm`) and static sticker frames into high-fidelity, lightweight `.webp` preview images on the fly.
+- **Git Auto-Sync Persistence**: Solves ephemeral cloud filesystem constraints (Render, Railway, Heroku) by automatically staging, committing, and pushing updated JSON databases and newly uploaded media assets directly back to your GitHub repository.
+- **CDN Asset Acceleration**: Converts local upload paths into permanent `raw.githubusercontent.com` URLs for zero-cost, high-speed static asset distribution.
+- **Self-Healing Database Lifecycle**: Automatically deduplicates entries, generates deterministic MD5 IDs for legacy records, checks image dimensions, and bootstraps missing asset directories on startup.
+- **Built-in Self-Ping / Keep-Alive**: Prevents free-tier hosting instances from sleeping by dispatching self-pings at regular intervals.
+- **Glassmorphic Web Dashboard**: Complete browser-based management UI featuring audio players, video lightboxes, drag-and-drop uploaders, category filters, real-time metrics, and an interactive REST API console.
+
+---
+
+## 🌐 Anify Connect — WebSocket Cloud Relay
+
+The server includes an integrated **WebSocket Cloud Relay Server** on the `/ws` endpoint (or standalone via `npm run relay`) enabling seamless mobile-to-PC connectivity without complex network configurations.
+
+### Connection Protocol
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor PC as PC Companion (Host)
+    participant Relay as Anify Cloud Relay (/ws)
+    actor Phone as Anify Android App (Client)
+
+    Note over PC,Relay: 1. Host Connects & Registers Room
+    PC->>Relay: Connect: ws://host/ws?room=ABCD
+    PC->>Relay: {"type": "REGISTER_HOST", "roomCode": "ABCD", "pin": "1234", "hostname": "Desktop-PC"}
+    Relay-->>PC: {"type": "REGISTER_SUCCESS", "payload": {"roomCode": "ABCD"}}
+
+    Note over Phone,Relay: 2. Mobile Client Joins & Authenticates
+    Phone->>Relay: Connect: ws://host/ws?room=ABCD
+    Phone->>Relay: {"type": "GLOBAL_AUTH", "roomCode": "ABCD", "pin": "1234"}
+    Relay->>PC: Forwards Auth Packet to Host PC
+    PC-->>Phone: {"type": "AUTH_SUCCESS", "payload": {"status": "authenticated"}}
+
+    Note over Phone,PC: 3. Low-Latency Bidirectional Packet Forwarding
+    Phone->>Relay: {"type": "INPUT_EVENT", "action": "MOUSE_MOVE", "dx": 10, "dy": -5}
+    Relay->>PC: Forwarded to Host PC
+    PC->>Relay: {"type": "TELEMETRY", "cpu": 24, "ram": 48, "temp": 52}
+    Relay->>Phone: Forwarded to Paired Phone Clients
+```
+
+### Relay Message Types:
+| Message Type | Direction | Payload Description |
+| :--- | :--- | :--- |
+| `REGISTER_HOST` | PC → Relay | Registers PC as the room host with `roomCode`, `pin`, and `hostname`. |
+| `REGISTER_SUCCESS` | Relay → PC | Confirms room creation and active host status. |
+| `GLOBAL_AUTH` / `JOIN_ROOM` | Phone → Relay | Authenticates phone client and requests room access. |
+| `AUTH_FAILED` | Relay → Phone | Sent if target PC host is offline or room does not exist. |
+| `HOST_DISCONNECTED` | Relay → Phone | Broadcast to connected phones when the PC host disconnects. |
+| *Pass-Through Packets* | Bidirectional | Mouse, keyboard, media, volume, telemetry, and system power commands. |
 
 ---
 
@@ -119,36 +186,36 @@ flowchart TB
 
 ### Prerequisites
 
-- **Node.js**: `v18.0.0` or higher
+- **Node.js**: `v18.0.0` or higher (ES Modules enabled)
 - **npm**: `v9.0.0` or higher
-- **Git**: Installed and accessible in your system `PATH` (required when `AUTO_GIT_SYNC=true`)
+- **Git**: Installed and accessible in system `PATH` (required for `AUTO_GIT_SYNC=true`)
 
 ### Installation
 
-1. Clone the repository:
+1. **Clone the repository:**
    ```bash
    git clone https://github.com/satyakiran29/Anify_Server.git
    cd Anify_Server
    ```
 
-2. Install dependencies:
+2. **Install dependencies:**
    ```bash
    npm install
    ```
 
 ### Environment Configuration
 
-Create a `.env` file in the root directory (or configure these in your cloud hosting environment):
+Create a `.env` file in the root directory (or configure variables in your cloud hosting settings):
 
 ```env
 PORT=3000
 NODE_ENV=production
 API_PREFIX=/api/v1
-ADMIN_PASSWORD=admin123
+ADMIN_PASSWORD=your_admin_secret_password
 
-# Git Auto-Sync Configuration (Optional / Recommended for Cloud)
+# Git Auto-Sync Configuration (Recommended for Cloud Hosting)
 AUTO_GIT_SYNC=true
-GITHUB_TOKEN=your_github_personal_access_token
+GITHUB_TOKEN=ghp_yourPersonalAccessTokenWithRepoScope
 GITHUB_REPO=satyakiran29/Anify_Server
 GITHUB_BRANCH=main
 
@@ -157,22 +224,26 @@ TELEGRAM_BOT_TOKEN=your_telegram_bot_token
 
 # Cloud URL for Keep-Alive Ping (Optional)
 RENDER_EXTERNAL_URL=https://anify-server.onrender.com
+
+# Optional Standalone Relay Port
+RELAY_PORT=8080
 ```
 
 #### Environment Variables Reference
 
 | Variable | Description | Default |
 | :--- | :--- | :--- |
-| `PORT` | Port number for the HTTP server to listen on. | `3000` |
+| `PORT` | HTTP & WebSocket server port. | `3000` |
 | `NODE_ENV` | Environment mode (`development` or `production`). | `production` |
-| `API_PREFIX` | Prefix route for REST API endpoints. | `/api/v1` |
-| `ADMIN_PASSWORD` | Passcode used to authenticate admin sessions. | `admin123` |
-| `AUTO_GIT_SYNC` | Automatically commit and push local changes to GitHub. | `true` |
+| `API_PREFIX` | Base prefix for all REST API endpoints. | `/api/v1` |
+| `ADMIN_PASSWORD` | Passcode for admin authentication token generation. | `admin123` |
+| `AUTO_GIT_SYNC` | Automatically commit and push database changes to GitHub. | `true` |
 | `GITHUB_TOKEN` | GitHub Personal Access Token (PAT) with write repository permissions. | *None* |
 | `GITHUB_REPO` | Target GitHub repository (`username/repository`). | `satyakiran29/Anify_Server` |
 | `GITHUB_BRANCH` | Target branch for commits and pushes. | `main` |
-| `TELEGRAM_BOT_TOKEN` | Telegram Bot token for querying sticker sets via Telegram API. | *Embedded Token* |
-| `RENDER_EXTERNAL_URL` | App host URL used for self-pings to prevent container sleep. | *None* |
+| `TELEGRAM_BOT_TOKEN` | Telegram Bot API token for fetching sticker sets. | *Embedded Token* |
+| `RENDER_EXTERNAL_URL` | Host URL for keep-alive pings to prevent cloud sleep. | *None* |
+| `RELAY_PORT` | Port for standalone cloud relay script (`relay-server.js`). | `8080` |
 
 ---
 
@@ -183,19 +254,27 @@ RENDER_EXTERNAL_URL=https://anify-server.onrender.com
 npm run dev
 ```
 
-#### Production Mode
+#### Production Mode (Unified API & WebSocket Relay)
 ```bash
 npm start
 ```
 
-Upon boot, the server logs startup metrics:
+#### Standalone Cloud Relay Server
+```bash
+npm run relay
+```
+
+Upon boot, the server logs startup endpoints and service status:
 ```text
 ===================================================
- Anify Server is active!
+ ✨ Anify Server & Cloud Relay is active!
  Port: 3000
  Environment: production
  API Endpoint: http://localhost:3000/api/v1/wallpapers
+ Banners API: http://localhost:3000/api/v1/banners
  Stickers API: http://localhost:3000/api/v1/stickers
+ Relay Stats: http://localhost:3000/api/v1/relay/stats
+ WebSocket Relay: ws://localhost:3000/ws?room=<ROOM_CODE>
  Explorer Dashboard: http://localhost:3000
 ===================================================
 ```
@@ -207,10 +286,10 @@ Upon boot, the server logs startup metrics:
 Execute the automated test suite using Node's native test runner:
 
 ```bash
-# Run main API test suite
+# Run core API lifecycle tests
 npm test
 
-# Run all test specifications
+# Run all test suites (API, Banners, Stickers, Relay, WebP conversion)
 node --test test/*.test.js
 ```
 
@@ -218,13 +297,30 @@ node --test test/*.test.js
 
 ## 🛠️ REST API Reference
 
-All requests follow the pattern `/api/v1/{resource}`.
+All REST endpoints are prefixed with `/api/v1` (configurable via `API_PREFIX`).
 
-### Authentication
+### Authentication & Health Endpoints
 
-Protected endpoints (`POST`, `PUT`, `DELETE`) require a Bearer token.
+#### 1. Top-Level Health Check
+- **Endpoint**: `GET /health`
+- **Access**: Public
+- **Response**:
+  ```json
+  {
+    "status": "online",
+    "service": "Anify Unified API & Cloud Relay",
+    "uptimeSeconds": 1420,
+    "relay": {
+      "activeRooms": 3,
+      "totalConnections": 6,
+      "uptimeSeconds": 1420,
+      "timestamp": "2026-08-31T16:00:00.000Z"
+    },
+    "timestamp": "2026-08-31T16:00:00.000Z"
+  }
+  ```
 
-#### 1. Admin Login
+#### 2. Admin Login
 - **Endpoint**: `POST /api/v1/wallpapers/auth/login`
 - **Request Body**:
   ```json
@@ -243,10 +339,48 @@ Protected endpoints (`POST`, `PUT`, `DELETE`) require a Bearer token.
   }
   ```
 
-#### 2. Authorizing Requests
-Pass the token in the `Authorization` header:
+#### 3. Protected Request Authorization
+Pass the returned token in the `Authorization` header for all write operations (`POST`, `PUT`, `DELETE`):
 ```text
 Authorization: Bearer <token>
+```
+
+---
+
+### Banner Endpoints
+
+**Base Path**: `/api/v1/banners`
+
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| **GET** | `/` | Public | Returns active banners ordered by priority. Pass `?all=true` for admin view including inactive banners. |
+| **GET** | `/:id` | Public | Returns details of a specific banner by ID. |
+| **POST** | `/` | Admin | Create a new banner. Supports multipart file upload (`image`) or image URL (`imageUrl`/`url`), `title`, `subtitle`, `tag`, `actionType`, `actionValue`, `order`, `active`. |
+| **PUT** | `/:id` | Admin | Update banner fields, change order/tag/actions, or replace the banner image. |
+| **DELETE** | `/:id` | Admin | Delete banner and clean up associated local image files. |
+
+#### Example Response (`GET /api/v1/banners`):
+```json
+{
+  "status": "success",
+  "results": 4,
+  "data": {
+    "banners": [
+      {
+        "id": "b3-stickers-studio",
+        "title": "Sticker Studio",
+        "subtitle": "Convert Telegram & custom packs for WhatsApp in seconds",
+        "imageUrl": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/banner-stickers.png",
+        "tag": "⚡ STICKERS",
+        "actionType": "stickers",
+        "actionValue": "",
+        "active": true,
+        "order": 1,
+        "createdAt": "2026-08-19T08:47:47.479Z"
+      }
+    ]
+  }
+}
 ```
 
 ---
@@ -259,39 +393,12 @@ Authorization: Bearer <token>
 | :--- | :--- | :--- | :--- |
 | **GET** | `/` | Public | Paginated wallpaper list. Query parameters: `page`, `limit` (pass `0` for all), `search`, `category`, `sort` (e.g. `sort=name`). |
 | **GET** | `/random` | Public | Returns random wallpapers. Query parameters: `limit` (default: 1), `category`. |
-| **GET** | `/categories` | Public | Returns unique categories with wallpaper count per category. |
+| **GET** | `/categories` | Public | Returns unique categories with total wallpaper counts per category. |
 | **GET** | `/stats` | Public | Returns database counts, category totals, and server uptime. |
-| **GET** | `/:id` | Public | Returns single wallpaper details by ID. |
+| **GET** | `/:id` | Public | Returns single wallpaper metadata by ID. |
 | **POST** | `/` | Admin | Upload up to 50 wallpapers (`image` multipart form field) or register an external image URL. |
-| **PUT** | `/:id` | Admin | Update wallpaper details or replace image file. |
+| **PUT** | `/:id` | Admin | Update wallpaper title, category, author, or replace image file. |
 | **DELETE** | `/:id` | Admin | Remove wallpaper and clean up associated disk file. |
-
-#### Example Response (`GET /api/v1/wallpapers`):
-```json
-{
-  "status": "success",
-  "results": 1,
-  "pagination": {
-    "total": 289,
-    "page": 1,
-    "limit": 1,
-    "pages": 289
-  },
-  "data": {
-    "wallpapers": [
-      {
-        "id": "e605d54a2db6ab04cf3519808389659b",
-        "name": "Neon Cyber City",
-        "category": "Cyberpunk",
-        "image": "https://raw.githubusercontent.com/satyakiran29/Anify_Server/main/public/uploads/wallpaper-1718000000.jpg",
-        "dimensions": { "width": 2160, "height": 3840 },
-        "size": "2.4 MB",
-        "created_at": "2026-08-17T10:00:00.000Z"
-      }
-    ]
-  }
-}
-```
 
 ---
 
@@ -305,8 +412,8 @@ Authorization: Bearer <token>
 | **GET** | `/random` | Public | Returns random live wallpapers. Query parameters: `limit`, `category`. |
 | **GET** | `/categories` | Public | Returns unique live wallpaper categories and counts. |
 | **GET** | `/stats` | Public | Returns live wallpaper metrics and server uptime. |
-| **GET** | `/:id` | Public | Returns specific live wallpaper details. |
-| **POST** | `/` | Admin | Upload live video (`video` field) and optional preview thumbnail (`thumbnail` field) or submit URLs. |
+| **GET** | `/:id` | Public | Returns specific live wallpaper details by ID. |
+| **POST** | `/` | Admin | Upload live video (`video` field) and preview thumbnail (`thumbnail` field) or submit URLs. |
 | **PUT** | `/:id` | Admin | Update live wallpaper fields and replace video or thumbnail. |
 | **DELETE** | `/:id` | Admin | Delete live wallpaper entry and associated disk assets. |
 
@@ -354,7 +461,7 @@ Authorization: Bearer <token>
 | **GET** | `/` | Public | Paginated sticker pack list. Query parameters: `page`, `limit`, `search`, `category`, `sort` (`name`, `category`, `downloads`, `rating`). |
 | **GET** | `/random` | Public | Returns random sticker packs. Query parameters: `limit`, `category`. |
 | **GET** | `/categories` | Public | Returns categories, item counts, and category thumbnail icons. |
-| **GET** | `/stats` | Public | Returns total packs, total individual stickers, categories, authors, and download counts. |
+| **GET** | `/stats` | Public | Returns total packs (990+), total stickers, categories, and download metrics. |
 | **GET** | `/:id` | Public | Lookup a sticker pack by unique ID or slug identifier (e.g. `nekostickerpack120`). |
 | **POST** | `/auto-fetch` | Public/Admin | Automatically queries Telegram Bot API for pack details, sticker counts, and generates converted `.webp` previews. |
 | **POST** | `/` | Admin | Create a new sticker pack. Automatically converts preview links to `.webp` frames and computes sticker counts. |
@@ -389,60 +496,71 @@ Authorization: Bearer <token>
 
 ---
 
-## 🔄 Git Auto-Sync & Storage Engine
+### Cloud Relay Endpoints
 
-When hosted on platforms with ephemeral filesystems (like Render or Railway), files uploaded to the local disk are lost upon server restart or redeployment. The **Git Auto-Sync** engine guarantees zero data loss by treating your GitHub repository as the primary persistent database.
+**Base Path**: `/api/v1/relay`
+
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| **GET** | `/stats` | Public | Returns active room count, connected WebSocket client count, uptime, and timestamp. |
+| **GET** | `/health` | Public | Quick health check endpoint for relay monitoring. |
+
+---
+
+## 🔄 Git Auto-Sync & Ephemeral Cloud Persistence
+
+Hosting platforms such as Render, Railway, and Heroku use ephemeral container filesystems where changes written to local disk are wiped on container restart. The **Git Auto-Sync Engine** solves this by treating your GitHub repository as the permanent persistence layer.
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Admin
+    actor Admin as Admin / API User
     participant Server as Express Server
-    participant Git as Local Git Engine
+    participant Git as Local Git Synchronizer
     participant GitHub as Remote GitHub Repository
 
-    Admin->>Server: Uploads media / updates sticker pack
-    Note over Server: Saves asset to disk<br/>Updates target .json database
-    Server->>Git: Triggers triggerGitSync(commitMsg)
-    Git->>GitHub: Fetches upstream changes (git fetch origin main)
+    Admin->>Server: Uploads media / modifies JSON database
+    Note over Server: Saves asset to disk<br/>Updates target .json file
+    Server->>Git: Invokes triggerGitSync(commitMessage)
+    Git->>GitHub: Fetches upstream (git fetch origin main)
     Git->>Git: Soft resets to remote HEAD (git reset FETCH_HEAD)
-    Git->>Git: Stages *.json and public/uploads / public/stickers
+    Git->>Git: Stages *.json, public/uploads, public/stickers
     Git->>Git: Commits changes locally
-    Git->>GitHub: Pushes changes to remote repository branch
-    Note over GitHub: Changes and files permanently saved!
-    Server-->>Admin: Returns 201 / 200 response with CDN URL
+    Git->>GitHub: Pushes changes to remote branch
+    Note over GitHub: Changes and media permanently preserved!
+    Server-->>Admin: Returns 200/201 response with raw CDN URL
 ```
 
-- **Serialized Execution**: Sync operations use a queueing mechanism to prevent concurrent Git lock conflicts.
-- **Automatic Git User Configuration**: Sets fallback auto-sync credentials if running in a clean container without pre-configured Git globals.
-- **CDN Raw URLs**: Generates `https://raw.githubusercontent.com/{repo}/{branch}/public/{path}` links for static files, providing seamless CDN delivery.
+- **Execution Queue**: Serializes sync operations to avoid concurrent Git lock file conflicts.
+- **Dynamic Git Auth**: Injects `GITHUB_TOKEN` into repository push URLs on the fly without exposing credentials in git config.
+- **GitHub Raw CDN**: Transforms local paths (`/uploads/file.jpg`) into permanent `https://raw.githubusercontent.com/{repo}/{branch}/public/{path}` links.
 
 ---
 
-## 🎭 Telegram Integration & WebP Media Engine
+## 🎭 Telegram Ingestion & WebP Media Pipeline
 
-Telegram provides animated and static sticker sets in `.webm` or `.tgs` formats. To guarantee maximum compatibility across mobile applications and browsers:
+Telegram hosts static and animated stickers in `.webp`, `.tgs` (lottie), and `.webm` formats. To deliver instant loading across mobile clients:
 
-1. The server interfaces directly with the Telegram Bot API (`getStickerSet`, `getFile`).
-2. Downloaded media passes through the `stickerConverter` module powered by `ffmpeg-static`.
-3. Video stickers (`.webm`) have frame snapshots extracted and converted into lightweight, high-fidelity `.webp` images stored in `public/stickers/{slug}/`.
-4. Pack previews and thumbnails are normalized and linked into `stickers.json`.
+1. **Bot Ingestion**: Interfaces with Telegram Bot API (`getStickerSet`, `getFile`) using the configured bot token.
+2. **WebM & Video Frame Extraction**: Runs `ffmpeg-static` to capture keyframe snapshots from video stickers.
+3. **Format Standardization**: Normalizes preview images into optimized `.webp` files under `public/stickers/{slug}/`.
+4. **Preview Generation**: Generates multi-frame preview arrays and compact pack thumbnails automatically.
 
 ---
 
-## ⏱️ Keep-Alive & Self-Healing Architecture
+## ⏱️ Keep-Alive & Self-Healing Engine
 
 ### Keep-Alive Mechanism
-Free-tier hosting providers (e.g. Render) spin down inactive web services after 15 minutes. Anify Server implements dual protection:
-1. **In-Process Interval Self-Ping**: If `RENDER_EXTERNAL_URL` is set, `src/server.js` automatically sends periodic HTTP pings every 10 minutes to `/api/v1/wallpapers/stats`.
-2. **Scheduled Cron Worker**: [render.yaml](file:///h:/Github/Anify_Server/render.yaml) defines a companion cron service executing [src/scripts/keepAlive.js](file:///h:/Github/Anify_Server/src/scripts/keepAlive.js) every 13 minutes.
+Free-tier cloud web instances spin down after 15 minutes of inactivity. Anify Server maintains continuous availability through dual mechanisms:
+1. **Internal Health Pings**: If `RENDER_EXTERNAL_URL` is set, `src/server.js` automatically dispatches self-pings every 10 minutes to `/api/v1/wallpapers/stats`.
+2. **Companion Cron Job**: [render.yaml](file:///h:/Github/Anify_Server/render.yaml) defines a scheduled cron worker executing [src/scripts/keepAlive.js](file:///h:/Github/Anify_Server/src/scripts/keepAlive.js) every 13 minutes.
 
 ### Self-Healing Database Lifecycle
-On server startup, each database utility ([db.js](file:///h:/Github/Anify_Server/src/utils/db.js), [liveDb.js](file:///h:/Github/Anify_Server/src/utils/liveDb.js), [ringtoneDb.js](file:///h:/Github/Anify_Server/src/utils/ringtoneDb.js), [kwgtDb.js](file:///h:/Github/Anify_Server/src/utils/kwgtDb.js), [stickerDb.js](file:///h:/Github/Anify_Server/src/utils/stickerDb.js)):
-- Creates missing JSON files with empty array defaults if they do not exist.
-- Validates entries and removes corrupted or duplicate records.
-- Computes deterministic MD5 hashes for items lacking unique IDs.
-- Creates required asset directories (`public/uploads`, `public/stickers`).
+On server bootstrap, database managers ([db.js](file:///h:/Github/Anify_Server/src/utils/db.js), [liveDb.js](file:///h:/Github/Anify_Server/src/utils/liveDb.js), [ringtoneDb.js](file:///h:/Github/Anify_Server/src/utils/ringtoneDb.js), [kwgtDb.js](file:///h:/Github/Anify_Server/src/utils/kwgtDb.js), [stickerDb.js](file:///h:/Github/Anify_Server/src/utils/stickerDb.js), [bannerDb.js](file:///h:/Github/Anify_Server/src/utils/bannerDb.js)):
+- Create missing database `.json` files with empty array defaults.
+- Clean corrupted entries and purge duplicate items.
+- Generate deterministic MD5 hashes for records missing unique identifiers.
+- Ensure required storage directories (`public/uploads`, `public/stickers`) exist on disk.
 
 ---
 
@@ -450,89 +568,101 @@ On server startup, each database utility ([db.js](file:///h:/Github/Anify_Server
 
 ```text
 Anify_Server/
-├── public/                     # Static frontend files & uploaded media
-│   ├── index.html              # Admin Console & API Explorer Dashboard UI
+├── public/                     # Static web dashboard & media assets
+│   ├── index.html              # Admin Console & Explorer UI
 │   ├── app.js                  # Frontend interactive client application
 │   ├── style.css               # Glassmorphic UI stylesheet
-│   ├── stickers/               # Converted .webp sticker pack assets
+│   ├── stickers/               # Converted .webp sticker pack previews
 │   └── uploads/                # Uploaded wallpapers, videos, ringtones, kwgts
 ├── src/
-│   ├── controllers/            # Request handlers for all resources
-│   │   ├── kwgtController.js
-│   │   ├── livewallController.js
-│   │   ├── ringtoneController.js
-│   │   ├── stickerController.js
-│   │   └── wallpaperController.js
+│   ├── controllers/            # REST API route controllers
+│   │   ├── bannerController.js    # Home banners CRUD handler
+│   │   ├── kwgtController.js      # KWGT widgets handler
+│   │   ├── livewallController.js  # Live video wallpapers handler
+│   │   ├── relayController.js     # Cloud relay stats & health handler
+│   │   ├── ringtoneController.js  # Audio ringtones handler
+│   │   ├── stickerController.js   # Telegram stickers & auto-fetch handler
+│   │   └── wallpaperController.js # Static wallpapers & auth handler
 │   ├── middleware/             # Express middlewares
-│   │   ├── auth.js             # Token verification middleware
-│   │   ├── errorHandler.js     # Centralized 404 & error handlers
-│   │   ├── upload.js           # Multer wallpaper storage configuration
-│   │   ├── uploadKwgt.js       # Multer KWGT file uploader
-│   │   ├── uploadLive.js       # Multer live video/thumb uploader
-│   │   └── uploadRingtone.js   # Multer audio uploader
-│   ├── routes/                 # Express API routing tables
-│   │   ├── kwgtRoutes.js
-│   │   ├── livewallRoutes.js
-│   │   ├── ringtoneRoutes.js
-│   │   ├── stickerRoutes.js
-│   │   └── wallpaperRoutes.js
-│   ├── scripts/                # Utility scripts
-│   │   └── keepAlive.js        # Health ping script for Render cron jobs
-│   ├── utils/                  # Core helpers & database utilities
-│   │   ├── db.js               # Wallpapers JSON database engine
-│   │   ├── gitSync.js          # Git auto-commit and push synchronizer
-│   │   ├── kwgtDb.js           # KWGT widgets database engine
-│   │   ├── liveDb.js           # Live wallpapers database engine
-│   │   ├── ringtoneDb.js       # Audio ringtones database engine
-│   │   ├── stickerConverter.js # ffmpeg WebM-to-WebP frame extractor
-│   │   └── stickerDb.js        # Sticker packs database engine
-│   └── server.js               # Application entry point & server bootstrap
-├── test/                       # Node.js automated test suites
-│   ├── admin_delete.test.js
-│   ├── api.test.js
-│   ├── sticker.test.js
-│   └── sticker_routes.test.js
-├── kwgts.json                  # JSON flat-file database for KWGT presets
-├── livewalls.json              # JSON flat-file database for Live wallpapers
-├── ringtones.json              # JSON flat-file database for Audio ringtones
-├── stickers.json               # JSON flat-file database for Sticker packs
-├── wallpapers.json             # JSON flat-file database for Static wallpapers
-├── render.yaml                 # Render cloud blueprint specification
-└── package.json                # Project dependencies & npm scripts
+│   │   ├── auth.js                # SHA256 admin token verification
+│   │   ├── errorHandler.js        # Centralized error & 404 handlers
+│   │   ├── upload.js              # Multer wallpaper & banner uploader
+│   │   ├── uploadKwgt.js          # Multer KWGT uploader
+│   │   ├── uploadLive.js          # Multer live video/thumb uploader
+│   │   └── uploadRingtone.js      # Multer audio ringtone uploader
+│   ├── routes/                 # Express API routes
+│   │   ├── bannerRoutes.js        # /api/v1/banners
+│   │   ├── kwgtRoutes.js          # /api/v1/kwgts
+│   │   ├── livewallRoutes.js      # /api/v1/livewalls
+│   │   ├── relayRoutes.js         # /api/v1/relay
+│   │   ├── ringtoneRoutes.js      # /api/v1/ringtones
+│   │   ├── stickerRoutes.js       # /api/v1/stickers
+│   │   └── wallpaperRoutes.js     # /api/v1/wallpapers
+│   ├── scripts/                # Standalone & background cron scripts
+│   │   └── keepAlive.js           # External health ping runner
+│   ├── utils/                  # Core helpers & flat-file database engines
+│   │   ├── bannerDb.js            # Banners database utility
+│   │   ├── db.js                  # Wallpapers database utility
+│   │   ├── gitSync.js             # Git auto-commit & push synchronizer
+│   │   ├── kwgtDb.js              # KWGT presets database utility
+│   │   ├── liveDb.js              # Live wallpapers database utility
+│   │   ├── relayServer.js         # WebSocket Cloud Relay server logic
+│   │   ├── ringtoneDb.js          # Audio ringtones database utility
+│   │   ├── stickerConverter.js    # ffmpeg WebM-to-WebP frame extractor
+│   │   └── stickerDb.js           # Stickers database utility
+│   └── server.js               # Application bootstrap & unified server entry
+├── test/                       # Node.js native test suites
+│   ├── admin_delete.test.js    # Admin deletion tests
+│   ├── api.test.js             # API core lifecycle tests
+│   ├── banner.test.js          # Banners CRUD & ordering tests
+│   ├── relay.test.js           # WebSocket cloud relay connection tests
+│   ├── sticker.test.js         # Sticker database lookup tests
+│   ├── sticker_routes.test.js  # Sticker routes & pagination tests
+│   ├── test_ffmpeg.js          # ffmpeg binary validation
+│   └── test_webp_conversion.js # WebP frame conversion tests
+├── add_widgets.js              # Batch KWGT import utility
+├── banners.json                # JSON database for Home & Promo Banners
+├── kwgts.json                  # JSON database for KWGT Presets
+├── livewalls.json              # JSON database for Live Wallpapers
+├── package.json                # Project dependencies & npm scripts
+├── relay-server.js             # Standalone Anify Connect Relay Server
+├── render.yaml                 # Render cloud deployment blueprint
+├── ringtones.json              # JSON database for Audio Ringtones
+├── stickers.json               # JSON database for Telegram Sticker Packs
+└── wallpapers.json             # JSON database for Static Wallpapers
 ```
 
 ---
 
-## 🚀 Deployment
+## 🚀 Deployment on Render & Cloud Platforms
 
-The repository includes a ready-to-deploy **Render Blueprint** configuration in [render.yaml](file:///h:/Github/Anify_Server/render.yaml).
+The repository includes a production-ready **Render Blueprint** configuration in [render.yaml](file:///h:/Github/Anify_Server/render.yaml).
 
 ### Steps to Deploy:
 1. Fork or push this repository to your GitHub account.
 2. Sign in to [Render](https://render.com/) and navigate to **Blueprints**.
 3. Select your repository and deploy the blueprint.
 4. Set the following environment secrets in your Render Web Service dashboard:
-   - `ADMIN_PASSWORD` - Passcode for admin authentication.
-   - `GITHUB_TOKEN` - Personal Access Token with repository write permissions.
-   - `TELEGRAM_BOT_TOKEN` *(Optional)* - Custom bot token for sticker fetching.
+   - `ADMIN_PASSWORD` — Passcode for admin authentication.
+   - `GITHUB_TOKEN` — Personal Access Token with repository write permissions.
+   - `TELEGRAM_BOT_TOKEN` *(Optional)* — Custom Telegram bot token.
 
 ```mermaid
 flowchart TD
-    Dev[Developer] -->|git push| GitHub(GitHub Repository)
-    
-    subgraph Render Platform
-        GitHub -->|Webhook Trigger| WebService[Anify Web Service: anify-server]
-        WebService -->|Build & Start| Run[npm install && npm start]
-        
-        CronJob[Keep-Alive Cron: anify-keep-alive] -->|Ping every 13m| WebService
+    Dev[Developer] -->|"git push origin main"| GitHub(GitHub Repository)
+
+    subgraph Render["Render Cloud Platform"]
+        GitHub -->|"Webhook Trigger"| WebService["Anify Web Service (anify-server)"]
+        WebService -->|"Build & Start"| Run["npm install && npm start"]
+        CronJob["Keep-Alive Cron (anify-keep-alive)"] -->|"Ping every 13m"| WebService
     end
 ```
 
 ---
 
-## 🤝 Contributing & Support
+## 🤝 Contributing & Community
 
-Contributions, suggestions, and feature requests are welcome!
+Contributions, suggestions, and feature requests are always welcome!
 
 1. Fork the project repository.
 2. Create your feature branch (`git checkout -b feature/amazing-feature`).
@@ -540,15 +670,20 @@ Contributions, suggestions, and feature requests are welcome!
 4. Push to the branch (`git push origin feature/amazing-feature`).
 5. Open a Pull Request.
 
-### Issues & Inquiries
-For bugs, questions, or feature requests, please open an issue in the [GitHub Issue Tracker](https://github.com/satyakiran29/Anify_Server/issues).
-
 ---
 
 <div align="center">
-  <p>
-    <a href="https://play.google.com/store/apps/details?id=com.skdev.anify"><b>📱 Download on Google Play</b></a> &nbsp;•&nbsp;
-    <a href="https://github.com/satyakiran29/Anify_Server"><b>⭐ Star on GitHub</b></a>
-  </p>
-  <sub>Built with ❤️ by <a href="https://github.com/satyakiran29">Satyakiran</a> to power seamless mobile personalization.</sub>
+
+### 🌐 Official Ecosystem Links
+
+<p>
+  <a href="https://play.google.com/store/apps/details?id=com.skdev.anify"><b>📱 Google Play Store</b></a> &nbsp;•&nbsp;
+  <a href="https://anify.psatyakiran.in/"><b>🌐 Anify Official Website</b></a> &nbsp;•&nbsp;
+  <a href="https://skdev.psatyakiran.in/"><b>🚀 SKDev Developer Hub</b></a> &nbsp;•&nbsp;
+  <a href="https://psatyakiran.in/"><b>👨‍💻 Satyakiran Portfolio</b></a> &nbsp;•&nbsp;
+  <a href="https://t.me/skdev29"><b>📢 Telegram Community</b></a>
+</p>
+
+<sub>Built with ❤️ by <a href="https://github.com/satyakiran29">Satyakiran</a>. Licensed under the <a href="LICENSE">MIT License</a>.</sub>
+
 </div>
